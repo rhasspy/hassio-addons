@@ -1,0 +1,47 @@
+{
+    "name": "Rhasspy Assistant",
+    "slug": "rhasspy",
+    "version": "2.5.7",
+    "description": "Offline voice assistant for Home Assistant",
+    "url": "https://github.com/rhasspy/hassio-addons/tree/master/rhasspy",
+    "startup": "application",
+    "arch": [
+        "aarch64",
+        "amd64",
+        "armhf"
+    ],
+    "boot": "auto",
+    "map": [
+        "share:rw",
+        "ssl"
+    ],
+    "options": {
+        "profile_dir": "/share/rhasspy/profiles",
+        "profile_name": "en",
+        "ssl": false,
+        "certfile": "cert",
+        "keyfile": "key",
+        "asoundrc": "",
+        "http_root": ""
+    },
+    "audio": true,
+    "ports": {
+        "12101/tcp": 12101,
+        "12333/udp": 12333
+    },
+    "ports_description": {
+        "12101/tcp": "Rhasspy Web UI + API",
+        "12333/udp": "Port for HTTP POST audio stream input"
+    },
+    "schema": {
+        "profile_dir": "str",
+        "profile_name": "str",
+        "ssl": "bool",
+        "certfile": "match(^[^/].*)",
+        "keyfile": "match(^[^/].*)",
+        "asoundrc": "str",
+        "http_root": "str"
+    },
+    "homeassistant_api": true,
+    "webui": "[PROTO:ssl]://[HOST]:[PORT:12101]/"
+}
