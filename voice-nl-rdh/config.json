@@ -9,6 +9,8 @@
         "amd64"
     ],
     "boot": "auto",
+    "options": {},
+    "schema": {},
     "ports": {
         "5002/tcp": 59125
     },
