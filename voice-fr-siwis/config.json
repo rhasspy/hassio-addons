@@ -1,0 +1,23 @@
+{
+    "name": "French TTS voice (siwis)",
+    "slug": "voice-fr-siwis",
+    "version": "1.0.0",
+    "description": "French text to speech voice",
+    "url": "https://github.com/rhasspy/hassio-addons/tree/master/voice-fr-siwis",
+    "startup": "application",
+    "arch": [
+        "aarch64",
+        "amd64",
+        "armhf"
+    ],
+    "boot": "auto",
+    "options": {},
+    "schema": {},
+    "ports": {
+        "5002/tcp": 59125
+    },
+    "ports_description": {
+        "5002/tcp": "MaryTTS compatible API"
+    },
+    "webui": "http://[HOST]:[PORT:59125]/"
+}
