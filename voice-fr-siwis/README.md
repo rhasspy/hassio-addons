@@ -9,7 +9,7 @@ Run a web server at http://localhost:5002
 ```sh
 $ docker run -it -p 5002:5002 \
     --device /dev/snd:/dev/snd \
-    rhasspy/larynx:nl-rdh-1
+    rhasspy/larynx:fr-siwis-1
 ```
 
 Endpoints:
