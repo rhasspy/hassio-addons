@@ -14,3 +14,6 @@ Add-ons for [Home Assistant's Hass.IO](https://www.home-assistant.io/hassio/).
 * [voice-de-thorsten](voice-de-thorsten/)
     * German text to speech voice based on the [thorsten dataset](https://github.com/thorstenMueller/deep-learning-german-tts/)
     * See http://github.com/rhasspy/de_larynx-thorsten
+* [voice-es-css10](voice-es-css10/)
+    * Spanish text to speech voice based on [CSS10](https://www.kaggle.com/bryanpark/spanish-single-speaker-speech-dataset)
+    * See http://github.com/rhasspy/es_larynx-css10
