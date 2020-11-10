@@ -17,3 +17,6 @@ Add-ons for [Home Assistant's Hass.IO](https://www.home-assistant.io/hassio/).
 * [voice-es-css10](voice-es-css10/)
     * Spanish text to speech voice based on [CSS10](https://www.kaggle.com/bryanpark/spanish-single-speaker-speech-dataset)
     * See http://github.com/rhasspy/es_larynx-css10
+* [voice-ru-nikolaev](voice-ru-nikolaev/)
+    * Russian text to speech voice based on the [M-AI Labs dataset](https://www.caito.de/2019/01/the-m-ailabs-speech-dataset/)
+    * See http://github.com/rhasspy/ru_larynx-nikolaev
