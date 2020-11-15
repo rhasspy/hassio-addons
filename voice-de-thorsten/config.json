@@ -1,7 +1,7 @@
 {
     "name": "German TTS voice (thorsten)",
     "slug": "voice-de-thorsten",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "German text to speech voice",
     "url": "https://github.com/rhasspy/hassio-addons/tree/master/voice-de-thorsten",
     "startup": "application",

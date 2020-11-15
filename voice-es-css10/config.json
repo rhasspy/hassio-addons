@@ -1,7 +1,7 @@
 {
     "name": "Spanish TTS voice (css10)",
     "slug": "voice-es-css10",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Spanish text to speech voice",
     "url": "https://github.com/rhasspy/hassio-addons/tree/master/voice-es-css10",
     "startup": "application",

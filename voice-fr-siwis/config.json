@@ -1,7 +1,7 @@
 {
     "name": "French TTS voice (siwis)",
     "slug": "voice-fr-siwis",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "French text to speech voice",
     "url": "https://github.com/rhasspy/hassio-addons/tree/master/voice-fr-siwis",
     "startup": "application",

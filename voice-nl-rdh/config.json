@@ -1,7 +1,7 @@
 {
     "name": "Dutch TTS voice (rdh)",
     "slug": "voice-nl-rdh",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "Dutch text to speech voice",
     "url": "https://github.com/rhasspy/hassio-addons/tree/master/voice-nl-rdh",
     "startup": "application",

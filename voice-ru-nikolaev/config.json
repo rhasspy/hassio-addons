@@ -1,7 +1,7 @@
 {
     "name": "Russian TTS voice (nikolaev)",
     "slug": "voice-ru-nikolaev",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Russian text to speech voice",
     "url": "https://github.com/rhasspy/hassio-addons/tree/master/voice-ru-nikolaev",
     "startup": "application",
