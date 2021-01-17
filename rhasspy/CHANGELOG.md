@@ -1,3 +1,30 @@
+## [2.5.9] - 15 Jan 2021
+
+### Added
+
+- Add DeepSpeech v0.9 profiles for English, German, French, Spanish, Italian, and Polish (Jaco)
+- Add streaming audio support for DeepSpeech (faster transcription)
+- Settings for energy-based silence detection
+- Max seconds for voice commands
+- English voice for Larynx (kathleen)
+- Reboot/shutdown menu in web UI
+- Add text to speech testing tools in settings page
+- Make it clearer in web UI when restarts are required
+- _site_id meta slot to Home Assistant intents/events (bk90)
+
+### Fixed
+
+- Custom converters for fsticuffs and fuzzywuzzy
+- fuzzywuzzy NluException: not enough values to unpack
+- Download links for all profiles
+
+### Changed
+
+- Upgrade to Mozilla DeepSpeech v0.9
+- Upgrade porcupine wake word system to 1.9
+- Move OpenAPI page from /api/ to /openapi/
+- Improved web UI for Raven keywords
+
 ## [2.5.8] - 2020 Nov 20
 
 ### Added
