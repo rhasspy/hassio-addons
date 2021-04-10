@@ -1,3 +1,42 @@
+## [2.5.10] - 2020 Apr 10
+
+### Added
+
+- New version of Larynx with improved performance and 35 voices (20 English, 1 German, 3 French, 2 Spanish, 3 Dutch, 2 Italian, 1 Swedish, 3 Russian)
+- Kaldi ASR model for Swedish (sv)
+- Confidence and word timings for Kaldi ASR
+- Minimum ASR confidence threshold for dialogue manager
+- Detect AVX support and warn for Larynx, DeepSpeech, and Precise in Web UI
+- Handle spaces in converter arguments with word!(converter, ...)
+- rhasspy-tts-cli-hermes TTS commands may be Jinja2 templates (--use-jinja2)
+- Support for MaryTTS effects (jasonhildebrand)
+- customData added to hermes/nlu/query message
+- customData is copied by NLU services from query to intent/intentNotRecognized
+- lang property added for wake, speech_to_text, and intent profile sections
+- Wake, ASR, NLU services all set lang properties if null
+- Profile now has "parent" setting, allowing one profile to load settings from another
+- Dialogue manager sound paths may be directories, from which a random WAV will be chosen each time (thanks plafue)
+
+### Fixed
+
+- Remote HTTP service sets site_id of satellite for ASR/NLU endpoints
+- DeepSpeech token output (was letters, now words)
+- Multiple values in custom converters are sent as a list on stdin
+- Don't show restart/shutdown button if "sudo" isn't available (Docker, Hass.io)
+- Added missing espeak phonemes for some profiles
+- MaryTTS voice test in Web UI
+- Remove dialogue session from site cache on end
+- Don't throw error about system not configured if message is intent for satellite (schnopsi)
+- Custom entities from /api/listen-for-command are passed through to NLU intent
+- Slots inside sub-directories will properly show up in the web interface
+- Use locks in dialogue manager to prevent multiple group satellite sessions during audio playback
+
+### Changed
+
+- /api/listen-for-command uses a proper wake workflow now (requires dialogue manager)
+- Show absolute paths for custom models (precise, snowboy, porcupine) in Web UI
+- TTS timeouts are computing using text length (dialogue.say_chars_per_second)
+
 ## [2.5.9] - 15 Jan 2021
 
 ### Added
