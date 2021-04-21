@@ -1,0 +1,34 @@
+---
+configuration:
+  profile_name:
+    name: Profile name
+    description: >-
+      Name of the profile to use, aka a 2-letter language code.
+      See https://rhasspy.readthedocs.io/en/latest/#supported-languages for an up-to-date list.
+  profile_dir:
+    name: Profile directory
+    description: >-
+      Directory, in which the profile will be stored.
+      If empty defauls to `/share/rhasspy/profiles`.
+  ssl:
+    name: SSL (HTTPS) toggle
+    description: >-
+      Whether to enable accessing Rhasspy's web interface via HTTPS.
+      Requires certfile and keyfile to be provided (can be self-signed).
+      See https://rhasspy.readthedocs.io/en/latest/usage/#secure-hosting-with-https for details.
+      If empty defaults to false.
+  certfile:
+    name: SSL certificate file
+    description: Certificate file for serving the web interface via HTTPS. See `ssl` description.
+  keyfile:
+    name: SSL key file
+    description: Key file for serving the web interface via HTTPS. See `ssl` description.
+  http_root:
+    name: HTTP root
+    description: >-
+      URL root for web server, i.e. the web interface will be available under `http://[hass-host]:[rhasspy-port]/<http_root>/`.
+  asoundrc:
+    name: Asoundrc configuration
+    description: >-
+      An asoundrc configuration to be used in the container.
+      Note that, by default, Home Assistant automatically provides a PulseAudio-mapped device to all the audio-enabled plugins.

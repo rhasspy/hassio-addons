@@ -1,3 +1,15 @@
+## [?] - ?
+
+### Added
+
+- Home Assistant automatic authorization
+- Add-on options descriptions (English only for now)
+
+### Changed
+
+- Make most of the configuration optional
+- Change the asoundrc option to be an array (one entry - one line in the resulting asoundrc)
+
 ## [2.5.10] - 2020 Apr 10
 
 ### Added
@@ -8,7 +20,7 @@
 - Minimum ASR confidence threshold for dialogue manager
 - Detect AVX support and warn for Larynx, DeepSpeech, and Precise in Web UI
 - Handle spaces in converter arguments with word!(converter, ...)
-- rhasspy-tts-cli-hermes TTS commands may be Jinja2 templates (--use-jinja2)
+- rhasspy-tts-cli-hermes TTS commands may be Jinja2 templates (`--use-jinja2`)
 - Support for MaryTTS effects (jasonhildebrand)
 - customData added to hermes/nlu/query message
 - customData is copied by NLU services from query to intent/intentNotRecognized
@@ -49,7 +61,7 @@
 - Reboot/shutdown menu in web UI
 - Add text to speech testing tools in settings page
 - Make it clearer in web UI when restarts are required
-- _site_id meta slot to Home Assistant intents/events (bk90)
+- \_site_id meta slot to Home Assistant intents/events (bk90)
 
 ### Fixed
 

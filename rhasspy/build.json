@@ -1,0 +1,7 @@
+{
+    "build_from": {
+        "aarch64": "rhasspy/rhasspy:2.5.10",
+        "amd64": "rhasspy/rhasspy:2.5.10",
+        "armhf": "rhasspy/rhasspy:2.5.10"
+    }
+}
