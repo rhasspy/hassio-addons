@@ -31,14 +31,14 @@ if [[ -f "${CONFIG_PATH}" ]]; then
     if [[ ! -z "${http_root}" ]]; then
         RHASSPY_ARGS+=('--http-root' "${http_root}")
     fi
-fi
 
-if [[ ! -z "${SUPERVISOR_TOKEN}" ]]; then
-    # Configure Home Assistant connection
-    jq --raw-input \
-        '.home_assistant += {"access_token": "${SUPERVISOR_TOKEN}", "url": "http://supervisor/core"}' \
-        "${CONFIG_PATH}" > /tmp/profile.json
-    mv /tmp/profile.json "${CONFIG_PATH}"
+    if [[ ! -z "${SUPERVISOR_TOKEN}" ]]; then
+        # Auto-configure Home Assistant connection
+        PROFILE_PATH="${profile_dir}/${profile_name}/profile.json"
+        jq \
+            '.home_assistant |= {"access_token": "'"${SUPERVISOR_TOKEN}"'", "url": "http://supervisor/core"}' \
+            "${PROFILE_PATH}"
+    fi
 fi
 
 if [[ -z "${RHASSPY_ARGS[*]}" ]]; then
