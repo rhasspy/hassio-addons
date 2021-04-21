@@ -14,13 +14,7 @@
         "ssl"
     ],
     "options": {
-        "profile_dir": "/share/rhasspy/profiles",
-        "profile_name": "en",
-        "ssl": false,
-        "certfile": "cert",
-        "keyfile": "key",
-        "asoundrc": "",
-        "http_root": ""
+        "profile_name": "en"
     },
     "audio": true,
     "ports": {
@@ -32,13 +26,13 @@
         "12333/udp": "Port for HTTP POST audio stream input"
     },
     "schema": {
-        "profile_dir": "str",
         "profile_name": "str",
-        "ssl": "bool",
-        "certfile": "match(^[^/].*)",
-        "keyfile": "match(^[^/].*)",
-        "asoundrc": "str",
-        "http_root": "str"
+        "profile_dir": "str?",
+        "ssl": "bool?",
+        "certfile": "match(^[^/].*)?",
+        "keyfile": "match(^[^/].*)?",
+        "http_root": "str?",
+        "asoundrc": ["str?"]
     },
     "homeassistant_api": true,
     "webui": "[PROTO:ssl]://[HOST]:[PORT:12101]/"

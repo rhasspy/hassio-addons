@@ -1,15 +1,24 @@
 #!/usr/bin/env bash
 
+set -e
+
 if [[ -f "${CONFIG_PATH}" ]]; then
     # Hass.IO configuration
     profile_name="$(jq --raw-output '.profile_name' "${CONFIG_PATH}")"
+    if [[ -z "${profile_name}" ]]; then
+        echo "No profile name provided!" 1>&2
+        exit 1
+
     profile_dir="$(jq --raw-output '.profile_dir' "${CONFIG_PATH}")"
+    if [[ -z "${profile_dir}" ]]; then
+        profile_dir='/share/rhasspy/profiles'
+    fi
     RHASSPY_ARGS=('--profile' "${profile_name}" '--user-profiles' "${profile_dir}")
 
     # Copy user-defined asoundrc to root
-    asoundrc="$(jq --raw-output '.asoundrc' "${CONFIG_PATH}")"
+    asoundrc="$(jq --raw-output '.asoundrc[]' "${CONFIG_PATH}")"
     if [[ ! -z "${asoundrc}" ]]; then
-	    echo "${asoundrc}" > /root/.asoundrc
+        echo "${asoundrc}" > /root/.asoundrc
     fi
 
     # Add SSL settings
