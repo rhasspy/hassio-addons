@@ -1,4 +1,6 @@
-FROM rhasspy/rhasspy:2.5.10
+ARG BUILD_FROM
+FROM $BUILD_FROM
+
 LABEL maintainer="Michael Hansen <mike@rhasspy.org>"
 
 ENV LANG C.UTF-8
