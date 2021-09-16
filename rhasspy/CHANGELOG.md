@@ -1,3 +1,29 @@
+## [2.5.11] - 2021 Sep 10
+
+### Added
+
+- Option to allow "unknown" words to be recognized with Kaldi with Text FST grammar enabled
+- Changeable "cancel" word that can be spoken at any time to trigger a recognition failure
+- Preliminary support for Arabic (ar)
+- Initial support for Vosk ASR (English, German, French, Spanish, Italian, Russian, Portuguese, Vietnamese, Arabic)
+- New Larynx voices for German, Dutch, and English
+- Multiple audio streams for Precise/Porcupine/Snowboy/Pocketsphinx wake word service (thanks Romkabouter)
+- Raven speed optimizations for dynamic time warping code (thanks maxbachmann)
+- Dialogue manager will convert audio files to WAV using soundfile and audioread
+- dialogue.sound_suffixes profile setting controls file extensions searched for when dialogue feedback sound path is a directory
+- rhasspy-speakers-cli-mqtt will convert audio bytes to WAV using soundfile and audioread
+- Wake word systems can receive raw UDP audio from multiple sites, and forward it to MQTT (see wake.<system>.udp_site_info)
+
+## Fixed
+
+- Websocket queues are retained between restarts (thanks sabeechen)
+- Avoid skipping 0 value in fsticuffs intent recognition
+- Fix fsticuffs bug for dropping multiple words: [foo | bar]:
+
+## Changed
+
+- The rhasspy-silence CLI tool can now split audio by silence and trim silence
+
 ## [2.5.10] - 2020 Apr 10
 
 ### Added

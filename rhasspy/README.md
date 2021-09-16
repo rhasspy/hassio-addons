@@ -59,3 +59,5 @@ Join [the community](https://community.rhasspy.org) for support and to connect w
     * [Kaldi](https://github.com/rhasspy/cs_kaldi-rhasspy)
 * Polish (`pl`)
     * [DeepSpeech](https://github.com/rhasspy/pl_deepspeech-jaco)
+* Arabic (`pl`)
+    * [Kaldi](https://github.com/rhasspy/ar_kaldi-rhasspy)
