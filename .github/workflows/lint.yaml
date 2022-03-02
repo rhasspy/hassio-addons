@@ -9,7 +9,7 @@ jobs:
          channel: [rhasspy, voice-de-thorsten, voice-es-css10, voice-fr-siwis, voice-nl-rdh, voice-ru-nikolaev]
     steps:
       - name: ⤵️ Check out code from GitHub
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: 🚀 Run Home Assistant Add-on Lint on ${{ matrix.channel }}
         uses: frenck/action-addon-linter@v2
         with:
