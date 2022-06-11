@@ -1,0 +1,13 @@
+name: "Rhasspy Junior"
+description: "Simplified voice control for Home Assistant"
+version: "0.2.0"
+url: "https://github.com/rhasspy/rhasspy-junior"
+slug: "rhasspy_junior"
+init: false
+arch:
+  - aarch64
+  - amd64
+audio: true
+homeassistant_api: true
+map:
+  - "share:rw"
