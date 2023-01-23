@@ -2,7 +2,7 @@
 
 Voice and vocoder models for [larynx](https://github.com/rhasspy/larynx) based on the free [rdh dataset](https://github.com/r-dh/dutch-vl-tts).
 
-[Samples](samples)
+[Samples](https://github.com/rhasspy/nl_larynx-rdh/tree/master/samples)
 
 ## Usage
 
