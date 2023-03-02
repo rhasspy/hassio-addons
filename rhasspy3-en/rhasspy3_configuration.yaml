@@ -1,0 +1,21 @@
+servers:
+  asr:
+    faster-whisper:
+      template_args:
+        language: "en"
+  tts:
+    larynx2:
+      template_args:
+        model: "${data_dir}/en-us-blizzard_lessac-medium.onnx"
+
+
+pipelines:
+  default:
+    asr:
+      name: faster-whisper.client
+    handle:
+      name: home_assistant
+      template_args:
+        url: "http://supervisor/core/api/conversation/process"
+    tts:
+      name: larynx2.client

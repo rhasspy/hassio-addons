@@ -1,0 +1,44 @@
+FROM debian:bullseye as build
+ARG TARGETARCH
+ARG TARGETVARIANT
+
+ENV LANG C.UTF-8
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && \
+    apt-get install --yes --no-install-recommends \
+      python3 python3-venv python3-pip
+
+WORKDIR /app
+
+COPY local/rhasspy3/setup.py local/rhasspy3/requirements_http_api.txt /app/
+COPY local/rhasspy3/rhasspy3/ /app/rhasspy3/
+COPY local/rhasspy3/rhasspy3_http_api/ /app/rhasspy3_http_api/
+COPY local/rhasspy3/script/ /app/script/
+
+ENV venv=/app/.venv
+RUN /app/script/setup_http_server && \
+    rm -rf /root/.cache/
+
+# vad
+COPY local/rhasspy3/programs/vad/silero/ /app/config/programs/vad/silero/
+RUN /app/config/programs/vad/silero/script/setup && \
+    rm -rf /root/.cache/
+
+# asr
+COPY local/rhasspy3/programs/asr/faster-whisper/ /app/config/programs/asr/faster-whisper/
+RUN /app/config/programs/asr/faster-whisper/script/setup && \
+    rm -rf /root/.cache/
+
+# handle
+COPY local/rhasspy3/programs/handle/home_assistant/ /app/config/programs/handle/home_assistant/
+
+# tts
+COPY local/rhasspy3/programs/tts/larynx2/ /app/config/programs/tts/larynx2/
+
+# local
+ADD local/larynx2/larynx_${TARGETARCH}${TARGETVARIANT}.tar.gz /app/config/programs/tts/larynx2/tmp/
+RUN mv /app/config/programs/tts/larynx2/tmp/larynx/* /app/config/programs/tts/larynx2/bin/
+COPY local/data/asr/ /app/config/data/asr/
+
+COPY local/rhasspy3/bin/ /app/bin/

@@ -1,0 +1,11 @@
+name: "Rhasspy 3"
+description: "Rhasspy 3 HTTP server"
+version: "0.0.1"
+slug: "rhasspy3"
+init: false
+homeassistant_api: true
+ports:
+  "13331/tcp": 13331
+arch:
+  - amd64
+  - aarch64
