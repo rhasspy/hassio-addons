@@ -1,6 +1,6 @@
 name: "Rhasspy 3 (en)"
 description: "Rhasspy 3 HTTP server (en)"
-version: "0.0.1"
+version: "0.0.2"
 slug: "rhasspy3_en"
 init: false
 homeassistant_api: true
@@ -9,3 +9,4 @@ ports:
 arch:
   - amd64
   - aarch64
+webui: "[PROTO:ssl]://[HOST]:[PORT:13331]/"
