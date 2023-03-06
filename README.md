@@ -2,8 +2,11 @@
 
 Add-ons for [Home Assistant's Hass.IO](https://www.home-assistant.io/hassio/).
 
+* [Rhasspy 3](rhasspy3/)
+    * (v3) Offline voice assistant toolkit for many human languages
+    * See http://github.com/rhasspy/rhasspy3
 * [Rhasspy](rhasspy/)
-    * Offline voice assistant for many human languages
+    * (v2) Offline voice assistant for many human languages
     * See http://github.com/rhasspy/rhasspy
 * [Rhasspy Junior](rhasspy-junior/)
     * Simplified offline voice control for Home Assistant
