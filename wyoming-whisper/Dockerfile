@@ -14,11 +14,15 @@ RUN python3 -m venv .venv && \
     .venv/bin/pip3 install --upgrade wheel setuptools
 
 RUN .venv/bin/pip3 install src/faster-whisper/src
-RUN .venv/bin/pip3 install src/wyoming-0.0.1.tar.gz
+RUN .venv/bin/pip3 install -r src/requirements.txt
 
 # -----------------------------------------------------------------------------
 
 FROM python:3.9-slim-bullseye as run
+
+RUN apt-get update && \
+    apt-get install --yes --no-install-recommends \
+      wget
 
 COPY data/ /app/data/
 COPY --from=build /app/.venv/ /app/.venv/
