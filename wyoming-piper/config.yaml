@@ -1,0 +1,10 @@
+name: "Wyoming Piper"
+description: "Local text to speech with Piper"
+version: "0.0.1"
+slug: "wyoming_piper"
+init: false
+ports:
+  "10200/tcp": 10200
+arch:
+  - amd64
+  - aarch64

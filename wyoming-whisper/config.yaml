@@ -1,0 +1,10 @@
+name: "Wyoming Whisper"
+description: "Local speech to text with Whisper"
+version: "0.0.1"
+slug: "wyoming_whisper"
+init: false
+ports:
+  "10300/tcp": 10300
+arch:
+  - amd64
+  - aarch64
