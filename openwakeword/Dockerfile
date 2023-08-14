@@ -8,8 +8,6 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 WORKDIR /usr/src
 ARG OPENWAKEWORD_LIB_VERSION
 
-COPY src/dist/*.whl ./
-
 RUN \
     apt-get update \
     && apt-get install -y --no-install-recommends \
