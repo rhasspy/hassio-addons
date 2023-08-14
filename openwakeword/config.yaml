@@ -1,0 +1,30 @@
+---
+version: 1.1.0
+slug: openwakeword
+name: openWakeWord
+description: openWakeWord using the Wyoming protocol
+url: https://github.com/home-assistant/addons/blob/master/openWakeWord
+arch:
+  - amd64
+  - aarch64
+init: false
+discovery:
+  - wyoming
+backup_exclude:
+  - "*.tflite"
+options:
+  model: "hey_jarvis"
+  threshold: 0.5
+  trigger_level: 4
+  noise_suppression: false
+  debug_logging: false
+schema:
+  model: |
+    list(alexa|hey_jarvis|hey_mycroft|hey_rhasspy)
+  threshold: float
+  trigger_level: int
+  noise_suppression: bool
+  debug_logging: bool
+ports:
+  "10400/tcp": null
+homeassistant: 2023.9.0.dev20230809

@@ -1,0 +1,19 @@
+#!/command/with-contenv bashio
+# shellcheck shell=bash
+# ==============================================================================
+# Start openWakeWord service
+# ==============================================================================
+flags=()
+if bashio::config.true 'noise_suppression'; then
+    flags+=('--noise-suppression')
+fi
+
+if bashio::config.true 'debug_logging'; then
+    flags+=('--debug')
+fi
+
+exec /usr/src/venv/bin/python3 -m wyoming_openwakeword \
+    --uri 'tcp://0.0.0.0:10400' \
+    --model "$(bashio::config 'model')" \
+    --threshold "$(bashio::config 'threshold')" \
+    --trigger-level "$(bashio::config 'trigger_level')" ${flags[@]}
