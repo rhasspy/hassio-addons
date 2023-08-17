@@ -1,5 +1,5 @@
 ---
-version: 1.1.0
+version: 1.2.0
 slug: openwakeword
 name: openWakeWord
 description: openWakeWord using the Wyoming protocol
@@ -13,14 +13,14 @@ discovery:
 backup_exclude:
   - "*.tflite"
 options:
-  model: "hey_jarvis"
+  model: "ok_nabu"
   threshold: 0.5
   trigger_level: 4
   noise_suppression: false
   debug_logging: false
 schema:
   model: |
-    list(alexa|hey_jarvis|hey_mycroft|hey_rhasspy)
+    list(ok_nabu|alexa|hey_jarvis|hey_mycroft|hey_rhasspy)
   threshold: float
   trigger_level: int
   noise_suppression: bool
