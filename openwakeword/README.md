@@ -6,6 +6,8 @@ Home Assistant add-on that uses [openWakeWord](https://github.com/dscripka/openW
 
 Part of the [Year of Voice](https://www.home-assistant.io/blog/2022/12/20/year-of-voice/).
 
+Requires Home Assistant 2023.9 or later.
+
 [aarch64-shield]: https://img.shields.io/badge/aarch64-yes-green.svg
 [amd64-shield]: https://img.shields.io/badge/amd64-yes-green.svg
 [armhf-shield]: https://img.shields.io/badge/armhf-no-red.svg
