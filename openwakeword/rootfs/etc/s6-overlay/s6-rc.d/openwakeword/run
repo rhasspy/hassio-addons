@@ -12,7 +12,7 @@ if bashio::config.true 'debug_logging'; then
     flags+=('--debug')
 fi
 
-exec /usr/src/venv/bin/python3 -m wyoming_openwakeword \
+exec python3 -m wyoming_openwakeword \
     --uri 'tcp://0.0.0.0:10400' \
     --model "$(bashio::config 'model')" \
     --threshold "$(bashio::config 'threshold')" \
