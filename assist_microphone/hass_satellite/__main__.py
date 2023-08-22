@@ -77,6 +77,9 @@ async def main() -> None:
         _LOGGER.fatal("Please install ffmpeg")
         sys.exit(1)
 
+    for device in sd.query_devices():
+        _LOGGER.debug(device)
+
     args.mic_device = args.mic_device or args.device
     args.snd_device = args.snd_device or args.device
 

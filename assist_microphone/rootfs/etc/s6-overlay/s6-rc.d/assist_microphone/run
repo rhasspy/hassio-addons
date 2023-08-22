@@ -21,5 +21,7 @@ fi
 exec python3 -m hass_satellite \
     'homeassistant' \
     "$(bashio::config 'token')" \
+    --mic-device "$(bashio::config 'mic_device')" \
+    --snd-device "$(bashio::config 'snd_device')" \
     --volume "$(bashio::config 'volume')" \
     --vad-model /usr/src/models/silero_vad.onnx ${extra_args[@]}

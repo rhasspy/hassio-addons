@@ -1,5 +1,5 @@
 ---
-version: 0.2.1
+version: 0.2.3
 slug: assist_microphone
 name: assist_microphone
 description: Stream microphone audio to Assist
@@ -9,12 +9,16 @@ arch:
   - aarch64
 options:
   token: null
+  mic_device: ""
+  snd_device: ""
   volume: 1.0
   awake_sound: true
   done_sound: true
   debug_logging: false
 schema:
   token: str
+  mic_device: str
+  snd_device: str
   volume: float
   awake_sound: bool
   done_sound: bool
