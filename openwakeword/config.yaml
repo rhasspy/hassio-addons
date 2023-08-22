@@ -1,5 +1,5 @@
 ---
-version: 1.2.0
+version: 1.3.0
 slug: openwakeword
 name: openWakeWord
 description: openWakeWord using the Wyoming protocol
@@ -12,6 +12,8 @@ discovery:
   - wyoming
 backup_exclude:
   - "*.tflite"
+map:
+  - share:rw
 options:
   model: "ok_nabu"
   threshold: 0.5

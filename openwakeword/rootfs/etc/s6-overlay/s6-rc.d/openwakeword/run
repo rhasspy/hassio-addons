@@ -16,4 +16,5 @@ exec python3 -m wyoming_openwakeword \
     --uri 'tcp://0.0.0.0:10400' \
     --model "$(bashio::config 'model')" \
     --threshold "$(bashio::config 'threshold')" \
-    --trigger-level "$(bashio::config 'trigger_level')" ${flags[@]}
+    --trigger-level "$(bashio::config 'trigger_level')" \
+    --output-dir /share/openwakeword ${flags[@]}
