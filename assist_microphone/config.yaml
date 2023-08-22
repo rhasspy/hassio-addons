@@ -1,0 +1,25 @@
+---
+version: 0.2.1
+slug: assist_microphone
+name: assist_microphone
+description: Stream microphone audio to Assist
+url: https://github.com/rhasspy/hassio-addons
+arch:
+  - amd64
+  - aarch64
+options:
+  token: null
+  volume: 1.0
+  awake_sound: true
+  done_sound: true
+  debug_logging: false
+schema:
+  token: str
+  volume: float
+  awake_sound: bool
+  done_sound: bool
+  debug_logging: bool
+init: false
+audio: true
+homeassistant_api: true
+homeassistant: 2023.9.0.dev20230809

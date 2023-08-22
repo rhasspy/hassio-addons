@@ -1,0 +1,25 @@
+#!/command/with-contenv bashio
+# shellcheck shell=bash
+# ==============================================================================
+# Start service
+# ==============================================================================
+export PYTHONPATH=/usr/src
+
+extra_args=()
+if bashio::config.true 'debug_logging'; then
+    extra_args+=('--debug')
+fi
+
+if bashio::config.true 'awake_sound'; then
+    extra_args+=('--awake-sound' '/usr/src/sounds/awake.wav')
+fi
+
+if bashio::config.true 'done_sound'; then
+    extra_args+=('--done-sound' '/usr/src/sounds/done.wav')
+fi
+
+exec python3 -m hass_satellite \
+    'homeassistant' \
+    "$(bashio::config 'token')" \
+    --volume "$(bashio::config 'volume')" \
+    --vad-model /usr/src/models/silero_vad.onnx ${extra_args[@]}
