@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-import asyncio
 import argparse
+import asyncio
 import logging
 import shutil
 import sys
 import threading
 from collections import deque
 from dataclasses import dataclass
-from enum import auto, Enum
+from enum import Enum, auto
 from typing import Deque, Optional, Tuple
 
 import sounddevice as sd
@@ -15,7 +15,11 @@ import sounddevice as sd
 from .mic import record
 from .remote import stream
 from .snd import play
-from .vad import SileroVoiceActivityDetector
+from .vad import (
+    SileroVoiceActivityDetector,
+    VoiceActivityDetector,
+    WebrtcVoiceActivityDetector,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -61,10 +65,16 @@ async def main() -> None:
         "--volume", type=float, default=1.0, help="Playback volume (0-1)"
     )
     #
+    parser.add_argument("--vad", choices=("", "webrtcvad", "silero"))
+    parser.add_argument(
+        "--vad-mode", type=int, default=3, choices=(0, 1, 2, 3), help="Webrtcvad mode"
+    )
     parser.add_argument("--vad-model", help="Path to Silero VAD onnx model (v4)")
     parser.add_argument("--vad-threshold", type=float, default=0.5)
     parser.add_argument("--vad-trigger-level", type=int, default=3)
-    parser.add_argument("--vad-buffer-chunks", type=int, default=15)
+    parser.add_argument("--vad-buffer-chunks", type=int, default=40)
+    #
+    parser.add_argument("--wake-buffer-seconds", type=float, default=0)
     #
     parser.add_argument(
         "--debug", action="store_true", help="Print DEBUG messages to the console"
@@ -72,6 +82,9 @@ async def main() -> None:
     args = parser.parse_args()
     logging.basicConfig(level=logging.DEBUG if args.debug else logging.INFO)
     _LOGGER.debug(args)
+
+    if args.vad == "silero":
+        assert args.vad_model, "--vad-model required for silero"
 
     if not shutil.which("ffmpeg"):
         _LOGGER.fatal("Please install ffmpeg")
@@ -109,72 +122,77 @@ async def main() -> None:
     speech_detected = asyncio.Event()
     state = State(mic=MicState.WAIT_FOR_VAD)
 
-    with sd.RawOutputStream(
-        device=args.snd_device,
-        samplerate=snd_sample_rate,
-        channels=1,
-        dtype="int16",
-    ) as snd_stream:
-        # Recording thread for microphone
-        mic_thread = threading.Thread(
-            target=_mic_proc,
-            args=(args, loop, audio_queue, speech_detected, state),
-            daemon=True,
-        )
-        mic_thread.start()
+    # Recording thread for microphone
+    mic_thread = threading.Thread(
+        target=_mic_proc,
+        args=(args, loop, audio_queue, speech_detected, state),
+        daemon=True,
+    )
+    mic_thread.start()
 
-        try:
-            while True:
-                if args.vad_model:
+    try:
+        while True:
+            try:
+                if args.vad:
                     _LOGGER.debug("Waiting for speech")
                     await speech_detected.wait()
                     speech_detected.clear()
                     _LOGGER.debug("Speech detected")
 
-                async for _timestamp, event_type, event_data in stream(
-                    host=args.host,
-                    token=args.token,
-                    audio=audio_queue,
-                    pipeline_name=args.pipeline,
-                ):
-                    _LOGGER.debug("%s %s", event_type, event_data)
+                with sd.RawOutputStream(
+                    device=args.snd_device,
+                    samplerate=snd_sample_rate,
+                    channels=1,
+                    dtype="int16",
+                ) as snd_stream:
+                    async for _timestamp, event_type, event_data in stream(
+                        host=args.host,
+                        token=args.token,
+                        audio=audio_queue,
+                        pipeline_name=args.pipeline,
+                        audio_seconds_to_buffer=args.wake_buffer_seconds,
+                    ):
+                        _LOGGER.debug("%s %s", event_type, event_data)
 
-                    if event_type == "wake_word-end":
-                        if args.awake_sound:
+                        if event_type == "wake_word-end":
+                            if args.awake_sound:
+                                state.mic = MicState.NOT_RECORDING
+                                play(
+                                    media=args.awake_sound,
+                                    stream=snd_stream,
+                                    sample_rate=snd_sample_rate,
+                                    volume=args.volume,
+                                )
+                                state.mic = MicState.RECORDING
+                        elif event_type == "stt-end":
+                            # Stop recording until run ends
                             state.mic = MicState.NOT_RECORDING
-                            play(
-                                media=args.awake_sound,
-                                stream=snd_stream,
-                                sample_rate=snd_sample_rate,
-                                volume=args.volume,
-                            )
-                            state.mic = MicState.RECORDING
-                    elif event_type == "stt-end":
-                        # Stop recording until run ends
-                        state.mic = MicState.NOT_RECORDING
-                        if args.done_sound:
-                            play(
-                                media=args.done_sound,
-                                stream=snd_stream,
-                                sample_rate=snd_sample_rate,
-                                volume=args.volume,
-                            )
-                    elif event_type == "tts-end":
-                        # Play TTS output
-                        tts_url = event_data.get("tts_output", {}).get("url")
-                        if tts_url:
-                            play(
-                                media=f"{args.protocol}://{args.host}:{args.port}{tts_url}",
-                                stream=snd_stream,
-                                sample_rate=snd_sample_rate,
-                                volume=args.volume,
-                            )
-                    elif event_type in ("run-end", "error"):
-                        # Start recording for next wake word
-                        state.mic = MicState.WAIT_FOR_VAD
-        finally:
-            state.is_running = False
-            mic_thread.join()
+                            if args.done_sound:
+                                play(
+                                    media=args.done_sound,
+                                    stream=snd_stream,
+                                    sample_rate=snd_sample_rate,
+                                    volume=args.volume,
+                                )
+                        elif event_type == "tts-end":
+                            # Play TTS output
+                            tts_url = event_data.get("tts_output", {}).get("url")
+                            if tts_url:
+                                play(
+                                    media=f"{args.protocol}://{args.host}:{args.port}{tts_url}",
+                                    stream=snd_stream,
+                                    sample_rate=snd_sample_rate,
+                                    volume=args.volume,
+                                )
+                        elif event_type in ("run-end", "error"):
+                            # Start recording for next wake word
+                            state.mic = MicState.WAIT_FOR_VAD
+            except Exception:
+                _LOGGER.exception("Unexpected error")
+                state.mic = MicState.WAIT_FOR_VAD
+    finally:
+        state.is_running = False
+        mic_thread.join()
 
 
 # -----------------------------------------------------------------------------
@@ -188,13 +206,19 @@ def _mic_proc(
     state: State,
 ) -> None:
     try:
-        vad: Optional[SileroVoiceActivityDetector] = None
+        vad: Optional[VoiceActivityDetector] = None
         vad_activation: int = 0
         vad_chunk_buffer: Deque[Tuple[int, bytes]] = deque(
             maxlen=args.vad_buffer_chunks
         )
-        if args.vad_model:
+        if args.vad == "webrtcvad":
+            vad = WebrtcVoiceActivityDetector(mode=args.vad_mode)
+            _LOGGER.debug("Using webrtcvad")
+        elif args.vad == "silero":
             vad = SileroVoiceActivityDetector(args.vad_model)
+            _LOGGER.debug("Using silero VAD")
+        else:
+            _LOGGER.debug("No VAD")
 
         for ts_chunk in record(args.mic_device):
             if not state.is_running:

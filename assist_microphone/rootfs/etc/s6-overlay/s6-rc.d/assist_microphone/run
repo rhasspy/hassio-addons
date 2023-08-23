@@ -24,4 +24,6 @@ exec python3 -m hass_satellite \
     --mic-device "$(bashio::config 'mic_device')" \
     --snd-device "$(bashio::config 'snd_device')" \
     --volume "$(bashio::config 'volume')" \
+    --wake-buffer-seconds "$(bashio::config 'wake_buffer_seconds')" \
+    --vad "$(bashio::config 'vad')" \
     --vad-model /usr/src/models/silero_vad.onnx ${extra_args[@]}

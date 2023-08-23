@@ -8,7 +8,6 @@ from typing import Any, AsyncGenerator, AsyncIterable, Dict, Optional, Tuple
 
 import aiohttp
 
-
 _LOGGER = logging.getLogger(__name__)
 
 
@@ -19,6 +18,7 @@ async def stream(
     pipeline_name: Optional[str] = None,
     port: int = 8123,
     api_path: str = "/api",
+    audio_seconds_to_buffer: float = 0,
 ) -> AsyncGenerator[Tuple[int, str, Dict[str, Any]], None]:
     url = f"ws://{host}:{port}{api_path}/websocket"
     message_id = 1
@@ -34,11 +34,16 @@ async def stream(
                 )
 
             message_id, handler_id = await _start_pipeline(
-                websocket, message_id, pipeline_id
+                websocket,
+                message_id,
+                pipeline_id,
+                audio_seconds_to_buffer=audio_seconds_to_buffer,
             )
 
             async for timestamp, event_type, event_data in _audio_to_events(
-                websocket, handler_id, audio
+                websocket,
+                handler_id,
+                audio,
             ):
                 yield timestamp, event_type, event_data
 
@@ -86,7 +91,10 @@ async def _get_pipeline_id(
 
 
 async def _start_pipeline(
-    websocket, message_id: int, pipeline_id: Optional[str]
+    websocket,
+    message_id: int,
+    pipeline_id: Optional[str],
+    audio_seconds_to_buffer: float = 0.0,
 ) -> Tuple[int, int]:
     pipeline_args = {
         "type": "assist_pipeline/run",
@@ -96,6 +104,7 @@ async def _start_pipeline(
         "input": {
             "sample_rate": 16000,
             "timeout": 3,
+            "audio_seconds_to_buffer": audio_seconds_to_buffer,
         },
     }
     if pipeline_id:
