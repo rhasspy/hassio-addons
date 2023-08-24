@@ -18,6 +18,14 @@ if bashio::config.true 'done_sound'; then
     extra_args+=('--done-sound' '/usr/src/sounds/done.wav')
 fi
 
+if bashio::config.true 'udp_mic'; then
+    extra_args+=('--udp-mic' 5000)
+fi
+
+if bashio::config.true 'udp_snd'; then
+    extra_args+=('--udp-snd' 6055)
+fi
+
 exec python3 -m hass_satellite \
     'homeassistant' \
     "$(bashio::config 'token')" \
