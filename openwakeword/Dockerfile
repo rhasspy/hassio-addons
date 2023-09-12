@@ -20,8 +20,7 @@ RUN \
         setuptools \
         wheel \
     && pip3 install --no-cache-dir \
-        "wyoming-openwakeword==${OPENWAKEWORD_LIB_VERSION}" \
-        'speexdsp-ns==0.1.2' \
+        "wyoming-openwakeword[webrtc]==${OPENWAKEWORD_LIB_VERSION}" \
     \
     && rm -rf /var/lib/apt/lists/*
 

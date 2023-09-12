@@ -4,12 +4,13 @@
 # Start openWakeWord service
 # ==============================================================================
 flags=()
-if bashio::config.true 'noise_suppression'; then
-    flags+=('--noise-suppression')
-fi
 
 if bashio::config.true 'debug_logging'; then
     flags+=('--debug')
+fi
+
+if bashio::config.true 'save_audio'; then
+    flags+=('--output-dir' '/share/openwakeword')
 fi
 
 exec python3 -m wyoming_openwakeword \
@@ -17,4 +18,5 @@ exec python3 -m wyoming_openwakeword \
     --model "$(bashio::config 'model')" \
     --threshold "$(bashio::config 'threshold')" \
     --trigger-level "$(bashio::config 'trigger_level')" \
-    --output-dir /share/openwakeword ${flags[@]}
+    --noise-suppression "$(bashio::config 'noise_suppression')" \
+    --auto-gain "$(bashio::config 'auto_gain')" ${flags[@]}
