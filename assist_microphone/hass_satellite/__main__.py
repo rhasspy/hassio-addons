@@ -9,20 +9,21 @@ import socket
 import sys
 import threading
 from collections import deque
-from typing import Deque, Optional, Tuple
+from typing import Deque, Final, Optional, Tuple
 
+import numpy as np
 import sounddevice as sd
 
-from .mic import record_stream, record_udp
+from .mic import record_stream, record_udp, SAMPLES_PER_CHUNK
 from .remote import stream
 from .snd import play_stream, play_udp
 from .state import State, MicState
 from .vad import (
     SileroVoiceActivityDetector,
     VoiceActivityDetector,
-    WebrtcVoiceActivityDetector,
 )
 
+VAD_DISABLED = "disabled"
 _LOGGER = logging.getLogger(__name__)
 
 
@@ -55,16 +56,18 @@ async def main() -> None:
         "--volume", type=float, default=1.0, help="Playback volume (0-1)"
     )
     #
-    parser.add_argument("--vad", choices=("", "webrtcvad", "silero"))
-    parser.add_argument(
-        "--vad-mode", type=int, default=3, choices=(0, 1, 2, 3), help="Webrtcvad mode"
-    )
+    parser.add_argument("--vad", choices=(VAD_DISABLED, "webrtcvad", "silero"))
     parser.add_argument("--vad-model", help="Path to Silero VAD onnx model (v4)")
     parser.add_argument("--vad-threshold", type=float, default=0.5)
     parser.add_argument("--vad-trigger-level", type=int, default=3)
     parser.add_argument("--vad-buffer-chunks", type=int, default=40)
     #
     parser.add_argument("--wake-buffer-seconds", type=float, default=0)
+    #
+    parser.add_argument(
+        "--noise-suppression", type=int, default=0, choices=(0, 1, 2, 3, 4)
+    )
+    parser.add_argument("--auto-gain", type=int, default=0, choices=list(range(32)))
     #
     parser.add_argument("--udp-mic", type=int, help="UDP port to receive input audio")
     parser.add_argument("--udp-snd", type=int, help="UDP port to send output audio")
@@ -155,7 +158,7 @@ async def main() -> None:
                         volume=args.volume,
                     )
 
-                if args.vad:
+                if args.vad != VAD_DISABLED:
                     _LOGGER.debug("Waiting for speech")
                     await speech_detected.wait()
                     speech_detected.clear()
@@ -210,14 +213,29 @@ def _mic_proc(
     state: State,
 ) -> None:
     try:
+        ap: "Optional[AudioProcessor]" = None
         vad: Optional[VoiceActivityDetector] = None
         vad_activation: int = 0
         vad_chunk_buffer: Deque[Tuple[int, bytes]] = deque(
             maxlen=args.vad_buffer_chunks
         )
-        if args.vad == "webrtcvad":
-            vad = WebrtcVoiceActivityDetector(mode=args.vad_mode)
-            _LOGGER.debug("Using webrtcvad")
+        sub_chunk_size: Final = 160
+        clean_10ms_array = np.zeros(shape=(sub_chunk_size,), dtype=np.int16)
+
+        if (
+            (args.vad == "webrtcvad")
+            or (args.noise_suppression > 0)
+            or (args.auto_gain > 0)
+        ):
+            from webrtc_noise_gain import AudioProcessor
+
+            ap = AudioProcessor(args.auto_gain, args.noise_suppression)
+
+            # Required so we don't need an extra buffer
+            assert (
+                SAMPLES_PER_CHUNK % sub_chunk_size
+            ) == 0, "Audio chunks must be a multiple of 10ms"
+            _LOGGER.debug("Using webrtc audio processing")
         elif args.vad == "silero":
             vad = SileroVoiceActivityDetector(args.vad_model)
             _LOGGER.debug("Using silero VAD")
@@ -233,13 +251,45 @@ def _mic_proc(
             if not state.is_running:
                 break
 
+            timestamp, chunk = ts_chunk
+            vad_prob = 0.0
+
+            # Process in 10ms sub-chunks.
+            if ap is not None:
+                chunk_array = np.frombuffer(chunk, dtype=np.int16)
+                ap_sub_chunks = len(chunk_array) // sub_chunk_size
+                if (len(chunk_array) % sub_chunk_size) != 0:
+                    _LOGGER.warning("Mic chunk size is not a multiple of 10ms")
+
+                clean_chunk_array = np.zeros_like(chunk_array)
+                for sub_chunk_idx in range(ap_sub_chunks):
+                    sub_chunk_offset = sub_chunk_idx * sub_chunk_size
+                    is_speech = ap.Process10ms(
+                        chunk_array[
+                            sub_chunk_offset : (sub_chunk_offset + sub_chunk_size)
+                        ],
+                        clean_10ms_array,
+                    )
+                    clean_chunk_array[
+                        sub_chunk_offset : (sub_chunk_offset + sub_chunk_size)
+                    ] = clean_10ms_array
+
+                    if is_speech:
+                        vad_prob = 1.0
+
+                # Overwrite with clean audio
+                chunk = clean_chunk_array.tobytes()
+                ts_chunk = (timestamp, chunk)
+
             if state.mic == MicState.WAIT_FOR_VAD:
-                if vad is None:
+                if (vad is None) and (ap is None):
                     # No VAD
                     state.mic = MicState.RECORDING
                 else:
-                    _timestamp, chunk = ts_chunk
-                    vad_prob = vad(chunk)
+                    if vad is not None:
+                        # silero
+                        vad_prob = vad(chunk)
+
                     if vad_prob >= args.vad_threshold:
                         vad_activation += 1
                     else:
@@ -248,7 +298,10 @@ def _mic_proc(
                     if vad_activation >= args.vad_trigger_level:
                         state.mic = MicState.RECORDING
                         speech_detected.set()
-                        vad.reset()
+
+                        if vad is not None:
+                            vad.reset()
+
                         vad_activation = 0
                     else:
                         vad_chunk_buffer.append(ts_chunk)

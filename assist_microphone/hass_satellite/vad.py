@@ -4,7 +4,6 @@ from typing import Union
 
 import numpy as np
 import onnxruntime
-import webrtcvad
 
 _RATE = 16000
 
@@ -59,12 +58,3 @@ class SileroVoiceActivityDetector(VoiceActivityDetector):
         out, self._h, self._c = ort_outs
 
         return out.squeeze()
-
-
-class WebrtcVoiceActivityDetector(VoiceActivityDetector):
-    def __init__(self, mode: int = 3):
-        self.vad = webrtcvad.Vad()
-        self.vad.set_mode(mode)
-
-    def __call__(self, audio: bytes) -> float:
-        return 1.0 if self.vad.is_speech(audio, _RATE) else 0.0

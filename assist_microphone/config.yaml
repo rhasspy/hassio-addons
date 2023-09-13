@@ -1,5 +1,5 @@
 ---
-version: 0.2.10
+version: 0.3.0
 slug: assist_microphone
 name: assist_microphone
 description: Stream microphone audio to Assist
@@ -9,27 +9,29 @@ arch:
   - aarch64
 options:
   token: null
-  vad: ""
+  vad: "disabled"
   mic_device: ""
   snd_device: ""
   volume: 1.0
   awake_sound: true
   done_sound: true
+  noise_suppression: 0
+  auto_gain: 0
   wake_buffer_seconds: 0.0
   udp_mic: false
-  udp_snd: false
   debug_logging: false
 schema:
   token: str
-  vad: list(|webrtcvad|silero)
+  vad: list(disabled|webrtcvad|silero)
   mic_device: str
   snd_device: str
   volume: float
+  noise_suppression: int
+  auto_gain: int
   awake_sound: bool
   done_sound: bool
   wake_buffer_seconds: float
   udp_mic: bool
-  udp_snd: bool
   debug_logging: bool
 init: false
 audio: true
