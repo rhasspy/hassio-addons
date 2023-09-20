@@ -1,25 +1,28 @@
 ---
-version: 0.3.0
+version: 1.0.0
 slug: assist_microphone
-name: assist_microphone
+name: Assist Microphone
 description: Stream microphone audio to Assist
 url: https://github.com/rhasspy/hassio-addons
 arch:
   - amd64
   - aarch64
+map:
+  - share:rw
 options:
   token: null
   vad: "disabled"
   mic_device: ""
   snd_device: ""
   volume: 1.0
-  awake_sound: true
-  done_sound: true
+  awake_sound: "/usr/src/sounds/awake.wav"
+  done_sound: "/usr/src/sounds/done.wav"
   noise_suppression: 0
   auto_gain: 0
   wake_buffer_seconds: 0.0
   udp_mic: false
   debug_logging: false
+  debug_recording_dir: ""
 schema:
   token: str
   vad: list(disabled|webrtcvad|silero)
@@ -28,11 +31,12 @@ schema:
   volume: float
   noise_suppression: int
   auto_gain: int
-  awake_sound: bool
-  done_sound: bool
+  awake_sound: str
+  done_sound: str
   wake_buffer_seconds: float
   udp_mic: bool
   debug_logging: bool
+  debug_recording_dir: str
 init: false
 audio: true
 homeassistant_api: true

@@ -1,0 +1,56 @@
+---
+configuration:
+  token:
+    name: Token
+    description: >-
+      Long-lived access token for Home Assistant
+  vad:
+    name: VAD
+    description: >-
+      Voice activity detector to use. webrtcvad is less CPU intensive, but silero is much better.
+  noise_suppression:
+    name: Noise suppression
+    description: >-
+      Noise suppression level (0 is disabled, 4 is max)
+  auto_gain:
+    name: Auto gain
+    description: >-
+      Automatic volume boost for microphone (0 is disabled, 31 is max)
+  wake_buffer_seconds:
+    name: Wake buffer seconds
+    description: >-
+      Seconds of audio to keep for STT after wake word is detected.
+  udp_mic:
+    name: UDP Microphone
+    description: >-
+      True if audio will be sent via UDP on port 5000 (raw 16-bit 16Khz mono PCM).
+  mic_device:
+    name: Microphone device
+    description: >-
+      Number or name of microphone device (audio input)
+  snd_device:
+    name: Sound device
+    description: >-
+      Number or name of sound device (audio output)
+  volume:
+    name: Volume
+    description: >-
+      Playback volume from 0 (mute) to 1 (max)
+  awake_sound:
+    name: Awake Sound
+    description: >-
+      Path to WAV file to play when wake word is detected (empty to disable)
+  done_sound:
+    name: Done Sound
+    description: >-
+      Path to WAV file to play when voice command is finished (empty to disable)
+  debug_logging:
+    name: Debug logging
+    description: >-
+      Enable debug logging.
+  debug_recording_dir:
+    name: Debug recording directory
+    description: >-
+      Directory to save audio for debugging purposes. Should be in /share
+network:
+  5000/udp: raw 16-bit 16Khz mono PCM audio

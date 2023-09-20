@@ -5,10 +5,8 @@ FROM ${BUILD_FROM}
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 WORKDIR /usr/src
+ARG HOMEASSISTANT_SATELLITE_VERSION
 ENV PIP_BREAK_SYSTEM_PACKAGES=1
-
-COPY requirements.txt ./
-COPY hass_satellite/ ./hass_satellite/
 
 RUN \
     apt-get update \
@@ -25,14 +23,13 @@ RUN \
         setuptools \
         wheel \
     && pip3 install --no-cache-dir \
-        -r requirements.txt \
+        "homeassistant_satellite[silerovad]@https://github.com/synesthesiam/homeassistant-satellite/archive/refs/tags/${HOMEASSISTANT_SATELLITE_VERSION}.tar.gz" \
     \
     && apt-get remove --yes build-essential python3-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 COPY sounds/ ./sounds/
-COPY models/ ./models/
 
 WORKDIR /
 COPY rootfs /

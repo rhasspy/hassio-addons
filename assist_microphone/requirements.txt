@@ -1,5 +1,0 @@
-aiohttp==3.8.4
-sounddevice==0.4.6
-onnxruntime>=1.11.0,<2
-numpy<2
-webrtc-noise-gain==0.0.1

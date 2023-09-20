@@ -10,26 +10,20 @@ if bashio::config.true 'debug_logging'; then
     extra_args+=('--debug')
 fi
 
-if bashio::config.true 'awake_sound'; then
-    extra_args+=('--awake-sound' '/usr/src/sounds/awake.wav')
-fi
-
-if bashio::config.true 'done_sound'; then
-    extra_args+=('--done-sound' '/usr/src/sounds/done.wav')
-fi
-
 if bashio::config.true 'udp_mic'; then
     extra_args+=('--udp-mic' 5000)
 fi
 
-exec python3 -m hass_satellite \
-    'homeassistant' \
-    "$(bashio::config 'token')" \
+exec python3 -m homeassistant_satellite \
+    --host 'homeassistant' \
+    --token "$(bashio::config 'token')" \
     --mic-device "$(bashio::config 'mic_device')" \
     --snd-device "$(bashio::config 'snd_device')" \
     --volume "$(bashio::config 'volume')" \
+    --awake-sound "$(bashio::config 'awake_sound')" \
+    --done-sound "$(bashio::config 'done_sound')" \
     --wake-buffer-seconds "$(bashio::config 'wake_buffer_seconds')" \
     --noise-suppression "$(bashio::config 'noise_suppression')" \
     --auto-gain "$(bashio::config 'auto_gain')" \
     --vad "$(bashio::config 'vad')" \
-    --vad-model /usr/src/models/silero_vad.onnx ${extra_args[@]}
+    --debug-recording-dir "$(bashio::config 'debug_recording_dir')" ${extra_args[@]}
