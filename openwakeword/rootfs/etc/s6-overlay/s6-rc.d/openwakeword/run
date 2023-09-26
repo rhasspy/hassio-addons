@@ -9,14 +9,13 @@ if bashio::config.true 'debug_logging'; then
     flags+=('--debug')
 fi
 
-if bashio::config.true 'save_audio'; then
-    flags+=('--output-dir' '/share/openwakeword')
-fi
-
 exec python3 -m wyoming_openwakeword \
     --uri 'tcp://0.0.0.0:10400' \
-    --model "$(bashio::config 'model')" \
+    --model 'ok_nabu' \
+    --model 'hey_jarvis' \
+    --model 'hey_rhasspy' \
+    --model 'hey_mycroft' \
+    --model 'alexa' \
+    --preload-model 'ok_nabu' \
     --threshold "$(bashio::config 'threshold')" \
-    --trigger-level "$(bashio::config 'trigger_level')" \
-    --noise-suppression "$(bashio::config 'noise_suppression')" \
-    --auto-gain "$(bashio::config 'auto_gain')" ${flags[@]}
+    --trigger-level "$(bashio::config 'trigger_level')" ${flags[@]}

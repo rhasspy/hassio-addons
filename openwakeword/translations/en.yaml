@@ -1,9 +1,5 @@
 ---
 configuration:
-  model:
-    name: Model
-    description: >-
-      Wake word model to use.
   threshold:
     name: Threshold
     description: >-
@@ -15,12 +11,6 @@ configuration:
     description: >-
       Number of activations before a detection is registered. A higher trigger
       level means fewer detections.
-  noise_suppression:
-    name: Noise suppression
-    description: >-
-      Enable noise suppression using speexdsp. This should be used for low
-      quality microphones, or in noisy environments where noise suppression is
-      not available on the voice satellite.
   debug_logging:
     name: Debug logging
     description: >-

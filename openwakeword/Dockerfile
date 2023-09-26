@@ -20,7 +20,7 @@ RUN \
         setuptools \
         wheel \
     && pip3 install --no-cache-dir \
-        "wyoming-openwakeword[webrtc]==${OPENWAKEWORD_LIB_VERSION}" \
+        "wyoming-openwakeword==${OPENWAKEWORD_LIB_VERSION}" \
     \
     && rm -rf /var/lib/apt/lists/*
 
