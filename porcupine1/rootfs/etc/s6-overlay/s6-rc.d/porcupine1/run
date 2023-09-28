@@ -1,0 +1,14 @@
+#!/command/with-contenv bashio
+# shellcheck shell=bash
+# ==============================================================================
+# Start porcupine1 service
+# ==============================================================================
+flags=()
+
+if bashio::config.true 'debug_logging'; then
+    flags+=('--debug')
+fi
+
+exec python3 /usr/src/server.py \
+    --uri 'tcp://0.0.0.0:10400' \
+    --sensitivity "$(bashio::config 'sensitivity')" ${flags[@]}

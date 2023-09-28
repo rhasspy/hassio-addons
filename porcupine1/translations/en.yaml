@@ -1,0 +1,12 @@
+---
+configuration:
+  sensitivity:
+    name: Sensitivity
+    description: >-
+      Activation threshold (0-1), where higher means fewer activations.
+  debug_logging:
+    name: Debug logging
+    description: >-
+      Enable debug logging. Useful for seeing each wake word detection in the logs.
+network:
+  10400/tcp: porcupine1 Wyoming Protocol
