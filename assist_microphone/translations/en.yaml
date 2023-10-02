@@ -16,6 +16,10 @@ configuration:
     name: Auto gain
     description: >-
       Automatic volume boost for microphone (0 is disabled, 31 is max)
+  volume_multiplier:
+    name: Volume multiplier
+    description: >-
+      Multiply volume by fixed value (1.0 = no change, 2.0 = twice as loud)
   wake_buffer_seconds:
     name: Wake buffer seconds
     description: >-

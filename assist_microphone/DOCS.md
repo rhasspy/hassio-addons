@@ -1,6 +1,6 @@
 # Assist Microphone
 
-Works with the [openWakeWord add-on](https://my.home-assistant.io/redirect/supervisor_addon/?addon=47701997_openwakeword&repository_url=https%3A%2F%2Fgithub.com%2Frhasspy%2Fhassio-addons)
+Works with the [openWakeWord add-on](https://my.home-assistant.io/redirect/supervisor_addon/?addon=core_openwakeword)
 
 Requires a long-lived access token from Home Assistant.
 To create a token:

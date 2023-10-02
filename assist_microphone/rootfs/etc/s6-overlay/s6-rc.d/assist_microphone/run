@@ -25,5 +25,6 @@ exec python3 -m homeassistant_satellite \
     --wake-buffer-seconds "$(bashio::config 'wake_buffer_seconds')" \
     --noise-suppression "$(bashio::config 'noise_suppression')" \
     --auto-gain "$(bashio::config 'auto_gain')" \
+    --volume-multiplier "$(bashio::config 'volume_multiplier')" \
     --vad "$(bashio::config 'vad')" \
     --debug-recording-dir "$(bashio::config 'debug_recording_dir')" ${extra_args[@]}
