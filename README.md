@@ -1,28 +1,28 @@
-# Rhasspy Hass.IO Add-Ons
+# Home Assistant Add-Ons
 
-Add-ons for [Home Assistant's Hass.IO](https://www.home-assistant.io/hassio/).
+Add-ons for [Home Assistant](https://www.home-assistant.io).
 
-* [Rhasspy 3](rhasspy3/)
-    * (v3) Offline voice assistant toolkit for many human languages
-    * See http://github.com/rhasspy/rhasspy3
-* [Rhasspy](rhasspy/)
-    * (v2) Offline voice assistant for many human languages
-    * See http://github.com/rhasspy/rhasspy
-* [Rhasspy Junior](rhasspy-junior/)
-    * Simplified offline voice control for Home Assistant
-    * See http://github.com/rhasspy/rhasspy-junior
-* [voice-nl-rdh](voice-nl-rdh/)
-    * Dutch text to speech voice based on the [rdh dataset](https://github.com/r-dh/dutch-vl-tts)
-    * See http://github.com/rhasspy/nl_larynx-rdh
-* [voice-fr-siwis](voice-fr-siwis/)
-    * French text to speech voice based on the [SIWIS corpus](https://datashare.is.ed.ac.uk/handle/10283/2353)
-    * See http://github.com/rhasspy/fr_larynx-siwis
-* [voice-de-thorsten](voice-de-thorsten/)
-    * German text to speech voice based on the [thorsten dataset](https://github.com/thorstenMueller/deep-learning-german-tts/)
-    * See http://github.com/rhasspy/de_larynx-thorsten
-* [voice-es-css10](voice-es-css10/)
-    * Spanish text to speech voice based on [CSS10](https://www.kaggle.com/bryanpark/spanish-single-speaker-speech-dataset)
-    * See http://github.com/rhasspy/es_larynx-css10
-* [voice-ru-nikolaev](voice-ru-nikolaev/)
-    * Russian text to speech voice based on the [M-AI Labs dataset](https://www.caito.de/2019/01/the-m-ailabs-speech-dataset/)
-    * See http://github.com/rhasspy/ru_larynx-nikolaev
+# Rhasspy 3
+
+Offline voice assistant toolkit for many human languages ([version 3](http://github.com/rhasspy/rhasspy3))
+
+https://my.home-assistant.io/redirect/supervisor_addon/?addon=47701997_rhasspy3_en&repository_url=https%3A%2F%2Fgithub.com%2Frhasspy%2Fhassio-addons
+
+# Rhasspy 2
+
+Offline voice assistant for many human languages ([version 2](http://github.com/rhasspy/rhasspy))
+
+https://my.home-assistant.io/redirect/supervisor_addon/?addon=47701997_rhasspy&repository_url=https%3A%2F%2Fgithub.com%2Frhasspy%2Fhassio-addons
+
+## Porcupine1
+
+Wake word detection using [porcupine1](https://github.com/Picovoice/porcupine)
+
+https://my.home-assistant.io/redirect/supervisor_addon/?addon=47701997_porcupine1&repository_url=https%3A%2F%2Fgithub.com%2Frhasspy%2Fhassio-addons
+
+
+## Assist Microphone
+
+Use [Assist](https://www.home-assistant.io/voice_control/) voice control with a USB microphone
+
+https://my.home-assistant.io/redirect/supervisor_addon/?addon=47701997_assist_microphone&repository_url=https%3A%2F%2Fgithub.com%2Frhasspy%2Fhassio-addons
