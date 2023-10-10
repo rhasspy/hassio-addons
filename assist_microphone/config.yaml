@@ -1,5 +1,5 @@
 ---
-version: 1.2.0
+version: 1.2.1
 slug: assist_microphone
 name: Assist Microphone
 description: Stream microphone audio to Assist
@@ -17,8 +17,8 @@ options:
   volume: 1.0
   awake_sound: "/usr/src/sounds/awake.wav"
   done_sound: "/usr/src/sounds/done.wav"
-  noise_suppression: 0
-  auto_gain: 0
+  noise_suppression: 2
+  auto_gain: 15
   volume_multiplier: 1.0
   wake_buffer_seconds: 0.0
   udp_mic: false
