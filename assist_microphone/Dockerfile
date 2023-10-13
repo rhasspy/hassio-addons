@@ -13,7 +13,7 @@ RUN \
     && apt-get install -y --no-install-recommends \
         build-essential \
         libasound2-plugins \
-        libportaudio2 \
+        alsa-utils \
         ffmpeg \
         python3 \
         python3-pip \
@@ -23,7 +23,7 @@ RUN \
         setuptools \
         wheel \
     && pip3 install --no-cache-dir \
-        "homeassistant_satellite[silerovad]@https://github.com/synesthesiam/homeassistant-satellite/archive/refs/tags/${HOMEASSISTANT_SATELLITE_VERSION}.tar.gz" \
+        "homeassistant_satellite[silerovad,webrtc]@https://github.com/synesthesiam/homeassistant-satellite/archive/refs/tags/${HOMEASSISTANT_SATELLITE_VERSION}.tar.gz" \
     \
     && apt-get remove --yes build-essential python3-dev \
     && apt-get clean \

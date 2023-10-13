@@ -17,8 +17,6 @@ fi
 exec python3 -m homeassistant_satellite \
     --host 'homeassistant' \
     --token "$(bashio::config 'token')" \
-    --mic-device "$(bashio::config 'mic_device')" \
-    --snd-device "$(bashio::config 'snd_device')" \
     --volume "$(bashio::config 'volume')" \
     --awake-sound "$(bashio::config 'awake_sound')" \
     --done-sound "$(bashio::config 'done_sound')" \
@@ -27,4 +25,5 @@ exec python3 -m homeassistant_satellite \
     --auto-gain "$(bashio::config 'auto_gain')" \
     --volume-multiplier "$(bashio::config 'volume_multiplier')" \
     --vad "$(bashio::config 'vad')" \
+    --pipeline "$(bashio::config 'pipeline')" \
     --debug-recording-dir "$(bashio::config 'debug_recording_dir')" ${extra_args[@]}

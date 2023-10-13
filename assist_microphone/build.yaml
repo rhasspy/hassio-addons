@@ -6,4 +6,4 @@ codenotary:
   signer: notary@home-assistant.io
   base_image: notary@home-assistant.io
 args:
-  HOMEASSISTANT_SATELLITE_VERSION: v1.2.0
+  HOMEASSISTANT_SATELLITE_VERSION: v2.2.0

@@ -15,7 +15,7 @@ or follow these steps to manually install the add-on:
 
 1. Navigate in your Home Assistant frontend to **Settings** -> **Add-ons** -> **Add-on store**.
 2. Add the store https://github.com/rhasspy/hassio-addons
-3. Find the "porcupine1" add-on and click it.
+3. Find the "Assist Microphone" add-on and click it.
 3. Click on the "INSTALL" button.
 
 ## How to use
@@ -30,16 +30,6 @@ To create a token:
 5. Copy the token using the **copy button** 
 6. Paste the token into this add-on's configuration page
 7. Click **Save** and then start the add-on
-
-After this add-on is running, it will be automatically discovered by the Wyoming
-integration in Home Assistant. To finish the setup, click the following my
-button:
-
-[![Open your Home Assistant instance and start setting up a new integration.](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=wyoming)
-
-Alternatively, you can install the Wyoming integration manually, see the
-[Wyoming integration documentation](https://www.home-assistant.io/integrations/wyoming/)
-for more information.
 
 ## Configuration
 
@@ -63,7 +53,11 @@ Automatic volume boost for microphone (0 is disabled, 31 dbfs is max). A value o
 
 ### Option: `volume_multiplier`
 
-Multiply volume by fixed value (1.0 = no change, 2.0 = twice as loud). 1.0 is the default.
+Multiply microphone volume by fixed value (1.0 = no change, 2.0 = twice as loud). 1.0 is the default.
+
+### Option: `pipeline`
+
+Name of pipeline to run. The preferred pipeline is run by default.
 
 ### Option: `wake_buffer_seconds`
 
@@ -72,14 +66,6 @@ Seconds of audio to keep for STT after wake word is detected. If you disable the
 ### Option: `udp_mic`
 
 True if audio will be sent via UDP on port 5000 (raw 16-bit 16Khz mono PCM).
-
-### Option: `mic_device`
-
-Number or name of microphone device (audio input). You should probably change the audio input device at the bottom of the configuration page instead of this.
-
-### Option: `snd_device`
-
-Number or name of sound device (audio output).  You should probably change the audio input device at the bottom of the configuration page instead of this.
 
 ### Option: `volume`
 

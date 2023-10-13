@@ -1,5 +1,5 @@
 ---
-version: 1.2.1
+version: 2.2.0
 slug: assist_microphone
 name: Assist Microphone
 description: Stream microphone audio to Assist
@@ -12,8 +12,6 @@ map:
 options:
   token: null
   vad: "disabled"
-  mic_device: ""
-  snd_device: ""
   volume: 1.0
   awake_sound: "/usr/src/sounds/awake.wav"
   done_sound: "/usr/src/sounds/done.wav"
@@ -22,13 +20,12 @@ options:
   volume_multiplier: 1.0
   wake_buffer_seconds: 0.0
   udp_mic: false
+  pipeline: ""
   debug_logging: false
   debug_recording_dir: ""
 schema:
   token: str
   vad: list(disabled|webrtcvad|silero)
-  mic_device: str
-  snd_device: str
   volume: float
   noise_suppression: int
   auto_gain: int
@@ -37,6 +34,7 @@ schema:
   done_sound: str
   wake_buffer_seconds: float
   udp_mic: bool
+  pipeline: str
   debug_logging: bool
   debug_recording_dir: str
 init: false

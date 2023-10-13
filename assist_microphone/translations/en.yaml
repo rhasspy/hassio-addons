@@ -19,7 +19,11 @@ configuration:
   volume_multiplier:
     name: Volume multiplier
     description: >-
-      Multiply volume by fixed value (1.0 = no change, 2.0 = twice as loud)
+      Multiply microphone volume by fixed value (1.0 = no change, 2.0 = twice as loud)
+  pipeline:
+    name: Pipeline
+    description: >-
+      Name of pipeline to run. The preferred pipeline is run by default.
   wake_buffer_seconds:
     name: Wake buffer seconds
     description: >-
@@ -28,14 +32,6 @@ configuration:
     name: UDP Microphone
     description: >-
       True if audio will be sent via UDP on port 5000 (raw 16-bit 16Khz mono PCM).
-  mic_device:
-    name: Microphone device
-    description: >-
-      Number or name of microphone device (audio input)
-  snd_device:
-    name: Sound device
-    description: >-
-      Number or name of sound device (audio output)
   volume:
     name: Volume
     description: >-
