@@ -11,6 +11,7 @@ map:
   - share:rw
 options:
   token: null
+  port: 8123
   vad: "disabled"
   volume: 1.0
   awake_sound: "/usr/src/sounds/awake.wav"

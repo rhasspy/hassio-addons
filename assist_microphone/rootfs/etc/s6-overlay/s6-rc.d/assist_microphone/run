@@ -16,6 +16,7 @@ fi
 
 exec python3 -m homeassistant_satellite \
     --host 'homeassistant' \
+    --port "$(bashio::config 'port')" \
     --token "$(bashio::config 'token')" \
     --volume "$(bashio::config 'volume')" \
     --awake-sound "$(bashio::config 'awake_sound')" \
