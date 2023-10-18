@@ -12,9 +12,10 @@ fi
 train_dir='/share/snowboy/train'
 # Train models in a directory with the structure:
 # <train_dir>/
-#   <wake_word>/
-#     sample1.wav
-#     ...
+#   <language>/
+#     <wake_word>/
+#       sample1.wav
+#       ...
 #
 # When trained, a .pmdl file with the same name as the directory will be
 # present.
