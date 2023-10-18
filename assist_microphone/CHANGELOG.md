@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.2.1
+
+- Use supervisor API to get HA port and protocol (http/https)
+
 ## 2.2.0
 
 - Upgrade to `homeassistant-satellite` v2.2.0
