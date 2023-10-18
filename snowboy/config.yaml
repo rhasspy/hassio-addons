@@ -1,0 +1,24 @@
+---
+version: 1.0.0-7
+slug: snowboy
+name: snowboy
+description: snowboy wake word detection using the Wyoming protocol
+url: https://github.com/rhasspy/hassio-addons/tree/master/snowboy
+arch:
+  - amd64
+  - aarch64
+  - armv7
+init: false
+discovery:
+  - wyoming
+map:
+  - share:rw
+options:
+  sensitivity: 0.5
+  debug_logging: false
+schema:
+  sensitivity: float
+  debug_logging: bool
+ports:
+  "10400/tcp": null
+homeassistant: 2023.9.0
