@@ -1,35 +1,41 @@
 # Assist Microphone
 
-Use [Assist](https://www.home-assistant.io/voice_control/) voice control with a USB microphone.
+Use [Assist](https://www.home-assistant.io/voice_control/) voice assistant with a USB microphone. For example, a USB webcam.
 
-Works with the [openWakeWord add-on](https://my.home-assistant.io/redirect/supervisor_addon/?addon=core_openwakeword)
+Works with the [openWakeWord add-on](https://my.home-assistant.io/redirect/supervisor_addon/?addon=core_openwakeword).
 
+## Installing the add-on
 
-## Installation
-
-Click the following my button:
+Select the following my button:
 
 [![Show add-on](https://my.home-assistant.io/badges/supervisor_addon.svg)](https://my.home-assistant.io/redirect/supervisor_addon/?addon=47701997_assist_microphone&repository_url=https%3A%2F%2Fgithub.com%2Frhasspy%2Fhassio-addons)
 
 or follow these steps to manually install the add-on:
 
-1. Navigate in your Home Assistant frontend to **Settings** -> **Add-ons** -> **Add-on store**.
-2. Add the store https://github.com/rhasspy/hassio-addons
-3. Find the "Assist Microphone" add-on and click it.
-3. Click on the "INSTALL" button.
+1. Navigate in your Home Assistant frontend to **Settings** > **Add-ons** > **Add-on store**.
+2. Add the store https://github.com/rhasspy/hassio-addons.
+3. Find the **Assist Microphone** add-on and select it.
+4. Select the **Install** button.
 
-## How to use
+## Running the add-on
 
 Before running the add-on, you must configure it with a long-lived access token from Home Assistant.
-To create a token:
 
-1. Go to your profile page in Home Assistant
-2. Scroll down to **Long-lived access tokens**
-3. Click **Create token**
-4. Provide a name for the token and click **OK**
-5. Copy the token using the **copy button** 
-6. Paste the token into this add-on's configuration page
-7. Click **Save** and then start the add-on
+### To create a token
+
+1. Go to your profile page in Home Assistant.
+2. Scroll down to **Long-lived access tokens**.
+3. Select **Create token**.
+4. Provide a name for the token and select **OK**.
+5. Copy the token using the **copy button**.
+6. Paste the token into this add-on's configuration page.
+7. Select **Save**.
+
+### To run the add on
+
+1. Connect the USB microphone to your Home Assistant server.
+2. Restart Home Assistant.
+3. Start the **Assist Microphone** add-on.
 
 ## Configuration
 
