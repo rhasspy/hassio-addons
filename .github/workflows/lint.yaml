@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
        matrix:
-         channel: [rhasspy, voice-de-thorsten, voice-es-css10, voice-fr-siwis, voice-nl-rdh, voice-ru-nikolaev]
+         channel: [porcupine1, snowboy, assist_microphone]
     steps:
       - name: ⤵️ Check out code from GitHub
         uses: actions/checkout@v4
