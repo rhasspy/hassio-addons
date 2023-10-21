@@ -1,0 +1,24 @@
+#!/command/with-contenv bashio
+# shellcheck shell=bash
+# ==============================================================================
+# Start vosk service
+# ==============================================================================
+flags=()
+
+if bashio::config.true 'debug_logging'; then
+    flags+=('--debug')
+fi
+
+if bashio::config.true 'limit_sentences'; then
+    flags+=('--limit-sentences')
+fi
+
+exec python3 -m wyoming_vosk \
+    --uri 'tcp://0.0.0.0:10300' \
+    --data-dir /data \
+    --download-dir /data \
+    --data-dir /share/vosk/models \
+    --sentences-dir /share/vosk/sentences \
+    --correct-sentences "$(bashio::config 'correct_sentences')" \
+    --language "$(bashio::config 'preload_language')" \
+    --preload-language "$(bashio::config 'preload_language')" ${flags[@]}
