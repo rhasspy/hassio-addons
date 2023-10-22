@@ -17,6 +17,15 @@ if bashio::config.true 'allow_unknown'; then
     flags+=('--allow-unknown')
 fi
 
+if [ -d '/share/vosk/models' ]; then
+  # Each directory is a language name with a model inside
+  while read -r lang_dir; do
+      # Override the model for this language
+      lang="$(basename "${lang_dir}")"
+      flags+=('--model-for-language' "${lang}" "$(realpath "${lang_dir}")")
+  done < <(find '/share/vosk/models' -mindepth 1 -maxdepth 1 -type d)
+fi
+
 exec python3 -m wyoming_vosk \
     --uri 'tcp://0.0.0.0:10300' \
     --data-dir /data \

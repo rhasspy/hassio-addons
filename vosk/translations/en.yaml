@@ -1,5 +1,26 @@
 ---
 configuration:
+  correct_sentences:
+    name: Correct sentences
+    description: >-
+      Strictness when correcting sentences, where 0 is the most strict and
+      larger values get less strict. This is only used when a YAML file exists
+      for the model's language at /share/vosk/sentences/<LANGUAGE>.yaml.
+  limit_sentences:
+    name: Limit sentences
+    description: >-
+      When enabled, only sentences from the file
+      /share/vosk/sentences/<LANGUAGE>.yaml can be spoken.
+  allow_unknown:
+    name: Allow unknown
+    description: >-
+      When enabled with limit_sentences, sentences that are not part of the
+      templates (or "no correct" patterns) will be returned as empty strings.
+  preload_language:
+    name: Preload language
+    description: >-
+      Preloads the speech-to-text model for the selected language. Other models
+      are loaded as requested.
   debug_logging:
     name: Debug logging
     description: >-
