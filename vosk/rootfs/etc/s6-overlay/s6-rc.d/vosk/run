@@ -13,6 +13,10 @@ if bashio::config.true 'limit_sentences'; then
     flags+=('--limit-sentences')
 fi
 
+if bashio::config.true 'allow_unknown'; then
+    flags+=('--allow-unknown')
+fi
+
 exec python3 -m wyoming_vosk \
     --uri 'tcp://0.0.0.0:10300' \
     --data-dir /data \

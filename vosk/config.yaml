@@ -1,5 +1,5 @@
 ---
-version: 1.0.0
+version: 1.1.0
 slug: vosk
 name: vosk
 description: vosk using the Wyoming protocol
@@ -17,12 +17,14 @@ options:
   correct_sentences: 0.0
   limit_sentences: false
   preload_language: en
+  allow_unknown: false
   debug_logging: false
 schema:
   correct_sentences: float
   limit_sentences: bool
   preload_language: |
     list(ar|br|ca|cs|de|en|eo|es|fa|fr|hi|it|ja|ko|kz|nl|pl|pt|ru|sv|tl|tr|uk|uz|vi|zh)
+  allow_unknown: bool
   debug_logging: bool
 ports:
   "10300/tcp": null
