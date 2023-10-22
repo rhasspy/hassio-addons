@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.2.0
+
+- Use edit distance for correcting scoring
+- Dynamically load sentence YAML files
+
 ## 1.1.0
 
 - Add "allow unknown" option to detect out-of-domain sentences
