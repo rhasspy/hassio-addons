@@ -3,7 +3,7 @@ configuration:
   sensitivity:
     name: Sensitivity
     description: >-
-      Activation threshold (0-1), where higher means fewer activations.
+      Activation threshold (0-1), where lower means fewer activations.
   debug_logging:
     name: Debug logging
     description: >-
