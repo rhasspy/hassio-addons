@@ -9,6 +9,6 @@ if bashio::config.true 'debug_logging'; then
     flags+=('--debug')
 fi
 
-exec python3 /usr/src/server.py \
+exec python3 -m wyoming_porcupine1 \
     --uri 'tcp://0.0.0.0:10400' \
     --sensitivity "$(bashio::config 'sensitivity')" ${flags[@]}

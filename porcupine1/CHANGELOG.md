@@ -1,16 +1,9 @@
 # Changelog
 
-## 1.5.0
+## 1.0.1
 
-- Remove webrtc (done in core now)
-- Remove audio options related to webrtc
-- Remove wake word option (dynamic loading)
-- Dynamically load wake word models
+- Try to fix memory leak by caching detectors
 
-## 1.4.0
-
-- Add noise suppression/auto gain with webrtc
-
-## 1.1.0
+## 1.0.0
 
 - Initial release
