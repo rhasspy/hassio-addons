@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.2
+
+- Fix start issue
+
 ## 1.2.0
 
 - Use edit distance for correcting scoring
