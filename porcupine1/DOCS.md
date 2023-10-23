@@ -25,7 +25,7 @@ for more information.
 
 ### Option: `sensitivity`
 
-Activation threshold (0-1), where higher means fewer activations.
+Activation threshold (0-1), where lower means fewer activations.
 
 ### Option: `debug_logging`
 
