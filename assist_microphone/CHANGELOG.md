@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.2.2
+
+- Use supervisor API to get HA IP address
+
 ## 2.2.1
 
 - Use supervisor API to get HA port and protocol (http/https)
