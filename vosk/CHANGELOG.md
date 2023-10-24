@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.0
+
+- Use `wyoming-vosk` 1.1.0
+
 ## 1.2.2
 
 - Fix start issue

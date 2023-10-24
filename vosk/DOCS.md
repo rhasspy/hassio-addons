@@ -21,6 +21,10 @@ Alternatively, you can install the Wyoming integration manually, see the
 [Wyoming integration documentation](https://www.home-assistant.io/integrations/wyoming/)
 for more information.
 
+## Models
+
+Models are automatically downloaded from [HuggingFace](https://huggingface.co/rhasspy/vosk-models), but they are originally from [Alpha Cephei](https://alphacephei.com/vosk/models). Please review the license of each model that you use ([model list](https://github.com/rhasspy/wyoming-vosk/blob/master/wyoming_vosk/download.py)).
+
 ## Modes
 
 There are three operating modes:
@@ -188,7 +192,7 @@ You can add as many regular expressions to `no_correct_patterns` as you'd like. 
 
 ## Allow Unknown
 
-With `--allow-unknown`, you can enable the detection of "unknown" words/phrases outside of the model's vocabulary. Transcripts that are "unknown" will be set to empty strings, indicating that nothing was recognized. When combined with [limited sentences](#limited-sentences), this lets you differentiate between in and out of domain sentences.
+With `--allow-unknown`, you can enable the detection of "unknown" words/phrases outside of the model's vocabulary. Transcripts that are "unknown" will be set to empty strings, indicating that nothing was recognized. When combined with [limited sentences](#limited), this lets you differentiate between in and out of domain sentences.
 
 ## Configuration
 
