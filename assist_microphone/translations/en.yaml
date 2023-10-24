@@ -44,6 +44,10 @@ configuration:
     name: Done Sound
     description: >-
       Path to WAV file to play when voice command is finished (empty to disable)
+  host:
+    name: Host
+    description: >-
+      Name or IP address of Home Assistant server (default: `homeassistant`)
   debug_logging:
     name: Debug logging
     description: >-

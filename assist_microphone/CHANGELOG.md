@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.2.3
+
+- Add `host` config option
+
 ## 2.2.2
 
 - Use supervisor API to get HA IP address

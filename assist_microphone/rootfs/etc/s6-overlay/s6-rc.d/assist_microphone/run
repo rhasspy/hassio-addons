@@ -19,7 +19,7 @@ if [ "$(bashio::core.ssl)" == 'true' ]; then
 fi
 
 exec python3 -m homeassistant_satellite \
-    --host "$(bashio::core.ip_address)" \
+    --host "$(bashio::config 'host')" \
     --port "$(bashio::core.port)" \
     --token "$(bashio::config 'token')" \
     --volume "$(bashio::config 'volume')" \

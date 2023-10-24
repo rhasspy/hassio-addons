@@ -1,5 +1,5 @@
 ---
-version: 2.2.2
+version: 2.2.3
 slug: assist_microphone
 name: Assist Microphone
 description: Stream microphone audio to Assist
@@ -22,6 +22,7 @@ options:
   wake_buffer_seconds: 0.0
   udp_mic: false
   pipeline: ""
+  host: "homeassistant"
   debug_logging: false
   debug_recording_dir: ""
 schema:
@@ -36,6 +37,7 @@ schema:
   wake_buffer_seconds: float
   udp_mic: bool
   pipeline: str
+  host: str
   debug_logging: bool
   debug_recording_dir: str
 init: false

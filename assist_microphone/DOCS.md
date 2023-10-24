@@ -85,6 +85,10 @@ Path to WAV file to play when wake word is detected (empty to disable).
 
 Path to WAV file to play when voice command is finished (empty to disable).
 
+### Option: `host`
+
+Name or IP address of Home Assistant server (default: `homeassistant`)
+
 ### Option: `debug_logging`
 
 Enable debug logging.
