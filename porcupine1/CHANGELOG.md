@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.3
+
+- Add base image for armv7
+
 ## 1.0.2
 
 - Fix sensitivity description in docs

@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.4.0
+
+- Use `wyoming-vosk` 1.2.0
+- Add armv7 base image
+
 ## 1.3.0
 
 - Use `wyoming-vosk` 1.1.0
