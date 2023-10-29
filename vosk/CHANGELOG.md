@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.5.0
+
+- Use `wyoming-vosk` 1.3.0 with sqlite database
+- Add armv7 base image
+
 ## 1.4.0
 
 - Use `wyoming-vosk` 1.2.0
