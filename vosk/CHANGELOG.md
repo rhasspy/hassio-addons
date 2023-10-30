@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.5.1
+
+- Bugfix with output text
+
 ## 1.5.0
 
 - Use `wyoming-vosk` 1.3.0 with sqlite database
