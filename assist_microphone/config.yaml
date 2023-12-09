@@ -1,9 +1,9 @@
 ---
-version: 2.2.3
+version: 2.2.4
 slug: assist_microphone
 name: Assist Microphone
 description: Stream microphone audio to Assist
-url: https://github.com/rhasspy/hassio-addons
+url: https://github.com/xkill/hassio-addons
 hassio_api: true
 arch:
   - amd64
@@ -23,6 +23,9 @@ options:
   udp_mic: false
   pipeline: ""
   host: "homeassistant"
+  pulseserver: ""
+  pulseecho: true
+  pulseducking: 0.2
   debug_logging: false
   debug_recording_dir: ""
 schema:
@@ -38,6 +41,9 @@ schema:
   udp_mic: bool
   pipeline: str
   host: str
+  pulseserver: str
+  pulseecho: bool
+  pulseducking: float
   debug_logging: bool
   debug_recording_dir: str
 init: false
