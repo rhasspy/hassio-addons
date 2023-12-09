@@ -56,5 +56,17 @@ configuration:
     name: Debug recording directory
     description: >-
       Directory to save audio for debugging purposes. Should be in /share
+  pulseserver:
+    name: Puseaudio Server
+    description: >-
+      Pulseaudio server IP or host and Port (optional) <IP|HOST>[:PORT]
+  pulseecho:
+    name: Puseaudio Echo Cancel
+    description: >-
+      Enable Pulseaudio Echo Cancel
+  pulseducking:
+    name: Puseaudio Server Ducking
+    description: >-
+      Enable Pulseaudio duking. Lower down playback streams to the volume level on this setting (e.g., 0.2 for 20%) after the wake word is detected and until the pipeline finishes, making speech recognition easier
 network:
   5000/udp: raw 16-bit 16Khz mono PCM audio
