@@ -3,7 +3,7 @@ version: 2.2.4
 slug: assist_microphone
 name: Assist Microphone
 description: Stream microphone audio to Assist
-url: https://github.com/xkill/hassio-addons
+url: https://github.com/rhasspy/hassio-addons
 hassio_api: true
 arch:
   - amd64
