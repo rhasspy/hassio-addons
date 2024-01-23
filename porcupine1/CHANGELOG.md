@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.0
+
+- Add tests and Github actions
+- Add `--log-format` argument
+- Add `--version` argument
+
 ## 1.0.3
 
 - Add base image for armv7
