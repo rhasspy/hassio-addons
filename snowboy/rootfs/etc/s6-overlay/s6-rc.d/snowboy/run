@@ -3,6 +3,8 @@
 # ==============================================================================
 # Start snowboy service
 # ==============================================================================
+cd /usr/src
+
 flags=()
 
 if bashio::config.true 'debug_logging'; then
@@ -25,14 +27,12 @@ if [ -n "${train_dir}" ]; then
         train_flags+=('--debug')
     fi
 
-    pushd /usr/src
-    python3 train.py \
+    .venv/bin/python3 train.py \
         --train-dir "${train_dir}" \
         --snowman-dir . "${train_flags[@]}"
-    popd
 fi
 
-exec python3 -m wyoming_snowboy \
+exec .venv/bin/python3 -m wyoming_snowboy \
     --uri 'tcp://0.0.0.0:10400' \
     --custom-model-dir /share/snowboy \
     --sensitivity "$(bashio::config 'sensitivity')" ${flags[@]}

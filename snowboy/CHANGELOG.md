@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.0
+
+- Update to wyoming-snowboy 1.1.0 (minor fixes)
+
 ## 1.0.2
 
 - Fix start issue

@@ -9,7 +9,6 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 WORKDIR /usr/src
 ARG WYOMING_SNOWBOY_VERSION
 ARG SNOWMAN_ENROLL_VERSION
-ENV PIP_BREAK_SYSTEM_PACKAGES=1
 
 RUN \
     apt-get update \
@@ -18,14 +17,16 @@ RUN \
         python3 \
         python3-pip \
         python3-dev \
+        python3-venv \
         build-essential \
         swig \
         libatlas-base-dev \
         curl \
-    && pip3 install --no-cache-dir -U \
+    && python3 -m venv .venv \
+    && .venv/bin/pip3 install --no-cache-dir -U \
         setuptools \
         wheel \
-    && pip3 install --no-cache-dir \
+    && .venv/bin/pip3 install --no-cache-dir \
         "wyoming-snowboy @ https://github.com/rhasspy/wyoming-snowboy/archive/refs/tags/v${WYOMING_SNOWBOY_VERSION}.tar.gz" \
     && ARCH="${BUILD_ARCH}" \
     && if [[ "${BUILD_ARCH}" = "aarch64" ]]; then ARCH="arm64"; fi \
