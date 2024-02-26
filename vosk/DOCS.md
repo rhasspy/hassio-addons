@@ -194,6 +194,48 @@ You can add as many regular expressions to `no_correct_patterns` as you'd like. 
 
 With `--allow-unknown`, you can enable the detection of "unknown" words/phrases outside of the model's vocabulary. Transcripts that are "unknown" will be set to empty strings, indicating that nothing was recognized. When combined with [limited sentences](#limited), this lets you differentiate between in and out of domain sentences.
 
+## Supported Languages
+
+* Arabic (`ar`)
+* Catalan (`ca`)
+* Czech (`cz`)
+    * Does not work with [allow unknown](#allow-unknown)
+* German (`de`)
+    * Does not work with [allow unknown](#allow-unknown)
+* English (`en`)
+* Spanish (`es`)
+    * Does not work with [allow unknown](#allow-unknown)
+* Persian (`fa`)
+    * Does not work with [allow unknown](#allow-unknown)
+* French (`fr`)
+* Hindi (`hi`)
+    * Does not work with [allow unknown](#allow-unknown)
+* Italian (`it`)
+    * Does not work with [allow unknown](#allow-unknown)
+* Korean (`ko`)
+    * Does not work with [allow unknown](#allow-unknown)
+* Dutch (`nl`)
+* Polish (`pl`)
+    * Does not work with [allow unknown](#allow-unknown)
+* Portuguese (`pt`)
+    * Does not work with [allow unknown](#allow-unknown)
+* Russian (`ru`)
+    * Does not work with [allow unknown](#allow-unknown)
+* Swedish (`sv`)
+    * Does not work with [limited sentences](#limited) and [allow unknown](#allow-unknown)
+* Ukrainian (`uk`)
+* Vietnamese (`vn`)
+* Chinese (`zh`)
+
+Not tested (no intent support yet in Home Assistant):
+
+* Breton (`br`)
+* Esperanto (`eo`)
+* Japanese (`ja`)
+* Kazakh (`kz`)
+* Tagalog (`tl`)
+* Uzbek (`uz`)
+
 ## Configuration
 
 ### Option: `correct_sentences`
