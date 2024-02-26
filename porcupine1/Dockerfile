@@ -6,7 +6,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # Install porcupine1
 WORKDIR /usr/src
-ENV WYOMING_PORCUPINE1_VERSION=1.1.0
+ENV WYOMING_PORCUPINE1_VERSION=1.2.0
 
 RUN \
     apt-get update \
