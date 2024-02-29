@@ -1,0 +1,28 @@
+---
+configuration:
+  model:
+    name: Model
+    description: >-
+      Name of the model to use.
+  language:
+    name: Language
+    description: >-
+      Default language to use.
+  beam_size:
+    name: Beam size
+    description: >-
+      Number of simultaneous candidate sentences to consider. Increasing this
+      number will make the model more accurate, but slower.
+  audio_context_base:
+    name: Audio context base
+    description: >-
+      A number from 0-1500 that determines how much audio history to consider
+      when processing. Increasing this number will make the model more accurate,
+      but slower. If the number is too small, you may get repeated text or times
+      when the model takes much longer to respond.
+  debug_logging:
+    name: Debug logging
+    description: >-
+      Enable debug logging.
+network:
+  10300/tcp: whisper.cpp Wyoming Protocol
