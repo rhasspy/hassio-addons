@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.6.1
+
+- Exclude vosk models from backups
+
+## 1.6.0
+
+- Use `wyoming-vosk` 1.5.0
+
 ## 1.5.1
 
 - Bugfix with output text
