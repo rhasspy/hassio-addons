@@ -1,0 +1,13 @@
+name: "Voice Kit FPC"
+description: "Voice Kit False Positive Collector"
+version: "0.0.1"
+slug: "voicekit_fpc"
+init: false
+ports:
+  "11223/tcp": 11223
+arch:
+  - amd64
+  - aarch64
+  - armv7
+map:
+  - share:rw
