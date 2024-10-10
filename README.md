@@ -32,3 +32,10 @@ Wake word detection using [snowboy](https://github.com/Kitt-AI/snowboy) for wake
 Fast speech-to-text using [vosk](https://alphacephei.com/vosk/) with support for pre-defined sentences.
 
 [![Show add-on](https://my.home-assistant.io/badges/supervisor_addon.svg)](https://my.home-assistant.io/redirect/supervisor_addon/?addon=47701997_vosk&repository_url=https%3A%2F%2Fgithub.com%2Frhasspy%2Fhassio-addons)
+
+## microWakeWord
+
+Wake word detection using [microWakeWord](https://github.com/kahrendt/microWakeWord/) for wake word detection.
+
+[![Show add-on](https://my.home-assistant.io/badges/supervisor_addon.svg)](https://my.home-assistant.io/redirect/supervisor_addon/?addon=47701997_microwakeword&repository_url=https%3A%2F%2Fgithub.com%2Frhasspy%2Fhassio-addons)
+

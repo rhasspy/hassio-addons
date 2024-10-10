@@ -1,0 +1,19 @@
+---
+version: 1.0.0
+slug: microwakeword
+name: microwakeword
+description: microWakeWord using the Wyoming protocol
+url: https://github.com/rhasspy/hassio-addons/tree/master/microwakeword
+arch:
+  - amd64
+  - aarch64
+init: false
+discovery:
+  - wyoming
+options:
+  debug_logging: false
+schema:
+  debug_logging: bool
+ports:
+  "10400/tcp": null
+homeassistant: 2023.9.0

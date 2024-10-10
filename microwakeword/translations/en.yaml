@@ -1,0 +1,8 @@
+---
+configuration:
+  debug_logging:
+    name: Debug logging
+    description: >-
+      Enable debug logging. Useful for seeing each wake word detection in the logs.
+network:
+  10400/tcp: microWakeWord Wyoming Protocol

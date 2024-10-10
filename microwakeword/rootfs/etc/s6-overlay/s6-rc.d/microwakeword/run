@@ -1,0 +1,14 @@
+#!/command/with-contenv bashio
+# shellcheck shell=bash
+# ==============================================================================
+# Start microWakeWord service
+# ==============================================================================
+cd /usr/src
+flags=()
+
+if bashio::config.true 'debug_logging'; then
+    flags+=('--debug')
+fi
+
+exec .venv/bin/python3 -m wyoming_microwakeword \
+    --uri 'tcp://0.0.0.0:10400' ${flags[@]}
