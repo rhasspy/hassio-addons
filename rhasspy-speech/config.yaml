@@ -1,5 +1,5 @@
 ---
-version: 1.2.0
+version: 1.2.1
 slug: rhasspy-speech
 name: rhasspy-speech
 description: Speech-to-text system from Rhasspy
