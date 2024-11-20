@@ -6,5 +6,5 @@ codenotary:
   signer: notary@home-assistant.io
   base_image: notary@home-assistant.io
 args:
-  RHASSPY_SPEECH_VERSION: 1.1.1
+  RHASSPY_SPEECH_VERSION: 1.1.2
   WYOMING_RHASSPY_SPEECH_VERSION: 1.1.0
