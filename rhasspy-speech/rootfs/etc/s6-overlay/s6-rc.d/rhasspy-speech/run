@@ -1,0 +1,22 @@
+#!/command/with-contenv bashio
+# shellcheck shell=bash
+# ==============================================================================
+# Start rhasspy-speech service
+# ==============================================================================
+cd /usr/src
+
+flags=()
+
+if bashio::config.true 'debug_logging'; then
+    flags+=('--debug')
+fi
+
+exec .venv/bin/python3 -m wyoming_rhasspy_speech \
+    --uri 'tcp://0.0.0.0:10300' \
+    --tools-dir /usr/src/tools \
+    --train-dir /share/rhasspy-speech/train \
+    --models-dir /share/rhasspy-speech/models \
+    --hass-token "${SUPERVISOR_TOKEN}" \
+    --hass-websocket-uri 'ws://supervisor/core/websocket' \
+    --hass-ingress \
+    --web-server-host '0.0.0.0'  ${flags[@]}

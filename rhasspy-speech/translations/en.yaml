@@ -1,0 +1,8 @@
+---
+configuration:
+  debug_logging:
+    name: Debug logging
+    description: >-
+      Enable debug logging.
+network:
+  10300/tcp: rhasspy-speech Wyoming Protocol
