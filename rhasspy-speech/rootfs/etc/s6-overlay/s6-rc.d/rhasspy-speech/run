@@ -16,6 +16,11 @@ exec .venv/bin/python3 -m wyoming_rhasspy_speech \
     --tools-dir /usr/src/tools \
     --train-dir /share/rhasspy-speech/train \
     --models-dir /share/rhasspy-speech/models \
+    --no-arpa-streaming \
+    --word-norm-distance-threshold 0 \
+    --char-norm-distance-threshold 0.2 \
+    --arpa-rescore \
+    --volume-multiplier 2 \
     --hass-token "${SUPERVISOR_TOKEN}" \
     --hass-websocket-uri 'ws://supervisor/core/websocket' \
     --hass-ingress \
