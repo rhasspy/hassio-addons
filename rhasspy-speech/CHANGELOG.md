@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.0
+
+- Expose options
+
 ## 1.3.0
 
 - Use ARPA rescoring

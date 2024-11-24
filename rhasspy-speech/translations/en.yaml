@@ -1,5 +1,109 @@
 ---
 configuration:
+  # Audio
+  volume_multiplier:
+    name: Volume multiplier
+    description: >-
+      Constant to multiply audio samples by (> 1 is louder, < 1 is quieter).
+  # VAD
+  vad:
+    name: Remove silence
+    description: >-
+      Remove audio before speech is detected.
+  vad_threshold:
+    name: Silence threshold
+    description: >-
+      Threshold for voice activity detection (0-1).
+  before_speech_seconds:
+    name: Before speech seconds
+    description: >-
+      Seconds of audio to keep before speech is detected.
+  # Speex
+  speex:
+    name: Clean audio
+    description: >-
+      Clean audio with Speex.
+  speex_noise_suppression:
+    name: Noise suppression level
+    description: >-
+      Amount of noise suppression (negative, lower is more suppression)
+  speex_auto_gain:
+    name: Auto gain level
+    description: >-
+      Amount of auto gain (higher is more gain)
+  # Edit distance
+  word_norm_distance_threshold:
+    name: Word edit distance threshold
+    description: >-
+      Normalized word edit distance threshold (0-1)
+  char_norm_distance_threshold:
+    name: Character edit distance threshold
+    description: >-
+      Normalized character edit distance threshold (0-1)
+  # Transcribers
+  grammar:
+    name: Use grammar
+    description: >-
+      Fast decoding, but cannot handle unexpected words/phrases.
+  grammar_streaming:
+    name: Streaming grammar decoder
+    description: >-
+      Decode grammar in streaming mode (faster, but less accurate).
+  grammar_max_active:
+    name: Maximum grammar candidates
+    description: >-
+      Maximum number of grammar candidates during decoding.
+  grammar_lattice_beam:
+    name: Grammar lattice beam width
+    description: >-
+      Width of lattice beam during grammar decoding.
+  grammar_acoustic_scale:
+    name: Grammar acoustic weight scale
+    description: >-
+      Acoustic weight scale during grammar decoding (should not matter).
+  grammar_beam:
+    name: Grammar beam width
+    description: >-
+      Width of beam during pruning Viterbi beam search in grammar decoding.
+  arpa:
+    name: Use language model
+    description: >-
+      Slower decoding, but can ignore unexpected words/phrases.
+  arpa_streaming:
+    name: Streaming ARPA decoder
+    description: >-
+      Decode language model in streaming mode (faster, but less accurate).
+      Must be disabled to use rescoring.
+  arpa_max_active:
+    name: Maximum ARPA candidates
+    description: >-
+      Maximum number of language model candidates during decoding.
+  arpa_lattice_beam:
+    name: ARPA lattice beam width
+    description: >-
+      Width of lattice beam during language model decoding.
+  arpa_acoustic_scale:
+    name: ARPA acoustic weight scale
+    description: >-
+      Acoustic weight scale during ARPA decoding (smaller to adhere more to the language model).
+  arpa_beam:
+    name: ARPA beam width
+    description: >-
+      Width of beam during pruning Viterbi beam search in ARPA decoding.
+  arpa_rescore:
+    name: Rescore ARPA
+    description: >-
+      Do a second pass with language model to get a more accurate transcription.
+      Requires disabling ARPA streaming.
+  arpa_rescore_order:
+    name: Rescore ARPA order
+    description: >-
+      N-gram order of rescored language model. Higher is more accurate, but slower.
+  arpa_rescore_acoustic_scale:
+    name: Rescore ARPA acoustic scale
+    description: >-
+      Acoustic scale used during rescoring (smaller to adhere more to the language model).
+  # Misc
   debug_logging:
     name: Debug logging
     description: >-
