@@ -1,5 +1,5 @@
 ---
-version: 1.4.0
+version: 1.4.1
 slug: rhasspy-speech
 name: rhasspy-speech
 description: Speech-to-text system from Rhasspy
@@ -36,6 +36,7 @@ options:
   grammar_acoustic_scale: 1.0
   grammar_beam: 24.0
   #
+  arpa: true
   arpa_streaming: false
   arpa_max_active: 7000
   arpa_lattice_beam: 8.0
@@ -69,6 +70,7 @@ schema:
   grammar_acoustic_scale: float
   grammar_beam: float
   #
+  arpa: bool
   arpa_streaming: bool
   arpa_max_active: int
   arpa_lattice_beam: float

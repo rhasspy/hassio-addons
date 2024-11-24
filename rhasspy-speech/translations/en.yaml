@@ -45,6 +45,7 @@ configuration:
     name: Use grammar
     description: >-
       Fast decoding, but cannot handle unexpected words/phrases.
+      Requires re-training if changed.
   grammar_streaming:
     name: Streaming grammar decoder
     description: >-
@@ -69,6 +70,7 @@ configuration:
     name: Use language model
     description: >-
       Slower decoding, but can ignore unexpected words/phrases.
+      Requires re-training if changed.
   arpa_streaming:
     name: Streaming ARPA decoder
     description: >-
@@ -95,10 +97,12 @@ configuration:
     description: >-
       Do a second pass with language model to get a more accurate transcription.
       Requires disabling ARPA streaming.
+      Requires re-training if changed.
   arpa_rescore_order:
     name: Rescore ARPA order
     description: >-
       N-gram order of rescored language model. Higher is more accurate, but slower.
+      Requires re-training if changed.
   arpa_rescore_acoustic_scale:
     name: Rescore ARPA acoustic scale
     description: >-
