@@ -1,5 +1,5 @@
 ---
-version: 1.4.2
+version: 1.4.3
 slug: rhasspy-speech
 name: rhasspy-speech
 description: Speech-to-text system from Rhasspy
@@ -26,22 +26,13 @@ options:
   speex_noise_suppression: -30
   speex_auto_gain: 4000
   # Edit distance
-  word_norm_distance_threshold: 0.0
-  char_norm_distance_threshold: 0.2
+  norm_distance_threshold: 0.2
   # Transcribers
-  grammar: true
-  grammar_streaming: true
-  grammar_max_active: 7000
-  grammar_lattice_beam: 8.0
-  grammar_acoustic_scale: 1.0
-  grammar_beam: 24.0
-  #
-  arpa: true
-  arpa_streaming: false
-  arpa_max_active: 7000
-  arpa_lattice_beam: 8.0
-  arpa_acoustic_scale: 1.0
-  arpa_beam: 24.0
+  max_active: 7000
+  lattice_beam: 8.0
+  acoustic_scale: 1.0
+  beam: 24.0
+  nbest: 5
   #
   arpa_rescore: true
   arpa_rescore_order: 5
@@ -60,22 +51,13 @@ schema:
   speex_noise_suppression: int
   speex_auto_gain: int
   # Edit distance
-  word_norm_distance_threshold: float
-  char_norm_distance_threshold: float
+  norm_distance_threshold: float
   # Transcribers
-  grammar: bool
-  grammar_streaming: bool
-  grammar_max_active: int
-  grammar_lattice_beam: float
-  grammar_acoustic_scale: float
-  grammar_beam: float
-  #
-  arpa: bool
-  arpa_streaming: bool
-  arpa_max_active: int
-  arpa_lattice_beam: float
-  arpa_acoustic_scale: float
-  arpa_beam: float
+  max_active: int
+  lattice_beam: float
+  acoustic_scale: float
+  beam: float
+  nbest: int
   #
   arpa_rescore: bool
   arpa_rescore_order: int

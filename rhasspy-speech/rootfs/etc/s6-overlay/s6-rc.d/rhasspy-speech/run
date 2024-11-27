@@ -18,22 +18,6 @@ if bashio::config.true 'speex'; then
 fi
 
 # Transcribers
-if bashio::config.false 'grammar'; then
-    flags+=('--no-grammar')
-fi
-
-if bashio::config.false 'grammar_streaming'; then
-    flags+=('--no-grammar-streaming')
-fi
-
-if bashio::config.false 'arpa'; then
-    flags+=('--no-arpa')
-fi
-
-if bashio::config.false 'arpa_streaming'; then
-    flags+=('--no-arpa-streaming')
-fi
-
 if bashio::config.true 'arpa_rescore'; then
     flags+=('--arpa-rescore')
 fi
@@ -53,16 +37,12 @@ exec .venv/bin/python3 -m wyoming_rhasspy_speech \
     --before-speech-seconds "$(bashio::config 'before_speech_seconds')" \
     --speex-noise-suppression "$(bashio::config 'speex_noise_suppression')" \
     --speex-auto-gain "$(bashio::config 'speex_auto_gain')" \
-    --word-norm-distance-threshold "$(bashio::config 'word_norm_distance_threshold')" \
-    --char-norm-distance-threshold "$(bashio::config 'char_norm_distance_threshold')" \
-    --grammar-max-active "$(bashio::config 'grammar_max_active')" \
-    --grammar-lattice-beam "$(bashio::config 'grammar_lattice_beam')" \
-    --grammar-acoustic-scale "$(bashio::config 'grammar_acoustic_scale')" \
-    --grammar-beam "$(bashio::config 'grammar_beam')" \
-    --arpa-max-active "$(bashio::config 'arpa_max_active')" \
-    --arpa-lattice-beam "$(bashio::config 'arpa_lattice_beam')" \
-    --arpa-acoustic-scale "$(bashio::config 'arpa_acoustic_scale')" \
-    --arpa-beam "$(bashio::config 'arpa_beam')" \
+    --norm-distance-threshold "$(bashio::config 'norm_distance_threshold')" \
+    --max-active "$(bashio::config 'max_active')" \
+    --lattice-beam "$(bashio::config 'lattice_beam')" \
+    --acoustic-scale "$(bashio::config 'acoustic_scale')" \
+    --beam "$(bashio::config 'beam')" \
+    --nbest "$(bashio::config 'nbest')" \
     --arpa-rescore-order "$(bashio::config 'arpa_rescore_order')" \
     --arpa-rescore-acoustic-scale "$(bashio::config 'arpa_rescore_acoustic_scale')" \
     --hass-token "${SUPERVISOR_TOKEN}" \
