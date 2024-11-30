@@ -18,6 +18,10 @@ if bashio::config.true 'speex'; then
 fi
 
 # Transcribers
+if bashio::config.true 'streaming'; then
+    flags+=('--streaming')
+fi
+
 if bashio::config.true 'arpa_rescore'; then
     flags+=('--arpa-rescore')
 fi
