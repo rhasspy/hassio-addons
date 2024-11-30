@@ -1,5 +1,5 @@
 ---
-version: 1.4.5
+version: 1.4.6
 slug: rhasspy-speech
 name: rhasspy-speech
 description: Speech-to-text system from Rhasspy
@@ -59,7 +59,7 @@ schema:
   nbest: int
   #
   decode_mode: |
-    list(grammar,arpa,arpa_rescore)
+    list(grammar|arpa|arpa_rescore)
   arpa_rescore_order: int
   # Misc
   debug_logging: bool
