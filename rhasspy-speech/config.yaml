@@ -1,5 +1,5 @@
 ---
-version: 1.4.4
+version: 1.4.5
 slug: rhasspy-speech
 name: rhasspy-speech
 description: Speech-to-text system from Rhasspy
@@ -34,9 +34,8 @@ options:
   beam: 24.0
   nbest: 5
   #
-  arpa_rescore: true
+  decode_mode: "arpa"
   arpa_rescore_order: 5
-  arpa_rescore_acoustic_scale: 0.1
   # Misc
   debug_logging: false
 schema:
@@ -59,9 +58,9 @@ schema:
   beam: float
   nbest: int
   #
-  arpa_rescore: bool
+  decode_mode: |
+    list(grammar,arpa,arpa_rescore)
   arpa_rescore_order: int
-  arpa_rescore_acoustic_scale: float
   # Misc
   debug_logging: bool
 ports:
