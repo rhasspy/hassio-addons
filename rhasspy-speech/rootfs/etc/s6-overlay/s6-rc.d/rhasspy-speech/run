@@ -43,8 +43,8 @@ exec .venv/bin/python3 -m wyoming_rhasspy_speech \
     --acoustic-scale "$(bashio::config 'acoustic_scale')" \
     --beam "$(bashio::config 'beam')" \
     --nbest "$(bashio::config 'nbest')" \
+    --decode-mode "$(bashio::config 'decode_mode')" \
     --arpa-rescore-order "$(bashio::config 'arpa_rescore_order')" \
-    --arpa-rescore-acoustic-scale "$(bashio::config 'arpa_rescore_acoustic_scale')" \
     --hass-token "${SUPERVISOR_TOKEN}" \
     --hass-websocket-uri 'ws://supervisor/core/websocket' \
     --hass-ingress \
