@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.5.0
+
+- Using ARPA decoding by default
+
 ## 1.4.0
 
 - Expose options

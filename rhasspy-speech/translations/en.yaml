@@ -43,25 +43,25 @@ configuration:
     description: >-
       Decode in streaming mode (faster, but less accurate).
   max_active:
-    name: Maximum ARPA candidates
+    name: Max decoding candidates
     description: >-
-      Maximum number of language model candidates during decoding.
+      Maximum number of candidates during decoding.
   lattice_beam:
-    name: ARPA lattice beam width
+    name: Lattice beam width
     description: >-
-      Width of lattice beam during language model decoding.
+      Width of lattice beam during decoding.
   acoustic_scale:
-    name: ARPA acoustic weight scale
+    name: Acoustic weight scale
     description: >-
-      Acoustic weight scale during ARPA decoding (smaller to adhere more to the language model).
+      Acoustic weight scale during decoding (smaller to adhere more to the language model).
   beam:
-    name: ARPA beam width
+    name: Beam width
     description: >-
-      Width of beam during pruning Viterbi beam search in ARPA decoding.
+      Width of beam during pruning Viterbi beam search in decoding.
   nbest:
-    name: Number of best candidates
+    name: Max transcripts to match
     description: >-
-      Number of best candidates to consider in matching.
+      Number of top transcripts to consider in matching.
       More candidates increases tolerance to noise, but is slower.
       Set to 1 if using grammar decode mode.
   decode_mode:
