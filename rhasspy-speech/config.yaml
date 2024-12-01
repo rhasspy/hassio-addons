@@ -1,5 +1,5 @@
 ---
-version: 1.4.8
+version: 1.4.9
 slug: rhasspy-speech
 name: rhasspy-speech
 description: Speech-to-text system from Rhasspy
@@ -26,13 +26,13 @@ options:
   speex_noise_suppression: -30
   speex_auto_gain: 4000
   # Edit distance
-  norm_distance_threshold: 0.2
+  norm_distance_threshold: 0.15
   # Transcribers
   max_active: 7000
   lattice_beam: 8.0
   acoustic_scale: 1.0
   beam: 24.0
-  nbest: 5
+  nbest: 3
   #
   streaming: true
   decode_mode: "arpa"

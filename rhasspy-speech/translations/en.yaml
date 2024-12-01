@@ -32,81 +32,52 @@ configuration:
     description: >-
       Amount of auto gain (higher is more gain)
   # Edit distance
-  word_norm_distance_threshold:
+  norm_distance_threshold:
     name: Word edit distance threshold
     description: >-
-      Normalized word edit distance threshold (0-1)
-  char_norm_distance_threshold:
-    name: Character edit distance threshold
-    description: >-
-      Normalized character edit distance threshold (0-1)
+      Normalized edit distance threshold (0-1).
+      Allows a percentage of characters in the transcript to be changed.
   # Transcribers
-  grammar:
-    name: Use grammar
+  streaming:
+    name: Streaming decoding
     description: >-
-      Fast decoding, but cannot handle unexpected words/phrases.
-      Requires re-training if changed.
-  grammar_streaming:
-    name: Streaming grammar decoder
-    description: >-
-      Decode grammar in streaming mode (faster, but less accurate).
-  grammar_max_active:
-    name: Maximum grammar candidates
-    description: >-
-      Maximum number of grammar candidates during decoding.
-  grammar_lattice_beam:
-    name: Grammar lattice beam width
-    description: >-
-      Width of lattice beam during grammar decoding.
-  grammar_acoustic_scale:
-    name: Grammar acoustic weight scale
-    description: >-
-      Acoustic weight scale during grammar decoding (should not matter).
-  grammar_beam:
-    name: Grammar beam width
-    description: >-
-      Width of beam during pruning Viterbi beam search in grammar decoding.
-  arpa:
-    name: Use language model
-    description: >-
-      Slower decoding, but can ignore unexpected words/phrases.
-      Requires re-training if changed.
-  arpa_streaming:
-    name: Streaming ARPA decoder
-    description: >-
-      Decode language model in streaming mode (faster, but less accurate).
-      Must be disabled to use rescoring.
-  arpa_max_active:
+      Decode in streaming mode (faster, but less accurate).
+  max_active:
     name: Maximum ARPA candidates
     description: >-
       Maximum number of language model candidates during decoding.
-  arpa_lattice_beam:
+  lattice_beam:
     name: ARPA lattice beam width
     description: >-
       Width of lattice beam during language model decoding.
-  arpa_acoustic_scale:
+  acoustic_scale:
     name: ARPA acoustic weight scale
     description: >-
       Acoustic weight scale during ARPA decoding (smaller to adhere more to the language model).
-  arpa_beam:
+  beam:
     name: ARPA beam width
     description: >-
       Width of beam during pruning Viterbi beam search in ARPA decoding.
-  arpa_rescore:
-    name: Rescore ARPA
+  nbest:
+    name: Number of best candidates
     description: >-
-      Do a second pass with language model to get a more accurate transcription.
-      Requires disabling ARPA streaming.
+      Number of best candidates to consider in matching.
+      More candidates increases tolerance to noise, but is slower.
+      Set to 1 if using grammar decode mode.
+  decode_mode:
+    name: Decode mode
+    description: >-
+      Decoding mode.
+      grammar is fast, but inflexible.
+      arpa is flexible, but slower.
+      arpa_rescore is flexible and more accurate, but slowest.
       Requires re-training if changed.
   arpa_rescore_order:
     name: Rescore ARPA order
     description: >-
       N-gram order of rescored language model. Higher is more accurate, but slower.
+      Requires decode mode set to arpa_rescore.
       Requires re-training if changed.
-  arpa_rescore_acoustic_scale:
-    name: Rescore ARPA acoustic scale
-    description: >-
-      Acoustic scale used during rescoring (smaller to adhere more to the language model).
   # Misc
   debug_logging:
     name: Debug logging
