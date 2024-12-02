@@ -7,4 +7,4 @@ codenotary:
   base_image: notary@home-assistant.io
 args:
   RHASSPY_SPEECH_VERSION: 1.4.3
-  WYOMING_RHASSPY_SPEECH_VERSION: 1.4.2
+  WYOMING_RHASSPY_SPEECH_VERSION: 1.4.3
