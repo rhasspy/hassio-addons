@@ -1,82 +1,111 @@
 ---
 configuration:
+  language:
+    name: Auto-train language
+    description: >-
+      Automatically download model and train for language.
+  streaming:
+    name: Streaming decoding
+    description: >-
+      Decode in streaming mode (faster, but less accurate).
+  decode_mode:
+    name: Decode mode
+    description: >-
+      Decoding mode.
+      Strict is fast, but inflexible.
+      Flexible is slower, but can tolerate noise better.
+      Flexible 2-pass is even more accurate, but slowest.
+      Requires re-training if changed.
+  builtin_intents:
+    name: Include builtin intents
+    description: >-
+      Include builtin intents when training.
+      Disable to only use your custom sentences.
+      Requires re-training if changed.
+  download_entities:
+    name: Download Home Assistant entities
+    description: >-
+      Automatically download Home Assistant entities during training.
+      Requires re-training if changed.
   # Audio
   volume_multiplier:
     name: Volume multiplier
     description: >-
       Constant to multiply audio samples by (> 1 is louder, < 1 is quieter).
-  # VAD
+      Default is 1.0.
+ # VAD
   vad:
     name: Remove silence
     description: >-
       Remove audio before speech is detected.
+      Default is true.
   vad_threshold:
     name: Silence threshold
     description: >-
       Threshold for voice activity detection (0-1).
+      Default is 0.5.
   before_speech_seconds:
     name: Before speech seconds
     description: >-
       Seconds of audio to keep before speech is detected.
+      Default is 0.7.
   # Speex
   speex:
     name: Clean audio
     description: >-
       Clean audio with Speex.
+      Default is false.
   speex_noise_suppression:
     name: Noise suppression level
     description: >-
       Amount of noise suppression (negative, lower is more suppression)
+      Default is -30.
   speex_auto_gain:
     name: Auto gain level
     description: >-
       Amount of auto gain (higher is more gain)
-  # Edit distance
-  norm_distance_threshold:
-    name: Word edit distance threshold
+      Default is 4000.
+  # Fuzzy
+  max_fuzzy_cost:
+    name: Max fuzzy matching cost
     description: >-
-      Normalized edit distance threshold (0-1).
-      Allows a percentage of characters in the transcript to be changed.
+      The default is 3, allowing 2-3 words to be corrected.
+      Higher values allow more corrections, but may reduce accuracy.
   # Transcribers
-  streaming:
-    name: Streaming decoding
-    description: >-
-      Decode in streaming mode (faster, but less accurate).
   max_active:
     name: Max decoding candidates
     description: >-
       Maximum number of candidates during decoding.
+      Default is 7000.
   lattice_beam:
     name: Lattice beam width
     description: >-
       Width of lattice beam during decoding.
+      Default is 8.
   acoustic_scale:
     name: Acoustic weight scale
     description: >-
-      Acoustic weight scale during decoding (smaller to adhere more to the language model).
+      Acoustic weight scale during decoding.
+      Smaller to adhere more to the trained sentences.
+      Default is 0.5.
   beam:
     name: Beam width
     description: >-
       Width of beam during pruning Viterbi beam search in decoding.
+      Default is 24.
   nbest:
     name: Max transcripts to match
     description: >-
       Number of top transcripts to consider in matching.
       More candidates increases tolerance to noise, but is slower.
-      Set to 1 if using grammar decode mode.
-  decode_mode:
-    name: Decode mode
-    description: >-
-      Decoding mode.
-      grammar is fast, but inflexible.
-      arpa is flexible, but slower.
-      arpa_rescore is flexible and more accurate, but slowest.
-      Requires re-training if changed.
+      Default is 3.
+      Automatically set to 1 if using grammar decode mode.
   arpa_rescore_order:
     name: Rescore ARPA order
     description: >-
       N-gram order of rescored language model. Higher is more accurate, but slower.
-      Requires decode mode set to arpa_rescore.
+      Requires decode mode set to flexible_2pass.
+      Default is 5.
       Requires re-training if changed.
   # Misc
   debug_logging:

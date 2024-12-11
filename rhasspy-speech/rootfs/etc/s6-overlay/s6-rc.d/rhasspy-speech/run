@@ -7,9 +7,46 @@ cd /usr/src
 
 flags=()
 
+if bashio::config.equals 'decode_mode' 'strict'; then
+    decode_mode='grammar'
+elif bashio::config.equals 'decode_mode' 'flexible'; then
+    decode_mode='arpa'
+elif bashio::config.equals 'decode_mode' 'flexible_2pass'; then
+    decode_mode='arpa_rescore'
+else
+    decode_mode='arpa'
+fi
+
+flags+=('--decode-mode' "${decode_mode}")
+
+if bashio::config.true 'streaming'; then
+    flags+=('--streaming')
+fi
+
+if bashio::config.false 'builtin_intents'; then
+    flags+=('--no-hass-builtin-intents')
+fi
+
+if bashio::config.true 'download_entities'; then
+    flags+=('--hass-auto-train')
+fi
+
+# Audio
+if bashio::config.has_value 'volume_multiplier'; then
+    flags+=('--volume-multiplier' "$(bashio::config 'volume_multiplier')")
+fi
+
 # VAD
 if bashio::config.false 'vad'; then
     flags+=('--no-vad')
+fi
+
+if bashio::config.has_value 'vad_threshold'; then
+    flags+=('--vad-threshold' "$(bashio::config 'vad_threshold')")
+fi
+
+if bashio::config.has_value 'before_speech_seconds'; then
+    flags+=('--before-speech-seconds' "$(bashio::config 'before_speech_seconds')")
 fi
 
 # Speex
@@ -17,13 +54,42 @@ if bashio::config.true 'speex'; then
     flags+=('--speex')
 fi
 
-# Transcribers
-if bashio::config.true 'streaming'; then
-    flags+=('--streaming')
+if bashio::config.has_value 'speex_noise_suppression'; then
+    flags+=('--speex-noise-suppression' "$(bashio::config 'speex_noise_suppression')")
 fi
 
-if bashio::config.true 'arpa_rescore'; then
-    flags+=('--arpa-rescore')
+if bashio::config.has_value 'speex_auto_gain'; then
+    flags+=('--speex-auto-gain' "$(bashio::config 'speex_auto_gain')")
+fi
+
+# Fuzzy
+if bashio::config.has_value 'max_fuzzy_cost'; then
+    flags+=('--max-fuzzy-cost' "$(bashio::config 'max_fuzzy_cost')")
+fi
+
+# Transcribers
+if bashio::config.has_value 'max_active'; then
+    flags+=('--max-active' "$(bashio::config 'max_active')")
+fi
+
+if bashio::config.has_value 'lattice_beam'; then
+    flags+=('--lattice-beam' "$(bashio::config 'lattice_beam')")
+fi
+
+if bashio::config.has_value 'acoustic_scale'; then
+    flags+=('--acoustic-scale' "$(bashio::config 'acoustic_scale')")
+fi
+
+if bashio::config.has_value 'beam'; then
+    flags+=('--beam' "$(bashio::config 'beam')")
+fi
+
+if bashio::config.has_value 'nbest'; then
+    flags+=('--max-active' "$(bashio::config 'nbest')")
+fi
+
+if bashio::config.has_value 'arpa_rescore_order'; then
+    flags+=('--arpa-rescore-order' "$(bashio::config 'arpa_rescore_order')")
 fi
 
 # Misc
@@ -36,19 +102,7 @@ exec .venv/bin/python3 -m wyoming_rhasspy_speech \
     --tools-dir /usr/src/tools \
     --train-dir /share/rhasspy-speech/train \
     --models-dir /share/rhasspy-speech/models \
-    --volume-multiplier "$(bashio::config 'volume_multiplier')" \
-    --vad-threshold "$(bashio::config 'vad_threshold')" \
-    --before-speech-seconds "$(bashio::config 'before_speech_seconds')" \
-    --speex-noise-suppression "$(bashio::config 'speex_noise_suppression')" \
-    --speex-auto-gain "$(bashio::config 'speex_auto_gain')" \
-    --norm-distance-threshold "$(bashio::config 'norm_distance_threshold')" \
-    --max-active "$(bashio::config 'max_active')" \
-    --lattice-beam "$(bashio::config 'lattice_beam')" \
-    --acoustic-scale "$(bashio::config 'acoustic_scale')" \
-    --beam "$(bashio::config 'beam')" \
-    --nbest "$(bashio::config 'nbest')" \
-    --decode-mode "$(bashio::config 'decode_mode')" \
-    --arpa-rescore-order "$(bashio::config 'arpa_rescore_order')" \
+    --auto-train "$(bashio::config 'language')"  \
     --hass-token "${SUPERVISOR_TOKEN}" \
     --hass-websocket-uri 'ws://supervisor/core/websocket' \
     --hass-ingress \

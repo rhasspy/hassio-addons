@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1>Download</h1>
+<h2>{{ model_id }}</h2>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <a href="{{ url_for('models') }}">Back to models</a>
+</div>
+<div class="row">
+  <textarea id="log" rows="10"></textarea>
+</div>
+
+<script type="text/javascript">
+  window.onload = async function() {
+      const log = document.getElementById("log");
+      log.value = "";
+      
+      const response = await fetch("{{ url_for('api_download', id=model_id) }}", {method:"post"});
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder("utf-8");
+
+      while (true) {
+          const { done, value } = await reader.read();
+          if (done) {
+              break;
+          }
+
+          log.value = decoder.decode(value, { stream: true }) + log.value;
+      }
+  }
+</script>
+
+{% endblock %}

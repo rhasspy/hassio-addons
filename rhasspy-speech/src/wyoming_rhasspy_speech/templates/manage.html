@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1>Manage ({{ model_id }})</h1>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-3">
+  <a href="{{ url_for('models') }}">Back to models</a>
+</div>
+<div class="row">
+  <table class="table table-bordered">
+    <tbody>
+      {% if suffixes: %}
+      <tr>
+        <td>
+          <select onchange="window.location.href=this.value">
+            {% if suffix: %}
+            <option value="{{ url_for('manage', id=model_id) }}">Default</option>
+            <option value="{{ url_for('manage', id=model_id, suffix=suffix) }}" selected>{{ suffix }}</option>
+            {% else: %}
+            <option value="" selected>Default</option>
+            {% endif %}
+            {% for other_suffix in suffixes: %}
+            {% if suffix != other_suffix: %}
+            <option value="{{ url_for('manage', id=model_id, suffix=other_suffix) }}">{{ other_suffix }}</option>
+            {% endif %}
+            {% endfor %}
+          </select>
+        </td>
+        <td>Change sub-model</td>
+      </tr>
+      {% endif %}
+      <tr>
+        <td>
+          <a href="{{ url_for('sentences', id=model_id, suffix=suffix) }}" class="btn btn-success">Edit Sentences</a>
+        </td>
+        <td>Change the possible sentences you can speak.</td>
+      </tr>
+      <tr>
+        <td>
+          <a href="{{ url_for('intents', id=model_id, suffix=suffix) }}" class="btn btn-info">View Intents</a>
+        </td>
+        <td>See what kinds of voice commands you can say.</td>
+      </tr>
+      <tr>
+        <td>
+          <a href="{{ url_for('words', id=model_id) }}" class="btn btn-secondary">Look Up Words</a>
+        </td>
+        <td>Look up or guess word pronunciations.</td>
+      </tr>
+  </tbody>
+  </table>
+</div>
+<div class="row">
+  <button id="train" onclick="train()" class="btn btn-primary">Start Training</button>
+</div>
+<div class="row mt-3">
+  <textarea id="log" rows="20"></textarea>
+</div>
+
+<script type="text/javascript">
+  async function train() {
+      const button = document.getElementById("train");
+      button.disabled = true;
+
+      const log = document.getElementById("log");
+      log.value = "";
+
+      const response = await fetch("{{ url_for('api_train', id=model_id, suffix=suffix) | safe }}", {method:"post"});
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder("utf-8");
+
+      while (true) {
+          const { done, value } = await reader.read();
+          if (done) {
+              break;
+          }
+
+          log.value = decoder.decode(value, { stream: true }) + log.value;
+      }
+
+      button.disabled = false;
+  }
+</script>
+{% endblock %}

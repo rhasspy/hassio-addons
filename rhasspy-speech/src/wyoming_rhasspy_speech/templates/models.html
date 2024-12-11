@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1>Rhasspy Speech</h1>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <p>Choose a model below to <b>manage</b> or <b>download</b>.</p>
+</div>
+<div class="row">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>&nbsp;</th>
+        <th>Id</th>
+        <th>Language</th>
+        <th>Attribution</th>
+        <th>&nbsp;</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for model_id, model in available_models.items() | sort: %}
+      <tr>
+        <td>
+          {% if model.id in downloaded_models %}
+          <a href="{{ url_for('manage', id=model_id) }}" class="btn btn-primary">Manage</a>
+          {% else: %}
+          <a href="{{ url_for('download', id=model_id) }}" class="btn btn-secondary">Download</a>
+          {% endif %}
+        </td>
+        <td>{{ model.id }}</td>
+        <td>{{ model.language }}</td>
+        <td>{{ model.attribution }}</td>
+        <td>
+          {% if model.id in downloaded_models %}
+          <a href="{{ url_for('delete', id=model_id) }}" onclick="return confirm('Are you sure? This will delete the downloaded model and training data.')" class="btn btn-danger">Delete</a>
+          {% else: %}
+          &nbsp;
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

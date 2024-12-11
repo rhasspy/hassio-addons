@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1>Sentences ({{ model_id }})</h1>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-3">
+  <details>
+    <summary>YAML Format</summary>
+    <pre class="text-start"><code>
+sentences:
+  - "a sentence with (this|or that) and [optional] word[s]"
+  - in: "set {name} brightness to {brightness} [percent]"
+    requires_context:
+      domain: light
+  - in: "turn (on|off) {name}"
+    excludes_context:
+      domain: cover
+lists:
+  my_list:
+    values:
+      - "basic list value"
+      - in: "spoken value"
+        out: "written value"
+  name:
+    values:
+      - in: "overhead light"
+        context:
+          domain: light
+      - in: "garage door"
+        context:
+          domain: cover
+  brightness:
+    range:
+      from: 1
+      to: 100
+    </code></pre>
+  </details>
+</div>
+<div class="row">
+  <form method="post">
+    <div class="mb-3">
+      <button type="submit" class="btn btn-primary">Save</button>
+      <a href="{{ url_for('manage', id=model_id) }}" class="btn btn-secondary">Cancel</a>
+    </div>
+    <div class="mb-3">
+      <textarea name="sentences" id="sentences" class="form-control" rows="20" style="font-family: monospace" required>{{ sentences }}</textarea>
+    </div>
+    <div class="mb-3">
+      <button type="submit" class="btn btn-primary">Save</button>
+      <a href="{{ url_for('manage', id=model_id) }}" class="btn btn-secondary">Cancel</a>
+    </div>
+  </form>
+</div>
+<div class="row">
+  <h2>Home Assistant</h2>
+</div>
+<div class="row mb-3">
+  <button onclick="getExposed()" class="btn btn-secondary">Download Exposed Entities</button>
+</div>
+<div class="row mb-3">
+  <textarea name="exposed" id="exposed" rows="20" style="font-family: monospace"></textarea>
+</div>
+
+<script type="text/javascript">
+  async function getExposed() {
+      const exposed = document.getElementById("exposed");
+      exposed.value = "";
+      
+      const response = await fetch("{{ url_for('api_hass_exposed') }}", {method:"post"});
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder("utf-8");
+
+      while (true) {
+          const { done, value } = await reader.read();
+          if (done) {
+              break;
+          }
+
+          exposed.value += decoder.decode(value, { stream: true });
+      }
+  }
+</script>
+{% endblock %}

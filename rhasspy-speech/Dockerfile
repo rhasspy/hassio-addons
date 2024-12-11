@@ -7,10 +7,9 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # Install rhasspy-speech
 WORKDIR /usr/src
-ARG RHASSPY_SPEECH_VERSION
-ARG WYOMING_RHASSPY_SPEECH_VERSION
 
 RUN mkdir -p ./tools
+COPY src/ ./
 
 RUN \
     apt-get update \
@@ -33,9 +32,7 @@ RUN \
     && .venv/bin/pip3 install --no-cache-dir -U \
         setuptools \
         wheel \
-    && .venv/bin/pip3 install --no-cache-dir \
-        "rhasspy-speech @ https://github.com/rhasspy/rhasspy-speech/archive/refs/tags/v${RHASSPY_SPEECH_VERSION}.tar.gz" \
-        "wyoming-rhasspy-speech @ https://github.com/rhasspy/wyoming-rhasspy-speech/archive/refs/tags/v${WYOMING_RHASSPY_SPEECH_VERSION}.tar.gz" \
+    && .venv/bin/pip3 install --no-cache-dir -r ./requirements.txt \
     && apt-get remove --yes build-essential \
     && apt-get autoclean \
     && apt-get purge \

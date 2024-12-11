@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% block head %}{% endblock %}
+    <title>{% block title %}{% endblock %} - Rhasspy Speech</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+  </head>
+  <body>
+    {% if error: %}
+    <div class="col">
+      <div class="alert alert-danger" role="alert">
+        {{ error }}
+      </div>
+    </div>
+    {% endif %}
+    {% if success: %}
+    <div class="col">
+      <div class="alert alert-success" role="alert">
+        {{ success }}
+      </div>
+    </div>
+    {% endif %}
+    <div class="container text-center">
+      <div class="row">
+        {% block header %}{% endblock %}
+      </div>
+      {% block content %}{% endblock %}
+    </div>
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.js') }}"></script>
+  </body>
+</html>

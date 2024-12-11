@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1>Intents ({{ language }})</h1>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-3">
+  <a href="{{ url_for('manage', id=model_id) }}">Back to model</a>
+</div>
+
+<div class="row text-start">
+
+{% if not sentences: %}
+<div class="alert alert-danger" role="alert">
+  No sentences found for language.
+</div>
+{% endif %}
+
+{% for intent_name, sentence_groups in sentences | dictsort(by='key'): %}
+<div class="col-12 col-md-6 col-lg-3 border m-2 p-0">
+<h2 class="bg-info text-white text-center p-1">{{ intent_name }}</h2>
+
+{% for group_idx, sentence_texts in sentence_groups.items(): %}
+
+{% set processed_texts = [] %}
+{% for sentence_text in sentence_texts: %}
+  {% set processed_words = [] %}
+  {% for word in sentence_text.split(): %}
+    {% if word.startswith("__number:"): %}
+      {% set word_parts = word.split(":", maxsplit=1)[1].split(",") %}
+      {% set _ = processed_words.append(range(word_parts[0] | int, word_parts[1] | int, word_parts[2] | int)) %}
+    {% elif word.startswith("__list:"): %}
+      {% set encoded_list = word.split(":", maxsplit=1)[1] %}
+      {% set _ = processed_words.append(decode_list(encoded_list)) %}
+    {% else: %}
+      {% set _ = processed_words.append(word) %}
+    {% endif %}
+  {% endfor %}
+  {% set _ = processed_texts.append(processed_words) %}
+{% endfor %}
+
+<ul>
+{% for processed_words in processed_texts: %}
+  <li class="p-1">
+{% for word in processed_words: %}
+  {% if isstring(word): %}
+  {{ word }}&nbsp;
+  {% else: %}
+  <select>
+    {% for sub_word in word: %}
+    <option {% if loop.index0 == 0:  %}selected{% endif %}>{{ sub_word }}</option>
+    {% endfor %}
+  </select>
+  {% endif %}
+{{ sentence_text }}
+{% endfor %}
+  </li>
+{% endfor %}
+</ul>
+
+{% endfor %}
+
+</div>  <!-- intent column -->
+{% endfor %}
+
+</div> <!-- row -->
+{% endblock %}

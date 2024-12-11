@@ -1,5 +1,5 @@
 ---
-version: 1.5.1
+version: 2.0.0
 slug: rhasspy-speech
 name: rhasspy-speech
 description: Speech-to-text system from Rhasspy
@@ -15,54 +15,39 @@ map:
 ingress: true
 homeassistant_api: true
 options:
-  # Audio
-  volume_multiplier: 1.0
-  # VAD
-  vad: true
-  vad_threshold: 0.5
-  before_speech_seconds: 0.7
-  # Speex
-  speex: false
-  speex_noise_suppression: -30
-  speex_auto_gain: 4000
-  # Edit distance
-  norm_distance_threshold: 0.15
-  # Transcribers
-  max_active: 7000
-  lattice_beam: 8.0
-  acoustic_scale: 1.0
-  beam: 24.0
-  nbest: 3
-  #
+  language: "en"
+  builtin_intents: true
+  download_entities: true
+  decode_mode: "auto"
   streaming: true
-  decode_mode: "arpa"
-  arpa_rescore_order: 5
   # Misc
   debug_logging: false
 schema:
-  # Audio
-  volume_multiplier: float
-  # VAD
-  vad: bool
-  vad_threshold: float
-  before_speech_seconds: float
-  # Speex
-  speex: bool
-  speex_noise_suppression: int
-  speex_auto_gain: int
-  # Edit distance
-  norm_distance_threshold: float
-  # Transcribers
-  max_active: int
-  lattice_beam: float
-  acoustic_scale: float
-  beam: float
-  nbest: int
-  #
+  language: |
+    list(cs|de|en|es|fr|it|nl|ru)
   streaming: bool
   decode_mode: |
-    list(grammar|arpa|arpa_rescore)
-  arpa_rescore_order: int
+    list(auto|strict|flexible|flexible_2pass)
+  builtin_intents: bool
+  download_entities: bool
+  # Audio
+  volume_multiplier: float?
+  # VAD
+  vad: bool?
+  vad_threshold: float?
+  before_speech_seconds: float?
+  # Speex
+  speex: bool?
+  speex_noise_suppression: int?
+  speex_auto_gain: int?
+  # Transcribers
+  max_fuzzy_cost: float?
+  max_active: int?
+  lattice_beam: float?
+  acoustic_scale: float?
+  beam: float?
+  nbest: int?
+  arpa_rescore_order: int?
   # Misc
   debug_logging: bool
 ports:

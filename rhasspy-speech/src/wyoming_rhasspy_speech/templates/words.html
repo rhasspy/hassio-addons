@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1>Manage ({{ model_id }})</h1>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-3">
+  <a href="{{ url_for('manage', id=model_id) }}">Back to model</a>
+</div>
+<div class="row mb-3">
+  <details>
+    <summary>Word Format</summary>
+    <p>Write each word on a separate line.</p>
+    <p>Add wildcards (<tt>*</tt>) to look up all matching words.</p>
+    <p>Surround <tt>p[art]</tt> of a word with <tt>[...]</tt> to pronounce just that part.</p>
+  </details>
+</div>
+<div class="row">
+  <form method="post">
+    <div class="mb-3">
+      <input type="submit" value="Lookup" class="btn btn-primary">
+    </div>
+    <div class="mb-3">
+      <textarea name="words" id="words" rows="5" class="form-control" placeholder="Enter words to look up or guess" required>{{ words }}</textarea>
+    </div>
+  </form>
+</div>
+<div class="row mb-3">
+  <div class="col">
+    <form>
+      <label for="found" class="form-label">Found</label>
+      <textarea name="found" id="found" rows="20" class="form-control" placeholder="Words in the dictionary">{{ found }}</textarea>
+    </form>
+  </div>
+  <div class="col">
+    <form>
+      <label for="guessed" class="form-label">Guessed</label>
+      <textarea name="guessed" id="guessed" rows="20" class="form-control" placeholder="Guessed pronunciations">{{ guessed }}</textarea>
+    </form>
+  </div>
+</div>
+{% endblock %}
