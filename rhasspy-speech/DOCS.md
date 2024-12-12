@@ -1,6 +1,8 @@
 # Home Assistant Add-on: rhasspy-speech
 
-Rhasspy speech is a speech-to-text system that recognizes what you say from a set of pre-defined sentences.
+![logo](logo.png)
+
+[Rhasspy speech](https://github.com/rhasspy/rhasspy-speech) is a speech-to-text system that recognizes what you say from a set of pre-defined sentences.
 It's targeted at lower-end hardware, such as the Raspberry Pi 4.
 
 ## Supported languages
@@ -14,7 +16,7 @@ It's targeted at lower-end hardware, such as the Raspberry Pi 4.
 * Russian (`ru`)
 * Spanish (`es`)
 
-A collection of [builtin](https://github.com/rhasspy/wyoming-rhasspy-speech/tree/master/wyoming_rhasspy_speech/sentences) sentences are available, which target the [builtin intents](https://developers.home-assistant.io/docs/intent_builtin) in Home Assistant.
+A collection of [builtin sentences](https://github.com/rhasspy/wyoming-rhasspy-speech/tree/master/wyoming_rhasspy_speech/sentences) are available, which target the [builtin intents](https://developers.home-assistant.io/docs/intent_builtin) in Home Assistant.
 
 Then names of your [exposed](https://www.home-assistant.io/voice_control/voice_remote_expose_devices/) entities, areas, and floors in Home Assistant are automatically added during the training process.
 
