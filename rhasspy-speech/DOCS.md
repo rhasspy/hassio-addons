@@ -1,5 +1,25 @@
 # Home Assistant Add-on: rhasspy-speech
 
+Rhasspy speech is a speech-to-text system that recognizes what you say from a set of pre-defined sentences.
+It's targeted at lower-end hardware, such as the Raspberry Pi 4.
+
+## Supported languages
+
+* Czech (`cz`)
+* Dutch (`nl`)
+* English (`en`)
+* French (`fr`)
+* German (`de`)
+* Italian (`it`)
+* Russian (`ru`)
+* Spanish (`es`)
+
+A collection of [builtin](https://github.com/rhasspy/wyoming-rhasspy-speech/tree/master/wyoming_rhasspy_speech/sentences) sentences are available, which target the [builtin intents](https://developers.home-assistant.io/docs/intent_builtin) in Home Assistant.
+
+Then names of your [exposed](https://www.home-assistant.io/voice_control/voice_remote_expose_devices/) entities, areas, and floors in Home Assistant are automatically added during the training process.
+
+You may also add your own [custom voice commands](#custom-voice-commands) as well [custom word pronunciations](#word-pronunciations).
+
 ## Installation
 
 Follow these steps to get the add-on installed on your system:
@@ -112,7 +132,7 @@ unknown_sentence_response: "My custom response"
 
 You will need a [custom sentence](https://www.home-assistant.io/voice_control/custom_sentences/) in Home Assistant in order to do something with the response.
 
-### Word Pronunciatons
+### Word Pronunciations
 
 You can customize the pronunciation of words too:
 
