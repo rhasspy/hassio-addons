@@ -125,151 +125,151 @@ intents:
   # turn on/off
   # open/close
   # lock/unlock
-  HassTurnOn:
-    data:
-      # turn on
-      - sentences:
-          - "<allume> [les] lumières"
+  # HassTurnOn:
+  #   data:
+  #     # turn on
+  #     - sentences:
+  #         - "<allume> [les] lumières"
 
-      - sentences:
-          - "<allume> [<le>]{name}"
-          - "<allume> [<le>]{name} <dans> [<le>]{area}"
-        requires_context:
-          domain:
-            - light
-            - switch
+  #     - sentences:
+  #         - "<allume> [<le>]{name}"
+  #         - "<allume> [<le>]{name} <dans> [<le>]{area}"
+  #       requires_context:
+  #         domain:
+  #           - light
+  #           - switch
 
-      - sentences:
-          - "allume[z] [toutes [les]] [les] lumières de [le|la|les] {area}"
-          - "allume[z] [toutes [les]] [les] lumières dans [le|la|les] {area}"
-          - "allume[z] [toutes [les]] [les] lumières (au|dans le) [le|la|les] {floor} [étage]"
+  #     - sentences:
+  #         - "allume[z] [toutes [les]] [les] lumières de [le|la|les] {area}"
+  #         - "allume[z] [toutes [les]] [les] lumières dans [le|la|les] {area}"
+  #         - "allume[z] [toutes [les]] [les] lumières (au|dans le) [le|la|les] {floor} [étage]"
 
-      # open
-      - sentences:
-          - "ouvre[z] [le|la|les] {name}"
-        requires_context:
-          domain:
-            - cover
-            - valve
+  #     # open
+  #     - sentences:
+  #         - "ouvre[z] [le|la|les] {name}"
+  #       requires_context:
+  #         domain:
+  #           - cover
+  #           - valve
 
-      - sentences:
-          - "ouvre[z] [tous [les]] [les] {cover_classes} dans [le|la|les] {area}"
-          - "ouvre[z] [tous [les]] [les] {area} {cover_classes}"
+  #     - sentences:
+  #         - "ouvre[z] [tous [les]] [les] {cover_classes} dans [le|la|les] {area}"
+  #         - "ouvre[z] [tous [les]] [les] {area} {cover_classes}"
 
-      - sentences:
-          - "ouvre[z] [tous [les]] [les] {cover_classes} (au|dans le) [le|la|les] {floor} [étage]"
+  #     - sentences:
+  #         - "ouvre[z] [tous [les]] [les] {cover_classes} (au|dans le) [le|la|les] {floor} [étage]"
 
-      # lock
-      - sentences:
-          - "verrouille[z] [le|la|les] {name}"
-        requires_context:
-          domain: lock
+  #     # lock
+  #     - sentences:
+  #         - "verrouille[z] [le|la|les] {name}"
+  #       requires_context:
+  #         domain: lock
 
-  HassTurnOff:
-    data:
-      # turn off
-      - sentences:
-          - "éteins[z] [les] lumières"
+  # HassTurnOff:
+  #   data:
+  #     # turn off
+  #     - sentences:
+  #         - "éteins[z] [les] lumières"
 
-      - sentences:
-          - "éteins[z] [le|la|les] {name}"
-          - "éteins[z] [le|la|les] {name} dans [le|la|les] {area}"
-        requires_context:
-          domain:
-            - light
-            - switch
+  #     - sentences:
+  #         - "éteins[z] [le|la|les] {name}"
+  #         - "éteins[z] [le|la|les] {name} dans [le|la|les] {area}"
+  #       requires_context:
+  #         domain:
+  #           - light
+  #           - switch
 
-      # close
-      - sentences:
-          - "ferme[z] [le|la|les] {name}"
-        requires_context:
-          domain:
-            - cover
-            - valve
+  #     # close
+  #     - sentences:
+  #         - "ferme[z] [le|la|les] {name}"
+  #       requires_context:
+  #         domain:
+  #           - cover
+  #           - valve
 
-      - sentences:
-          - "ferme[z] [tous [les]] [les] {cover_classes} dans [le|la|les] {area}"
+  #     - sentences:
+  #         - "ferme[z] [tous [les]] [les] {cover_classes} dans [le|la|les] {area}"
 
-      # unlock
-      - sentences:
-          - "déverrouille[z] [le|la|les] {name}"
-        requires_context:
-          domain: lock
+  #     # unlock
+  #     - sentences:
+  #         - "déverrouille[z] [le|la|les] {name}"
+  #       requires_context:
+  #         domain: lock
 
-  # light brightness/color
-  HassLightSet:
-    data:
-      # brightness
-      - sentences:
-          - "régle[z] la luminosité de [le|la|les] {name} à {brightness} pour cent"
-        requires_context:
-          domain: light
+  # # light brightness/color
+  # HassLightSet:
+  #   data:
+  #     # brightness
+  #     - sentences:
+  #         - "régle[z] la luminosité de [le|la|les] {name} à {brightness} pour cent"
+  #       requires_context:
+  #         domain: light
 
-      # color
-      - sentences:
-          - "régle[z] [la couleur de [le|la|les]] {name} à {color}"
-        requires_context:
-          domain: light
+  #     # color
+  #     - sentences:
+  #         - "régle[z] [la couleur de [le|la|les]] {name} à {color}"
+  #       requires_context:
+  #         domain: light
 
-  # timers
-  HassStartTimer:
-    data:
-      # seconds
-      - sentences:
-          - "(lance|démarre|crée) [un] minuteur de {seconds} secondes"
+  # # timers
+  # HassStartTimer:
+  #   data:
+  #     # seconds
+  #     - sentences:
+  #         - "(lance|démarre|crée) [un] minuteur de {seconds} secondes"
 
-      # hours + minutes
-      - sentences:
-          - "(lance|démarre|crée) [un] minuteur pour {hours} heures et {minutes_large} minutes"
+  #     # hours + minutes
+  #     - sentences:
+  #         - "(lance|démarre|crée) [un] minuteur pour {hours} heures et {minutes_large} minutes"
 
-  HassCancelTimer:
-    data:
-      - sentences:
-          - "(arrête|annule) [le|mon] minuteur"
+  # HassCancelTimer:
+  #   data:
+  #     - sentences:
+  #         - "(arrête|annule) [le|mon] minuteur"
 
-  HassCancelAllTimers:
-    data:
-      - sentences:
-          - "(arrête|annule) tous [les|mes] minuteurs"
+  # HassCancelAllTimers:
+  #   data:
+  #     - sentences:
+  #         - "(arrête|annule) tous [les|mes] minuteurs"
 
-  HassTimerStatus:
-    data:
-      - sentences:
-          - "statut du minuteur"
+  # HassTimerStatus:
+  #   data:
+  #     - sentences:
+  #         - "statut du minuteur"
 
-  # media players
-  HassMediaPause:
-    data:
-      - sentences:
-          - "pause [[la ]musique]"
-        requires_context:
-          domain: media_player
+  # # media players
+  # HassMediaPause:
+  #   data:
+  #     - sentences:
+  #         - "pause [[la ]musique]"
+  #       requires_context:
+  #         domain: media_player
 
-  HassMediaNext:
-    data:
-      - sentences:
-          - "(suivant|passe) [[ce ](morceau|chanson)]"
+  # HassMediaNext:
+  #   data:
+  #     - sentences:
+  #         - "(suivant|passe) [[ce ](morceau|chanson)]"
 
-  # temperature
-  HassGetTemperature:
-    data:
-      - sentences:
-          - "(quel[']s|quelle est) la (température|temp)"
+  # # temperature
+  # HassGetTemperature:
+  #   data:
+  #     - sentences:
+  #         - "(quel[']s|quelle est) la (température|temp)"
 
-      - sentences:
-          - "(quel[']s|quelle est) [la] {area} (température|temp)"
+  #     - sentences:
+  #         - "(quel[']s|quelle est) [la] {area} (température|temp)"
 
-  # questions
-  HassGetState:
-    data:
-      - sentences:
-          - "est-ce que [le|la|les] {name} est {state}"
-        requires_context:
-          domain:
-            - cover
-            - valve
-        lists:
-          state:
-            values:
-              - ouvert
-              - fermé
+  # # questions
+  # HassGetState:
+  #   data:
+  #     - sentences:
+  #         - "est-ce que [le|la|les] {name} est {state}"
+  #       requires_context:
+  #         domain:
+  #           - cover
+  #           - valve
+  #       lists:
+  #         state:
+  #           values:
+  #             - ouvert
+  #             - fermé

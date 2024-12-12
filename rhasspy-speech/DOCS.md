@@ -101,6 +101,17 @@ lists:
       - oranges
 ```
 
+### Unrecognize Sentences
+
+When a sentence isn't recognized, an empty text string is returned to Home Assistant by default.
+You may override this in your custom sentences:
+
+```yaml
+unknown_sentence_response: "My custom response"
+```
+
+You will need a [custom sentence](https://www.home-assistant.io/voice_control/custom_sentences/) in Home Assistant in order to do something with the response.
+
 ### Word Pronunciatons
 
 You can customize the pronunciation of words too:

@@ -190,8 +190,9 @@ def get_app(state: AppState) -> Flask:
             try:
                 with io.StringIO(sentences) as sentences_file:
                     sentences_dict = safe_load(sentences_file)
-                    assert "sentences" in sentences_dict, "Missing sentences block"
-                    assert sentences_dict["sentences"], "No sentences"
+                    state.unknown_sentence_responses[model_id] = sentences_dict.get(
+                        "unknown_sentence_response"
+                    )
 
                 # Success
                 sentences_path.parent.mkdir(parents=True, exist_ok=True)
@@ -421,6 +422,21 @@ async def write_exposed(state: AppState, yaml_file: TextIO) -> None:
     )
     SafeDumper.ignore_aliases = lambda *args: True  # type: ignore[assignment]
     safe_dump({"lists": exposed_dict}, yaml_file, sort_keys=False)
+
+
+def load_responses(
+    state: AppState, model_id: str, suffix: Optional[str] = None
+) -> None:
+    """Load responses for a model."""
+    sentences_path = state.settings.sentences_path(model_id, suffix)
+    if not sentences_path.exists():
+        return
+
+    with open(sentences_path, "r", encoding="utf-8") as sentences_file:
+        sentences_dict = safe_load(sentences_file)
+        state.unknown_sentence_responses[model_id] = sentences_dict.get(
+            "unknown_sentence_response", ""
+        )
 
 
 async def train_model(

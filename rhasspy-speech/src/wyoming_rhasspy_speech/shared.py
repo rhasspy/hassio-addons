@@ -1,6 +1,6 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 from rhasspy_speech.const import LangSuffix
 
@@ -66,9 +66,6 @@ class AppSettings:
 
         return self.train_dir / model_id / filename
 
-    def sentences_db_path(self, model_id: str, suffix: Optional[str] = None) -> Path:
-        return self.model_train_dir(model_id, suffix) / "sentences.db"
-
     def get_suffixes(self, model_id: str) -> List[str]:
         suffixes: List[str] = []
         for sentences_path in (self.train_dir / model_id).glob("sentences*.yaml"):
@@ -94,3 +91,7 @@ class AppSettings:
 @dataclass
 class AppState:
     settings: AppSettings
+
+    # Responses for unknown sentences
+    # model_id -> response
+    unknown_sentence_responses: Dict[str, str] = field(default_factory=dict)

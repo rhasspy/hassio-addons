@@ -30,7 +30,7 @@ from wyoming.server import AsyncEventHandler, AsyncServer
 
 from .models import MODELS, Model
 from .shared import AppSettings, AppState
-from .web_server import get_app, train_model, write_exposed
+from .web_server import get_app, load_responses, train_model, write_exposed
 
 _LOGGER = logging.getLogger()
 _DIR = Path(__file__).parent
@@ -178,19 +178,6 @@ async def main() -> None:
         )
     )
 
-    # Run Flask server in a separate thread
-    flask_app = get_app(state)
-    Thread(
-        target=flask_app.run,
-        kwargs={
-            "host": args.web_server_host,
-            "port": args.web_server_port,
-            "debug": args.debug,
-            "use_reloader": False,
-        },
-        daemon=True,
-    ).start()
-
     if args.auto_train:
         model: Optional[Model] = None
         for model_id, maybe_model in MODELS.items():
@@ -273,6 +260,19 @@ async def main() -> None:
                 _LOGGER.debug("[Auto train] model already trained: %s", model.id)
         else:
             _LOGGER.warning("Can't auto train. No model for %s", args.auto_train)
+
+    # Run Flask server in a separate thread
+    flask_app = get_app(state)
+    Thread(
+        target=flask_app.run,
+        kwargs={
+            "host": args.web_server_host,
+            "port": args.web_server_port,
+            "debug": args.debug,
+            "use_reloader": False,
+        },
+        daemon=True,
+    ).start()
 
     wyoming_server = AsyncServer.from_uri(args.uri)
 
@@ -557,8 +557,20 @@ class RhasspySpeechEventHandler(AsyncEventHandler):
 
             text = ""
             if texts:
-                text = texts[0]
+                text = texts[0].strip()
 
+            if not text:
+                # Use custom response if available
+                if self.model_id not in self.state.unknown_sentence_responses:
+                    try:
+                        # Reload responses
+                        load_responses(self.state, self.model_id)
+                    except Exception:
+                        _LOGGER.exception("Unexpected error loading responses")
+
+                text = self.state.unknown_sentence_responses.get(self.model_id, "")
+
+            _LOGGER.debug("Final text: %s", text)
             await self.write_event(Transcript(text=text).event())
 
             return True
