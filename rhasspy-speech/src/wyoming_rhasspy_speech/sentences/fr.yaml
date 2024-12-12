@@ -26,7 +26,7 @@ lists:
   seconds:
     range:
       from: 10
-      to: 100
+      to: 60
       step: 10
   minutes_small:
     range:
@@ -35,7 +35,7 @@ lists:
   minutes_large:
     range:
       from: 10
-      to: 100
+      to: 60
       step: 10
   minutes_extra:
     values:
@@ -65,78 +65,32 @@ lists:
       - portail[s]
 
 expansion_rules:
-  #Common rules
-  pourcent: " pourcent"
   le: (le |la |les |l')
   dans: "(dans|du|de|des|à|au|aux|sur)"
   de: "(du|de|des)"
   tous: "(tout|tous|toute[s])"
-  completement: "(complètement|totalement|entièrement)"
-
-  # Context awareness
-  maison: maison|domicile|appartement|appart|logement
-  piece: (pièce|endroit) [(actuelle|actuel|courant|courante)]
-  ou_je_suis: (où je suis)|(où je me trouve)|(où je me situe)|(où nous sommes)|(où nous nous trouvons)|(où nous nous situons)|(où on est)|(où on se trouve)|(où on se situe)
-  ici: "([<dans>] (cet |cette |<le>)<piece>)|(ici)|(ici même)|<ou_je_suis>"
-  partout: ([de] partout)|([<dans>] [<tous>] [<le>]<maison>)|([<dans>] toutes les pièces)
 
   # Verbs
-  active: "(active|activer|joue|jouer|exécute|exécuter|démarre|démarrer|lance|lancer)"
   allume: "(allume|allumer|active|activer|démarre|démarrer)"
   augmente: "(augmente|augmenter|monte|monter)"
-  demarre: "(démarre|démarrer|lance|lancer)"
   diminue: "(diminue|diminuer|baisse|baisser)"
-  eclaire: "(éclaire|éclairer|illumine|illuminer)"
-  eteins: "(éteint|eteint|éteins|eteins|éteindre|eteindre|désactive|désactiver|stoppe|stopper|arrête|arrêter|coupe|couper|<eteins_dirty>)"
-  ferme: "(ferme|fermer|<baisse>|<ferme_dirty>)"
-  lis: "(lis|lire)"
-  mets: "(mets|mettre|passe|passer|<mets_dirty>)"
+  eteins: "(éteint|eteint|éteins|eteins|éteindre|eteindre|désactive|désactiver|stoppe|stopper|arrête|arrêter|coupe|couper)"
+  ferme: "(ferme|fermer|<baisse>)"
+  mets: "(mets|mettre|passe|passer)"
   ouvre: "(ouvre|ouvrir|<monte>)"
-  regle: "(règle|régler|met|mets|mettre|ajuste|ajuster|change|changer|<mets_dirty>)"
-  renvoie: "(renvoie|renvoyer|arrête|arrêter|stop[pe]|stopper)"
-  reprends: "(remets|remettre|reprends|reprend|reprendre|reprise|relance|relancer)"
-  cree: "(créer|crée)"
+  regle: "(règle|régler|met|mets|mettre|ajuste|ajuster|change|changer)"
   supprime: "(supprime|supprimer|annule|annuler)"
-  enleve: "(enlève|enlever|soustrais|soustrait|soustraire|retranche|retrancher)"
-  ajoute: "(ajoute|ajouter|ajoutez|rajoute|rajouter|rajoutez)"
   verrouille: "(verrouiller|verrouille|barre|barrer)"
   deverrouille: "(déverrouiller|déverrouille)"
   monte: (monte|monter)
   baisse: (baisse|baisser|descendre|descends)
-  nettoie: (aspire|aspirer|nettoie|nettoyer)
-
-  # Dirty Verbs. We have some heavy STT limitations today. We're willing to support this hack for now. Ideally this should be removed once we have a better STT engine. Hence the fact that we decided to put it on a different expansion rules. The goal of this expansion rule is to be removed in the future.
-  # Éteins
-  eteins_dirty: "(étant|étends|étend|étendre|état|et tant|et teins|et teint|et teints|et t'as|été|étais|était)"
-  # Mets
-  mets_dirty: "(mais|maître)"
-  # ferme
-  ferme_dirty: "faire"
-  minuteur_dirty: "minuteurs"
 
   # Domains and Things
-  lumiere: "(lumière[s]|lampe[s]|ampoule[s]|éclairage[s])"
-  ventilateur: "[le ](ventilateur|brasseur d'air)"
-  ventilateurs: "[les ](ventilateurs|brasseurs d'air)"
-  fenetre: "(fenetre[s]|fenêtre[s]|baie[s]|velux|vélux|lucarne[s])"
-  appareil: "(appareil|machine|équipement)[s]"
-  capteur: "(capteur|sonde|détecteur)[s]"
+  lumiere: "(lumière[s])"
   media: "(morceau|chanson|musique|son|élément|podcast|film|vidéo|épisode|radio|média)"
-  lecture: "(lecture|visionnage)"
-  volume: "(volume|son|watt[s])"
-  minuteur: "(compte a rebours)|(compte à rebours)|(minuteur)|(décompte)|<minuteur_dirty>"
+  minuteur: "(compte a rebours)|(compte à rebours)|(minuteur)|(décompte)>"
   minuteurs: "(comptes a rebours)|(comptes à rebours)|(minuteurs)|(décomptes)"
   serrure: "(verrou[s]|serrure[s]|loquet[s]|porte[s])"
-
-  # Others
-  en_route: (en route)|(en marche)
-
-  # Questions
-  yatil: "(y a[-][ ]t[-][']il|il y a)"
-  estil: "(est|sont)[-][ ][(il[s]|elle[s])]"
-  atil: "(ont|a)[-][ ][t][ ][-][(il[s]|elle[s])]"
-  quel: "quel[le][s]"
-  quelest: "<quel> (est|sont)"
 
 intents:
   # nevermind
@@ -259,7 +213,6 @@ intents:
       # context area awareness
       - sentences:
           - <verrouille> [<le>] <serrure>
-          - <verrouille> [<tous>] [<le>] <serrure> <ici>
         slots:
           domain: lock
 
@@ -272,7 +225,7 @@ intents:
 
       # the whole house
       - sentences:
-          - <verrouille> <tous> [<le>] <serrure> <partout>
+          - <verrouille> <tous> [<le>] <serrure>
         slots:
           domain: lock
 
@@ -388,24 +341,24 @@ intents:
     data:
       # brightness (name)
       - sentences:
-          - "(<regle>|<augmente>|<diminue>) [la] luminosité [<de>] [<le>]{name} [à] {brightness}<pourcent>"
-          - "(<allume>|<regle>|<augmente>|<diminue>) [<le>]{name} [à] {brightness}<pourcent>"
+          - "(<regle>|<augmente>|<diminue>) [la] luminosité [<de>] [<le>]{name} [à] {brightness} pourcent"
+          - "(<allume>|<regle>|<augmente>|<diminue>) [<le>]{name} [à] {brightness} pourcent"
         requires_context:
           domain: light
 
       # brightness (area)
       - sentences:
-          - "(<regle>|<augmente>|<diminue>) [la] luminosité [<dans>] [<le>]{area} [à] {brightness}<pourcent>"
-          - "(<allume>|<regle>|<augmente>|<diminue>) [<le>]{area} [à] {brightness}<pourcent>"
+          - "(<regle>|<augmente>|<diminue>) [la] luminosité [<dans>] [<le>]{area} [à] {brightness} pourcent"
+          - "(<allume>|<regle>|<augmente>|<diminue>) [<le>]{area} [à] {brightness} pourcent"
 
       # brigtness (area + context awareness)
       - sentences:
-          - "(<regle>|<augmente>|<diminue>) [la] luminosité [à] {brightness}<pourcent>"
+          - "(<regle>|<augmente>|<diminue>) [la] luminosité [à] {brightness} pourcent"
 
       # brightness (floor)
       - sentences:
-          - "(<regle>|<augmente>|<diminue>) [la] luminosité [<dans>] [<le>]{floor} [à] {brightness}<pourcent>"
-          - "(<allume>|<regle>|<augmente>|<diminue>) [<le>]{floor} [à] {brightness}<pourcent>"
+          - "(<regle>|<augmente>|<diminue>) [la] luminosité [<dans>] [<le>]{floor} [à] {brightness} pourcent"
+          - "(<allume>|<regle>|<augmente>|<diminue>) [<le>]{floor} [à] {brightness} pourcent"
 
       # color (name)
       - sentences:
@@ -427,40 +380,22 @@ intents:
           - "(<regle>|<allume>) [<le>]{floor} en {color}"
 
   # # timers
-  # HassStartTimer:
-  #   data:
-  #     # seconds
-  #     - sentences:
-  #         - "(lance|démarre|crée) [un] minuteur de {seconds} secondes"
+  HassStartTimer:
+    data:
+      # seconds
+      - sentences:
+          - "<minuteur> {seconds} secondes"
 
-  #     # hours + minutes
-  #     - sentences:
-  #         - "(lance|démarre|crée) [un] minuteur pour {hours} heures et {minutes_large} minutes"
+      # hours + minutes
+      - sentences:
+          - "<minuteur> {hours} heure[s] et {minutes_large} minutes"
 
   # HassCancelTimer:
   HassCancelTimer:
     data:
       # No name
       - sentences:
-          - "<supprime> [(le|mon)] <minuteur>"
-          - "<eteins> [(le|mon)] <minuteur>"
-
-      # area
-      - sentences:
-          - "<supprime> [(le|mon)] <minuteur> [(<de>|<dans>)] [<le>]{area}"
-          - "<eteins> [(le|mon)] <minuteur> [(<de>|<dans>)] [<le>]{area}"
-
-      # duration
-      - sentences:
-          - "<supprime> [(le|mon)] <minuteur> [de] <timer_start>"
-          - "<eteins> [(le|mon)] <minuteur> [de] <timer_start>"
-
-      # name
-      - sentences:
-          - "<supprime> [(le|mon)] <minuteur> [<appele>] {timer_name:name}"
-          - "<eteins> [(le|mon)] <minuteur> [<appele>] {timer_name:name}"
-        expansion_rules:
-          appele: "(appelé|nommé|surnommé|pour [<le>])"
+          - "<supprime> [le] <minuteur>"
 
   # HassCancelAllTimers:
   HassCancelAllTimers:
@@ -468,63 +403,13 @@ intents:
       # All timers
       - sentences:
           - "<supprime> tous [(les|mes)] <minuteurs>"
-          - "<eteins> tous [(les|mes)] <minuteurs>"
-
-      # All timers in area
-      - sentences:
-          - "<supprime> tous [(les|mes)] <minuteurs> [(<de>|<dans>)] [<le>]{area}"
-          - "<eteins> tous [(les|mes)] <minuteurs> [(<de>|<dans>)] [<le>]{area}"
-
-      # All timers here (context awareness)
-      - sentences:
-          - "<supprime> tous [(les|mes)] <minuteurs> <ici>"
-          - "<eteins> tous [(les|mes)] <minuteurs> <ici>"
 
   # HassTimerStatus:
   HassTimerStatus:
     data:
       # No name
       - sentences:
-          - "[Encore] Combien de temps <reste_t_il>"
-          - "[Encore] Combien de temps <reste_t_il> au <minuteur>"
-          - "[Encore] Combien de temps <reste_t_il> (sur|dans) [(le|mon)] <minuteur>"
-          - "[Il reste] [encore] combien de temps"
-          - "[Il reste] [encore] combien [de temps] au <minuteur>"
-          - "[Il reste] [encore] combien [de temps] (sur|dans) [(le|mon)] <minuteur>"
-        expansion_rules:
-          reste_t_il: "(reste-t-il)|(reste t il)"
-
-      # area
-      - sentences:
-          - "[Encore] Combien [de temps] <reste_t_il> au <minuteur> [<de>] [<le>]{area}"
-          - "[Encore] Combien [de temps] <reste_t_il> (sur|dans) [(le|mon)] <minuteur> [<de>] [<le>]{area}"
-          - "[Il reste] [encore] combien [de temps] au <minuteur> [<de>] [<le>]{area}"
-          - "[Il reste] [encore] combien [de temps] (sur|dans) [(le|mon)] <minuteur> [<de>] [<le>]{area}"
-        expansion_rules:
-          reste_t_il: "(reste-t-il)|(reste t il)"
-
-      # duration
-      - sentences:
-          - "[Encore] Combien [de temps] <reste_t_il> au <minuteur> [de] <timer_start>"
-          - "[Encore] Combien [de temps] <reste_t_il> (sur|dans) [(le|mon)] <minuteur> [de] <timer_start>"
-          - "[Il reste] [encore] combien [de temps] au <minuteur> [de] <timer_start>"
-          - "[Il reste] [encore] combien [de temps] (sur|dans) [(le|mon)] <minuteur> [de] <timer_start>"
-        expansion_rules:
-          reste_t_il: "(reste-t-il)|(reste t il)"
-
-      # name
-      - sentences:
-          - "[Encore] Combien [de temps] <reste_t_il> au <minuteur> [<appele>] {timer_name:name}"
-          - "[Encore] Combien [de temps] <reste_t_il> (sur|dans) [(le|mon)] <minuteur> [<appele>] {timer_name:name}"
-          - "[Encore] Combien [de temps] <reste_t_il> [<appele>] {timer_name:name}"
-          - "[Il reste] [encore] combien [de temps] au <minuteur> [<appele>] {timer_name:name}"
-          - "[Il reste] [encore] combien [de temps] (sur|dans) [(le|mon)] <minuteur> [<appele>] {timer_name:name}"
-          - "Il reste [encore] combien [de temps] [<appele>] {timer_name:name}"
-          - "[Il reste] [encore] combien de temps [<appele>] {timer_name:name}"
-          - "[Il reste] [encore] combien de temps avant (de |d'|<le>){timer_name:name}"
-        expansion_rules:
-          reste_t_il: "(reste-t-il)|(reste t il)"
-          appele: "(appelé|nommé|surnommé|pour [<le>])"
+          - "[Il reste] [encore] combien [de temps] (sur|dans) [le] <minuteur>"
 
   # # media players
   # HassMediaPause:
@@ -533,30 +418,15 @@ intents:
       # name
       - sentences:
           - "<mets> [<le>]{name} (sur|en) pause"
-          - "<mets> (sur|en) pause [<le>]{name} "
-          - "<mets> [<le>]<media> (sur|en) pause sur [<le>]{name} "
-          - "Pause sur [<le>]{name}"
-          - "[<le>]{name} en pause"
-          - "<eteins>  [<le>]<media> sur [<le>]{name}"
-          - "<eteins> <le> <lecture> <de> [<le>]<media> sur [<le>]{name}"
-          - "<eteins> <le> <lecture> sur [<le>]{name}"
         requires_context:
           domain: media_player
 
       # Area (Context awarenes)
       - sentences:
-          - "<eteins> [<le>]<media>"
-          - "<eteins> <le> <lecture> <de> [<le>]<media>"
-          - "<eteins> <le> <lecture>"
           - "pause"
-          - "<mets> [<le>]<media> (sur|en) pause"
 
       # Area
       - sentences:
-          - "<eteins> [<le>]<media> <dans> [<le>]{area}"
-          - "<eteins> <le> <lecture> <de> [<le>]<media> <dans> [<le>]{area}"
-          - "<eteins> <le> <lecture> <dans> [<le>]{area}"
-          - "pause <dans> [<le>]{area}"
           - "<mets> [<le>]<media> (sur|en) pause <dans> [<le>]{area}"
 
   # HassMediaNext:
@@ -565,21 +435,16 @@ intents:
       # name
       - sentences:
           - "<media> suivant[e] sur [<le>]{name}"
-          - "<mets> (<le>|au |à la )<media> suivant[e] [sur] [<le>]{name}"
         requires_context:
           domain: media_player
 
       # Area (Context awarenes)
       - sentences:
           - "suivant[e]"
-          - "<media> suivant[e]"
-          - "<mets> (<le>|au |à la )<media> suivant[e]"
 
       # Area
       - sentences:
-          - "suivant[e] <dans> [<le>]{area}"
           - "<media> suivant[e] <dans> [<le>]{area}"
-          - "<mets> (<le>|au |à la )<media> suivant[e] <dans> [<le>]{area}"
 
   # # temperature
   # HassGetTemperature:
@@ -587,27 +452,18 @@ intents:
     data:
       # area
       - sentences:
-          - "Quelle est la température <dans> [<le>]{area}"
           - "Combien fait-il <dans> [<le>]{area}"
-          - "Il fait combien <dans> [<le>]{area}"
 
       # context awerness
       - sentences:
-          - "Quelle est la température"
           - "Combien fait-il"
-          - "Il fait combien"
 
   # # questions
-  # HassGetState:
-  #   data:
-  #     - sentences:
-  #         - "est-ce que [le|la|les] {name} est {state}"
-  #       requires_context:
-  #         domain:
-  #           - cover
-  #           - valve
-  #       lists:
-  #         state:
-  #           values:
-  #             - ouvert
-  #             - fermé
+  HassGetState:
+    data:
+      - sentences:
+          - <quel> est [(l'(état|etat)|le statut|la valeur) de] [<le>]{name} [<dans> [<le>]{area}]
+        requires_context:
+          domain:
+            - sensor
+            - binary_sensor
