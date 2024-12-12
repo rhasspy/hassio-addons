@@ -65,12 +65,79 @@ lists:
       - fenêtres
 
 expansion_rules:
-  le: "(le |la |les |l')"
+  #Common rules
+  pourcent: "(%| %| pourcent| pour cent)"
+  degres: "(°| °| degré| degrés)"
+  le: (le |la |les |l')
+  dans: "(dans|du|de|des|à|au|aux|sur)"
+  de: "(du|de|des)"
+  tous: "(tout|tous|toute[s])"
+  completement: "(complètement|totalement|entièrement)"
+
+  # Context awareness
+  maison: maison|domicile|appartement|appart|logement
+  piece: (pièce|endroit) [(actuelle|actuel|courant|courante)]
+  ou_je_suis: (où je suis)|(où je me trouve)|(où je me situe)|(où nous sommes)|(où nous nous trouvons)|(où nous nous situons)|(où on est)|(où on se trouve)|(où on se situe)
+  ici: "([<dans>] (cet |cette |<le>)<piece>)|(ici)|(ici même)|<ou_je_suis>"
+  partout: ([de] partout)|([<dans>] [<tous>] [<le>]<maison>)|([<dans>] toutes les pièces)
+
+  # Verbs
+  active: "(active|activer|joue|jouer|exécute|exécuter|démarre|démarrer|lance|lancer)"
+  allume: "(allume|allumer|active|activer|démarre|démarrer)"
+  augmente: "(augmente|augmenter|monte|monter)"
+  demarre: "(démarre|démarrer|lance|lancer)"
+  diminue: "(diminue|diminuer|baisse|baisser)"
+  eclaire: "(éclaire|éclairer|illumine|illuminer)"
+  eteins: "(éteint|eteint|éteins|eteins|éteindre|eteindre|désactive|désactiver|stoppe|stopper|arrête|arrêter|coupe|couper|<eteins_dirty>)"
+  ferme: "(ferme|fermer|<baisse>|<ferme_dirty>)"
+  lis: "(lis|lire)"
+  mets: "(mets|mettre|passe|passer|<mets_dirty>)"
+  ouvre: "(ouvre|ouvrir|<monte>)"
+  regle: "(règle|régler|met|mets|mettre|ajuste|ajuster|change|changer|<mets_dirty>)"
+  renvoie: "(renvoie|renvoyer|arrête|arrêter|stop[pe]|stopper)"
+  reprends: "(remets|remettre|reprends|reprend|reprendre|reprise|relance|relancer)"
+  cree: "(créer|crée)"
+  supprime: "(supprime|supprimer|annule|annuler)"
+  enleve: "(enlève|enlever|soustrais|soustrait|soustraire|retranche|retrancher)"
+  ajoute: "(ajoute|ajouter|ajoutez|rajoute|rajouter|rajoutez)"
+  verrouille: "(verrouiller|verrouille|barre|barrer)"
+  deverrouille: "(déverrouiller|déverrouille)"
+  monte: (monte|monter)
+  baisse: (baisse|baisser|descendre|descends)
+  nettoie: (aspire|aspirer|nettoie|nettoyer)
+
+  # Dirty Verbs. We have some heavy STT limitations today. We're willing to support this hack for now. Ideally this should be removed once we have a better STT engine. Hence the fact that we decided to put it on a different expansion rules. The goal of this expansion rule is to be removed in the future.
+  # Éteins
+  eteins_dirty: "(étant|étends|étend|étendre|état|et tant|et teins|et teint|et teints|et t'as|été|étais|était)"
+  # Mets
+  mets_dirty: "(mais|maître)"
+  # ferme
+  ferme_dirty: "faire"
+  minuteur_dirty: "minuteurs"
+
+  # Domains and Things
+  lumiere: "(lumière[s]|lampe[s]|ampoule[s]|éclairage[s])"
+  ventilateur: "[le ](ventilateur|brasseur d'air)"
+  ventilateurs: "[les ](ventilateurs|brasseurs d'air)"
+  fenetre: "(fenetre[s]|fenêtre[s]|baie[s]|velux|vélux|lucarne[s])"
+  appareil: "(appareil|machine|équipement)[s]"
+  capteur: "(capteur|sonde|détecteur)[s]"
+  media: "(morceau|chanson|musique|son|élément|podcast|film|vidéo|épisode|radio|média)"
+  lecture: "(lecture|visionnage)"
+  volume: "(volume|son|watt[s])"
+  minuteur: "(compte a rebours)|(compte à rebours)|(minuteur)|(décompte)|<minuteur_dirty>"
+  minuteurs: "(comptes a rebours)|(comptes à rebours)|(minuteurs)|(décomptes)"
+  serrure: "(verrou[s]|serrure[s]|loquet[s]|porte[s])"
+
+  # Others
+  en_route: (en route)|(en marche)
+
+  # Questions
+  yatil: "(y a[-][ ]t[-][']il|il y a)"
+  estil: "(est|sont)[-][ ][(il[s]|elle[s])]"
+  atil: "(ont|a)[-][ ][t][ ][-][(il[s]|elle[s])]"
   quel: "quel[le][s]"
   quelest: "<quel> (est|sont)"
-  dans: "(dans|du|de|des|à|au|aux|sur)"
-  allume: "(allume|allumer|active|activer|démarre|démarrer)"
-  ouvre: "(ouvre|ouvrir|<monte>)"
 
 intents:
   # nevermind
@@ -122,94 +189,463 @@ intents:
         requires_context:
           domain: weather
 
-  # turn on/off
-  # open/close
-  # lock/unlock
-  # HassTurnOn:
-  #   data:
-  #     # turn on
-  #     - sentences:
-  #         - "<allume> [les] lumières"
+  # HassTurnOn (Generic):
+  HassTurnOn:
+      data:
+      - sentences:
+          - <allume> [<le>]{name}
+          - <allume> [<le>]{name} <dans> [<le>]{area}
+        excludes_context:
+          domain:
+            - binary_sensor
+            - cover
+            - lock
+            - scene
+            - script
+            - sensor
+            - vacuum
+            - valve
+            
+  # HassTurnOn (Light):
+      # area
+      - sentences:
+          - "<allume> [<tous>] [<le>]<lumiere> [<dans>] [<le>]{area}"
+          - "(<allume>|<eclaire>) [<le>]{area}"
+          - "<lumiere> [<dans>] [<le>]{area}"
+        slots:
+          domain: light
 
-  #     - sentences:
-  #         - "<allume> [<le>]{name}"
-  #         - "<allume> [<le>]{name} <dans> [<le>]{area}"
-  #       requires_context:
-  #         domain:
-  #           - light
-  #           - switch
+      # area + context awareness
+      - sentences:
+          - "<allume> [<tous>] [<le>]<lumiere> <ici>"
+          - "<allume> [<le>]<lumiere>"
+          - (jour|jours)
+          - <eclaire> <ici>
+        slots:
+          domain: light
+        requires_context:
+          area:
+            slot: true
 
-  #     - sentences:
-  #         - "allume[z] [toutes [les]] [les] lumières de [le|la|les] {area}"
-  #         - "allume[z] [toutes [les]] [les] lumières dans [le|la|les] {area}"
-  #         - "allume[z] [toutes [les]] [les] lumières (au|dans le) [le|la|les] {floor} [étage]"
+      # all
+      - sentences:
+          - <allume> [<le>]<lumiere> <partout>
+          - <allume> <tous> [<le>]<lumiere>
+          - <allume> <tous> [<le>]<lumiere> <partout>
+          - <eclaire> <partout>
+          - <allume> <completement> [<le>]<lumiere> <partout>
+          - <eclaire> <completement> <partout>
+        slots:
+          domain: light
 
-  #     # open
-  #     - sentences:
-  #         - "ouvre[z] [le|la|les] {name}"
-  #       requires_context:
-  #         domain:
-  #           - cover
-  #           - valve
+      # name + floor
+      # To be done when it's supported in the slot_combinations
 
-  #     - sentences:
-  #         - "ouvre[z] [tous [les]] [les] {cover_classes} dans [le|la|les] {area}"
-  #         - "ouvre[z] [tous [les]] [les] {area} {cover_classes}"
+      # floor
+      - sentences:
+          - "<allume> [<tous>] [<le>]<lumiere> [<dans>] [<le>]{floor}"
+          - "(<allume>|<eclaire>) [<le>]{floor}"
+          - "<lumiere> [<dans>] [<le>]{floor}"
+          - "<allume> [<tous>] [<le>]<lumiere> [<dans>] [toutes] les pièces [<dans>] [<le>]{floor}"
+          - "(<allume>|<eclaire>) [toutes] les pièces [<dans>] [<le>]{floor}"
+        slots:
+          domain: light
 
-  #     - sentences:
-  #         - "ouvre[z] [tous [les]] [les] {cover_classes} (au|dans le) [le|la|les] {floor} [étage]"
+  # HassTurnOn (Cover):
+      # name
+      - sentences:
+          - <ouvre> [<le>]{name}
+        requires_context:
+          domain: cover
+        response: cover
 
-  #     # lock
-  #     - sentences:
-  #         - "verrouille[z] [le|la|les] {name}"
-  #       requires_context:
-  #         domain: lock
+      # device_class and area
+      - sentences:
+          - <ouvre> [<tous>] [<le>]{cover_classes:device_class} [<dans>] [<le>]{area}
+        response: cover
+        slots:
+          domain: cover
 
-  # HassTurnOff:
-  #   data:
-  #     # turn off
-  #     - sentences:
-  #         - "éteins[z] [les] lumières"
+      # name and area
+      - sentences:
+          - <ouvre> [<le>]{name} [<dans>] [<le>]{area}
+        requires_context:
+          domain: cover
+        response: cover
 
-  #     - sentences:
-  #         - "éteins[z] [le|la|les] {name}"
-  #         - "éteins[z] [le|la|les] {name} dans [le|la|les] {area}"
-  #       requires_context:
-  #         domain:
-  #           - light
-  #           - switch
+      # device_class
+      - sentences:
+          - <ouvre> [<le>]{cover_classes:device_class} <partout>
+          - <ouvre> <tous> [<le>]{cover_classes:device_class}
+          - <ouvre> <tous> [<le>]{cover_classes:device_class} <partout>
+        slots:
+          domain: cover
+        response: cover
 
-  #     # close
-  #     - sentences:
-  #         - "ferme[z] [le|la|les] {name}"
-  #       requires_context:
-  #         domain:
-  #           - cover
-  #           - valve
+      # Context area awareness
+      - sentences:
+          - <ouvre> [<le>]{cover_classes:device_class}
+          - <ouvre> [<tous>] [<le>]{cover_classes:device_class} <ici>
+        slots:
+          domain: cover
+        requires_context:
+          area:
+            slot: true
+        response: cover
 
-  #     - sentences:
-  #         - "ferme[z] [tous [les]] [les] {cover_classes} dans [le|la|les] {area}"
+      # name and floor
+      - sentences:
+          - <ouvre> [<le>]{name} [<dans>] [<le>]{floor}
+        requires_context:
+          domain: cover
+        response: cover
 
-  #     # unlock
-  #     - sentences:
-  #         - "déverrouille[z] [le|la|les] {name}"
-  #       requires_context:
-  #         domain: lock
+      # device_class and floor
+      - sentences:
+          - <ouvre> [<tous>] [<le>]{cover_classes:device_class} [<dans>] [<le>]{floor}
+        response: cover
+        slots:
+          domain: cover
 
-  # # light brightness/color
-  # HassLightSet:
-  #   data:
-  #     # brightness
-  #     - sentences:
-  #         - "régle[z] la luminosité de [le|la|les] {name} à {brightness} pour cent"
-  #       requires_context:
-  #         domain: light
+  # HassTurnOn (Locks):
+      # name
+      - sentences:
+          - <verrouille> [<le>]{name}
+        requires_context:
+          domain: lock
+        response: lock
 
-  #     # color
-  #     - sentences:
-  #         - "régle[z] [la couleur de [le|la|les]] {name} à {color}"
-  #       requires_context:
-  #         domain: light
+      # area
+      - sentences:
+          - <verrouille> [<le>]{area}
+          - <verrouille> [<tous>] [<le>] <serrure> [<dans>] [<le>]{area}
+        slots:
+          domain: lock
+        response: lock
+
+      # name and area
+      - sentences:
+          - <verrouille> [<le>]{name} [<dans>] [<le>]{area}
+        requires_context:
+          domain: lock
+        response: lock
+
+      # context area awareness
+      - sentences:
+          - <verrouille> [<le>] <serrure>
+          - <verrouille> [<tous>] [<le>] <serrure> <ici>
+        requires_context:
+          area:
+            slot: true
+        slots:
+          domain: lock
+        response: lock
+
+      # floor
+      - sentences:
+          - <verrouille> [<le>]{floor}
+          - <verrouille> [<tous>] [<le>] <serrure> [<dans>] [<le>]{floor}
+        slots:
+          domain: lock
+        response: lock
+
+      # name and floor
+      - sentences:
+          - <verrouille> [<le>]{name} [<dans>] [<le>]{floor}
+        requires_context:
+          domain: lock
+        response: lock
+
+      # the whole house
+      - sentences:
+          - <verrouille> [<le>] <serrure> <partout>
+          - <verrouille> <tous> [<le>] <serrure> <partout>
+          - <verrouille> <tous> [<le>] <serrure>
+        slots:
+          domain: lock
+        response: lock
+
+  # HassTurnOff (Generic)
+  HassTurnOff:
+    data:
+      - sentences:
+          - <eteins> [<le>]{name}
+          - <eteins> [<le>]{name} <dans> [<le>]{area}
+        excludes_context:
+          domain:
+            - binary_sensor
+            - cover
+            - lock
+            - scene
+            - script
+            - sensor
+            - vacuum
+            - valve
+
+  # HassTurnOff (Light)
+      # area
+      - sentences:
+          - "<eteins> [<tous>] [<le>]<lumiere> [<dans>] [<le>]{area}"
+          - "<eteins> [<le>]{area}"
+        slots:
+          domain: light
+
+      # area + context awareness
+      - sentences:
+          - "<eteins> [<tous>] [<le>]<lumiere> <ici>"
+          - "<eteins> [<le>]<lumiere>"
+          - (nuit|nuits)
+        slots:
+          domain: light
+        requires_context:
+          area:
+            slot: true
+
+      # all
+      - sentences:
+          - <eteins> [<le>]<lumiere> <partout>
+          - <eteins> <tous> [<le>]<lumiere>
+          - <eteins> <tous> [<le>]<lumiere> <partout>
+          - <eteins> <completement> [<le>]<lumiere> <partout>
+        slots:
+          domain: light
+
+      # name + floor
+      # To be done when it's supported in the slot_combinations
+
+      # floor
+      - sentences:
+          - "<eteins> [<tous>] [<le>]<lumiere> [<dans>] [<le>]{floor}"
+          - "<eteins> [<le>]{floor}"
+          - "<eteins> [<tous>] [<le>]<lumiere> [<dans>] [toutes] les pièces [<dans>] [<le>]{floor}"
+          - "<eteins> [toutes] les pièces [<dans>] [<le>]{floor}"
+        slots:
+          domain: light
+
+
+  # HassTurnOff (Cover)
+      # name
+      - sentences:
+          - <ferme> [<le>]{name}
+        requires_context:
+          domain: cover
+        response: cover
+
+      # device_class and area
+      - sentences:
+          - <ferme> [<tous>] [<le>]{cover_classes:device_class} [<dans>] [<le>]{area}
+        response: cover
+        slots:
+          domain: cover
+
+      # name and area
+      - sentences:
+          - <ferme> [<le>]{name} [<dans>] [<le>]{area}
+        requires_context:
+          domain: cover
+        response: cover
+
+      # device_class
+      - sentences:
+          - <ferme> [<le>]{cover_classes:device_class} <partout>
+          - <ferme> <tous> [<le>]{cover_classes:device_class}
+          - <ferme> <tous> [<le>]{cover_classes:device_class} <partout>
+        slots:
+          domain: cover
+        response: cover
+
+      # Context area awareness
+      - sentences:
+          - <ferme> [<le>]{cover_classes:device_class}
+          - <ferme> [<tous>] [<le>]{cover_classes:device_class} <ici>
+        slots:
+          domain: cover
+        requires_context:
+          area:
+            slot: true
+        response: cover
+
+      # name and floor
+      - sentences:
+          - <ferme> [<le>]{name} [<dans>] [<le>]{floor}
+        requires_context:
+          domain: cover
+        response: cover
+
+      # device_class and floor
+      - sentences:
+          - <ferme> [<tous>] [<le>]{cover_classes:device_class} [<dans>] [<le>]{floor}
+        response: cover
+        slots:
+          domain: cover
+
+  # HassTurnOff (Lock)
+      # name
+      - sentences:
+          - <deverrouille> [<le>]{name}
+        requires_context:
+          domain: lock
+        response: lock
+
+      # area
+      - sentences:
+          - <deverrouille> [<le>]{area}
+          - <deverrouille> [<tous>] [<le>] <serrure> [<dans>] [<le>]{area}
+        slots:
+          domain: lock
+        response: lock
+
+      # name and area
+      - sentences:
+          - <deverrouille> [<le>]{name} [<dans>] [<le>]{area}
+        requires_context:
+          domain: lock
+        response: lock
+
+      # context area awareness
+      - sentences:
+          - <deverrouille> [<le>] <serrure>
+          - <deverrouille> [<tous>] [<le>] <serrure> <ici>
+        requires_context:
+          area:
+            slot: true
+        slots:
+          domain: lock
+        response: lock
+
+      # floor
+      - sentences:
+          - <deverrouille> [<le>]{floor}
+          - <deverrouille> [<tous>] [<le>] <serrure> [<dans>] [<le>]{floor}
+        slots:
+          domain: lock
+        response: lock
+
+      # name and floor
+      - sentences:
+          - <deverrouille> [<le>]{name} [<dans>] [<le>]{floor}
+        requires_context:
+          domain: lock
+        response: lock
+
+      # the whole house
+      - sentences:
+          - <deverrouille> [<le>] <serrure> <partout>
+          - <deverrouille> <tous> [<le>] <serrure> <partout>
+          - <deverrouille> <tous> [<le>] <serrure>
+        slots:
+          domain: lock
+        response: lock
+      
+
+  # HassLightSet
+  HassLightSet:
+    data:
+      # brightness (name)
+      - sentences:
+          - "(<regle>|<augmente>|<diminue>) [la] luminosité [<de>] [<le>]{name} [à] {brightness}<pourcent>"
+          - "(<allume>|<regle>|<augmente>|<diminue>) [<le>]<lumiere> [<de>] [<le>]{name} [à] {brightness}<pourcent>"
+          - "(<allume>|<regle>|<augmente>|<diminue>) [<le>]{name} [à] {brightness}<pourcent> [de] luminosité"
+          - "(<allume>|<regle>|<augmente>|<diminue>) [<le>]{name} [à] {brightness}<pourcent>"
+          - "luminosité [<de>] [<le>]{name} [à] {brightness}<pourcent>"
+          - "[<le>]{name} [à] {brightness}<pourcent>"
+          - "[<le>]{name} [à] {brightness}<pourcent> [de] luminosité"
+          - "[<le>]{name} luminosité [à] {brightness}<pourcent>"
+        requires_context:
+          domain: light
+        response: brightness
+
+      # brightness (area)
+      - sentences:
+          - "(<regle>|<augmente>|<diminue>) [la] luminosité [<dans>] [<le>]{area} [à] {brightness}<pourcent>"
+          - "(<allume>|<regle>|<augmente>|<diminue>) [<le>]<lumiere> [<dans>] [<le>]{area} [à] {brightness}<pourcent>"
+          - "(<allume>|<regle>|<augmente>|<diminue>) [<le>]{area} [à] {brightness}<pourcent> [de] luminosité"
+          - "(<allume>|<regle>|<augmente>|<diminue>) [<le>]{area} [à] {brightness}<pourcent>"
+          - "luminosité [<dans>] [<le>]{area} [à] {brightness}<pourcent>"
+          - "[<le>]{area} luminosité [à] {brightness}<pourcent>"
+          - "[<le>]{area} [à] {brightness}<pourcent> [de] luminosité"
+          - "(<allume>|<regle>) [<tous>] [<le>][<lumiere>] [<de>] [<le>]{area} [avec la luminosité|avec la lumière] [à] {brightness}<pourcent>"
+        response: brightness
+
+      # brigtness (area + context awareness)
+      - sentences:
+          - "(<regle>|<augmente>|<diminue>) [la] luminosité [à] {brightness}<pourcent>"
+          - "(<allume>|<regle>|<augmente>|<diminue>) [<le>]<lumiere> [à] {brightness}<pourcent>"
+          - "(<allume>|<regle>|<augmente>|<diminue>) [à] {brightness}<pourcent> [de] luminosité"
+          - "luminosité [à] {brightness}<pourcent>"
+          - "{brightness}<pourcent> [de] luminosité"
+        response: brightness
+        requires_context:
+          area:
+            slot: true
+
+      # brightness (name + area)
+      - sentences:
+          - "(<regle>|<augmente>|<diminue>) [la] luminosité [<de>] [<le>]{name} [<dans>] [<le>]{area} [à] {brightness}<pourcent>"
+          - "(<allume>|<regle>|<augmente>|<diminue>) [<le>]<lumiere> [<de>] [<le>]{name} [<dans>] [<le>]{area} [à] {brightness}<pourcent>"
+          - "(<allume>|<regle>|<augmente>|<diminue>) [<le>]{name} [<dans>] [<le>]{area} [à] {brightness}<pourcent> [de] luminosité"
+          - "(<allume>|<regle>|<augmente>|<diminue>) [<le>]{name} [<dans>] [<le>]{area} [à] {brightness}<pourcent>"
+          - "luminosité [<de>] [<le>]{name} [<dans>] [<le>]{area} [à] {brightness}<pourcent>"
+          - "[<le>]{name} [<dans>] [<le>]{area} {brightness}<pourcent>"
+          - "[<le>]{name} [<dans>] [<le>]{area} {brightness}<pourcent> [de] luminosité"
+          - "[<le>]{name} [<dans>] [<le>]{area} luminosité {brightness}<pourcent>"
+        requires_context:
+          domain: light
+        response: brightness
+
+      # brightness (floor)
+      - sentences:
+          - "(<regle>|<augmente>|<diminue>) [la] luminosité [<dans>] [<le>]{floor} [à] {brightness}<pourcent>"
+          - "(<allume>|<regle>|<augmente>|<diminue>) [<le>]<lumiere> [<dans>] [<le>]{floor} [à] {brightness}<pourcent>"
+          - "(<allume>|<regle>|<augmente>|<diminue>) [<le>]{floor} [à] {brightness}<pourcent> [de] luminosité"
+          - "(<allume>|<regle>|<augmente>|<diminue>) [<le>]{floor} [à] {brightness}<pourcent>"
+          - "luminosité [<dans>] [<le>]{floor} [à] {brightness}<pourcent>"
+          - "[<le>]{floor} luminosité [à] {brightness}<pourcent>"
+          - "[<le>]{floor} [à] {brightness}<pourcent> [de] luminosité"
+          - "(<allume>|<regle>) [<tous>] [<le>][<lumiere>] [<de>] [<le>]{floor} [avec la luminosité|avec la lumière] [à] {brightness}<pourcent>"
+        response: brightness
+
+      # color (name)
+      - sentences:
+          - "<regle> la couleur [<de>] [<le>]{name} [en] {color}"
+          - "(<regle>|<allume>) [<le>]{name} [avec la couleur | de couleur | en] {color}"
+        requires_context:
+          domain: light
+        response: color
+
+      # color (area)
+      - sentences:
+          - "<regle> la couleur [<de>] [<le>]{area} [en] {color}"
+          - "<regle> la couleur <de> [<tous>] [<le>]<lumiere> [<dans>] [<le>]{area} [en] {color}"
+          - "(<regle>|<allume>) [<tous>] [<le>]<lumiere> [<de>] [<le>]{area} [avec la couleur | de couleur | en] {color}"
+          - "(<regle>|<allume>) [<le>]{area} [avec la couleur | de couleur | en] {color}"
+        response: color
+
+      # color (area + context awareness)
+      - sentences:
+          - "<regle> la couleur [en] {color}"
+          - "<regle> la couleur <de> [<tous>] [<le>]<lumiere> [en] {color}"
+          - "(<regle>|<allume>) [<tous>] [<le>]<lumiere> [avec la couleur | de couleur | en] {color}"
+        response: color
+        requires_context:
+          area:
+            slot: true
+
+      # color (name + area)
+      - sentences:
+          - "<regle> la couleur [<de>] [<le>]{name} [<dans>] [<le>]{area} [en] {color}"
+          - (<regle>|<allume>) [<le>]{name} [<dans>] [<le>]{area} [avec la couleur | de couleur | en] {color}
+        requires_context:
+          domain: light
+        response: color
+
+      # color (floor)
+      - sentences:
+          - "<regle> la couleur [<de>] [<le>]{floor} [en] {color}"
+          - "<regle> la couleur <de> [<tous>] [<le>]<lumiere> [<dans>] [<le>]{floor} [en] {color}"
+          - "(<regle>|<allume>) [<tous>] [<le>]<lumiere> [<de>] [<le>]{floor} [avec la couleur | de couleur | en] {color}"
+          - "(<regle>|<allume>) [<le>]{floor} [avec la couleur | de couleur | en] {color}"
+        response: color
 
   # # timers
   # HassStartTimer:
@@ -223,41 +659,176 @@ intents:
   #         - "(lance|démarre|crée) [un] minuteur pour {hours} heures et {minutes_large} minutes"
 
   # HassCancelTimer:
-  #   data:
-  #     - sentences:
-  #         - "(arrête|annule) [le|mon] minuteur"
+  HassCancelTimer:
+    data:
+      # No name
+      - sentences:
+          - "<supprime> [(le|mon)] <minuteur>"
+          - "<eteins> [(le|mon)] <minuteur>"
+
+      # area
+      - sentences:
+          - "<supprime> [(le|mon)] <minuteur> [(<de>|<dans>)] [<le>]{area}"
+          - "<eteins> [(le|mon)] <minuteur> [(<de>|<dans>)] [<le>]{area}"
+
+      # duration
+      - sentences:
+          - "<supprime> [(le|mon)] <minuteur> [de] <timer_start>"
+          - "<eteins> [(le|mon)] <minuteur> [de] <timer_start>"
+
+      # name
+      - sentences:
+          - "<supprime> [(le|mon)] <minuteur> [<appele>] {timer_name:name}"
+          - "<eteins> [(le|mon)] <minuteur> [<appele>] {timer_name:name}"
+        expansion_rules:
+          appele: "(appelé|nommé|surnommé|pour [<le>])"
 
   # HassCancelAllTimers:
-  #   data:
-  #     - sentences:
-  #         - "(arrête|annule) tous [les|mes] minuteurs"
+  HassCancelAllTimers:
+    data:
+      # All timers
+      - sentences:
+          - "<supprime> tous [(les|mes)] <minuteurs>"
+          - "<eteins> tous [(les|mes)] <minuteurs>"
+
+      # All timers in area
+      - sentences:
+          - "<supprime> tous [(les|mes)] <minuteurs> [(<de>|<dans>)] [<le>]{area}"
+          - "<eteins> tous [(les|mes)] <minuteurs> [(<de>|<dans>)] [<le>]{area}"
+
+      # All timers here (context awareness)
+      - sentences:
+          - "<supprime> tous [(les|mes)] <minuteurs> <ici>"
+          - "<eteins> tous [(les|mes)] <minuteurs> <ici>"
+        requires_context:
+          area:
+            slot: true
 
   # HassTimerStatus:
-  #   data:
-  #     - sentences:
-  #         - "statut du minuteur"
+  HassTimerStatus:
+    data:
+      # No name
+      - sentences:
+          - "[Encore] Combien de temps <reste_t_il>"
+          - "[Encore] Combien de temps <reste_t_il> au <minuteur>"
+          - "[Encore] Combien de temps <reste_t_il> (sur|dans) [(le|mon)] <minuteur>"
+          - "[Il reste] [encore] combien de temps"
+          - "[Il reste] [encore] combien [de temps] au <minuteur>"
+          - "[Il reste] [encore] combien [de temps] (sur|dans) [(le|mon)] <minuteur>"
+        expansion_rules:
+          reste_t_il: "(reste-t-il)|(reste t il)"
+
+      # area
+      - sentences:
+          - "[Encore] Combien [de temps] <reste_t_il> au <minuteur> [<de>] [<le>]{area}"
+          - "[Encore] Combien [de temps] <reste_t_il> (sur|dans) [(le|mon)] <minuteur> [<de>] [<le>]{area}"
+          - "[Il reste] [encore] combien [de temps] au <minuteur> [<de>] [<le>]{area}"
+          - "[Il reste] [encore] combien [de temps] (sur|dans) [(le|mon)] <minuteur> [<de>] [<le>]{area}"
+        expansion_rules:
+          reste_t_il: "(reste-t-il)|(reste t il)"
+
+      # duration
+      - sentences:
+          - "[Encore] Combien [de temps] <reste_t_il> au <minuteur> [de] <timer_start>"
+          - "[Encore] Combien [de temps] <reste_t_il> (sur|dans) [(le|mon)] <minuteur> [de] <timer_start>"
+          - "[Il reste] [encore] combien [de temps] au <minuteur> [de] <timer_start>"
+          - "[Il reste] [encore] combien [de temps] (sur|dans) [(le|mon)] <minuteur> [de] <timer_start>"
+        expansion_rules:
+          reste_t_il: "(reste-t-il)|(reste t il)"
+
+      # name
+      - sentences:
+          - "[Encore] Combien [de temps] <reste_t_il> au <minuteur> [<appele>] {timer_name:name}"
+          - "[Encore] Combien [de temps] <reste_t_il> (sur|dans) [(le|mon)] <minuteur> [<appele>] {timer_name:name}"
+          - "[Encore] Combien [de temps] <reste_t_il> [<appele>] {timer_name:name}"
+          - "[Il reste] [encore] combien [de temps] au <minuteur> [<appele>] {timer_name:name}"
+          - "[Il reste] [encore] combien [de temps] (sur|dans) [(le|mon)] <minuteur> [<appele>] {timer_name:name}"
+          - "Il reste [encore] combien [de temps] [<appele>] {timer_name:name}"
+          - "[Il reste] [encore] combien de temps [<appele>] {timer_name:name}"
+          - "[Il reste] [encore] combien de temps avant (de |d'|<le>){timer_name:name}"
+        expansion_rules:
+          reste_t_il: "(reste-t-il)|(reste t il)"
+          appele: "(appelé|nommé|surnommé|pour [<le>])"
 
   # # media players
   # HassMediaPause:
-  #   data:
-  #     - sentences:
-  #         - "pause [[la ]musique]"
-  #       requires_context:
-  #         domain: media_player
+  HassMediaPause:
+    data:
+      # name
+      - sentences:
+          - "<mets> [<le>]{name} (sur|en) pause"
+          - "<mets> (sur|en) pause [<le>]{name} "
+          - "<mets> [<le>]<media> (sur|en) pause sur [<le>]{name} "
+          - "Pause sur [<le>]{name}"
+          - "[<le>]{name} en pause"
+          - "<eteins>  [<le>]<media> sur [<le>]{name}"
+          - "<eteins> <le> <lecture> <de> [<le>]<media> sur [<le>]{name}"
+          - "<eteins> <le> <lecture> sur [<le>]{name}"
+        requires_context:
+          domain: media_player
+
+      # Area (Context awarenes)
+      - sentences:
+          - "<eteins> [<le>]<media>"
+          - "<eteins> <le> <lecture> <de> [<le>]<media>"
+          - "<eteins> <le> <lecture>"
+          - "pause"
+          - "<mets> [<le>]<media> (sur|en) pause"
+        requires_context:
+          area:
+            slot: true
+
+      # Area
+      - sentences:
+          - "<eteins> [<le>]<media> <dans> [<le>]{area}"
+          - "<eteins> <le> <lecture> <de> [<le>]<media> <dans> [<le>]{area}"
+          - "<eteins> <le> <lecture> <dans> [<le>]{area}"
+          - "pause <dans> [<le>]{area}"
+          - "<mets> [<le>]<media> (sur|en) pause <dans> [<le>]{area}"
 
   # HassMediaNext:
-  #   data:
-  #     - sentences:
-  #         - "(suivant|passe) [[ce ](morceau|chanson)]"
+  HassMediaNext:
+    data:
+      # name
+      - sentences:
+          - "<media> suivant[e] sur [<le>]{name}"
+          - "<mets> (<le>|au |à la )<media> suivant[e] [sur] [<le>]{name}"
+        requires_context:
+          domain: media_player
+
+      # Area (Context awarenes)
+      - sentences:
+          - "suivant[e]"
+          - "<media> suivant[e]"
+          - "<mets> (<le>|au |à la )<media> suivant[e]"
+        requires_context:
+          area:
+            slot: true
+
+      # Area
+      - sentences:
+          - "suivant[e] <dans> [<le>]{area}"
+          - "<media> suivant[e] <dans> [<le>]{area}"
+          - "<mets> (<le>|au |à la )<media> suivant[e] <dans> [<le>]{area}"
 
   # # temperature
   # HassGetTemperature:
-  #   data:
-  #     - sentences:
-  #         - "(quel[']s|quelle est) la (température|temp)"
+  HassClimateGetTemperature:
+    data:
+      # area
+      - sentences:
+          - "Quelle est la température <dans> [<le>]{area}"
+          - "Combien fait-il <dans> [<le>]{area}"
+          - "Il fait combien <dans> [<le>]{area}"
 
-  #     - sentences:
-  #         - "(quel[']s|quelle est) [la] {area} (température|temp)"
+      # context awerness
+      - sentences:
+          - "Quelle est la température"
+          - "Combien fait-il"
+          - "Il fait combien"
+        requires_context:
+          area:
+            slot: true
 
   # # questions
   # HassGetState:
