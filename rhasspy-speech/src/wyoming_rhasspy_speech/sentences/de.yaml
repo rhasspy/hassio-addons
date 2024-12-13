@@ -62,31 +62,8 @@ lists:
       - in: "Fenster"
 
 expansion_rules:
-  absperren: "(zu|ab)<sperren>|verrieg(el|le)[n]"
-  alle: "((alle|sämtliche)[r]|jede[r|s|n]|(die|der) (ganze|komplette|sämtliche)[n])[ der]"
-  alle_lichter: "(<alle> (<lichter>|Beleuchtung)|von allen[ (Lichtern|Lampen|Leuchten|Beleuchtungen)])"
-  an: "(an|ein|auf)"
-  area: "[in|an|auf|bei][ (<artikel_bestimmt>|im|am|<von_dem>)] {area}[s]"
-  artikel: "[<artikel_bestimmt>|<artikel_unbestimmt>]"
-  artikel_bestimmt: "[(der|die|das|dem|den|des)]"
-  artikel_unbestimmt: "[(ein|eine|eines|einer|einem|einen)]"
-  aus: "(aus|ab|zu)"
-  floor: "[in|auf][ (<artikel_bestimmt>|im|<von_dem>)] {floor}[ Geschoss]"
-  licht: "[(das|die) ](Licht|Lampe|Beleuchtung)"
-  lichter: "[(die|der|von den) ](Lichter|Lichtern|Lampen|Leuchten|Beleuchtungen)"
-  machen: "(mach[e|en|t])"
-  naechster: "nächste[r|s|n]"
-  name: "<artikel_bestimmt> {name}"
-  öffnen: "(öffne[n]|aufmachen|auf machen)"
-  schalten: "(schalt[e|en|et])"
-  schliessen: "(schlie(ß|ss)[e|en]|zumachen|zu machen)"
-  song: "(Titel|Lied|Song|Track|Stück)"
-  sperren: "(sperr|schlie(ss|ß))[e|en]"
-  starte: "(starte|spiele)"
-  timer_cancel: "(beende|stoppe)"
-  von_dem: "(von[ dem]|vom)"
-  welche: "(welche[r|s|n]|was für[ <artikel_unbestimmt>[s]]) <artikel_bestimmt>"
-  wieviel: "(wie[ ]viel[e]|welche Anzahl[ (an|von)])"
+  name: "[der|die|das|dem|den|des] {name}[s]"
+  area: "[im|in der|in den|im] {area}"
 
 intents:
   # nevermind
@@ -104,23 +81,18 @@ intents:
     data:
       - sentences:
           - "wie spät ist es"
-          - "(wie viel|wieviel) uhr (ist es|haben wir)[ jetzt]"
-          - "(nenn[e]|gib|gebe) mir die uhrzeit"
 
   HassGetCurrentDate:
     data:
       - sentences:
-          - "<welche> (tag|datum) (ist|haben wir) heute"
-          - "(nenn[e]|gib|gebe) mir das[ (heutige|aktuelle)] datum"
+          - "welches Datum ist heute"
 
   HassGetWeather:
     data:
       - sentences:
-          - "wie ist[ das] Wetter"
+          - "Wie ist das Wetter"
       - sentences:
-          - "wie ist[ das] Wetter[ (für|in) <name>]"
-          - "wie ist[ das] <name>[er|s] Wetter"
-          - "was für[ ein] Wetter (ist|hat es) in <name>"
+          - "Wie ist das Wetter in <name>"
         requires_context:
           domain: weather
 
@@ -131,88 +103,78 @@ intents:
     data:
       # turn on
       - sentences:
-          - "<schalten> (<licht>|<lichter>)[ hier] <an>"
-          - "<schalten>[ hier] (<licht>|<lichter>) <an>"
+          - "Mach das Licht an"
 
       - sentences:
-          - "(<schalten>|<machen>) <name> <an>"
-          - "<name> <an>[<schalten>|<machen>]"
+          - "Mach <name> an"
         requires_context:
           domain:
             - light
             - switch
 
       - sentences:
-          - "<schalten> (<licht>|<lichter>|<alle_lichter>) <area> <an>"
-          - "<schalten> (<licht>|<lichter>|<alle_lichter>) <floor> <an>"
-          - "<schalten> <floor> (<licht>|<lichter>|<alle_lichter>) <an>"
+          - "Mach das Licht <area> an"
 
       # open
       - sentences:
-          - "<öffnen> <name>"
-          - "<name> <öffnen>"
+          - "Öffne <name>"
         requires_context:
           domain:
             - cover
             - valve
 
-      # - sentences:
-      #     - "open [all [of]] [the] {cover_classes} in [the] {area}"
-      #     - "open [all [of]] [the] {area} {cover_classes}"
-
-      # - sentences:
-      #     - "open [all [of]] [the] [the] {cover_classes} (on|in) [the] {floor} [floor]"
-      #     - "open [all [of]] [the] {floor} [floor] {cover_classes}"
+      - sentences:
+          - "Öffne <name> <area>"
 
       # lock
       - sentences:
-          - "(<sperren>|<machen>) <name>[ (zu|ab)]"
-          - "<name> (zu[machen]|<absperren>)"
+          - "Schließe <name> ab"
         requires_context:
           domain: lock
+
+      # script
+      - sentences:
+          - "Führe <name> aus"
+        requires_context:
+          domain: script
+
+      # scene
+      - sentences:
+          - "Aktiviere <name>"
+        requires_context:
+          domain: scene
 
 
   HassTurnOff:
     data:
       # turn off
       - sentences:
-          - "<schalten> (<licht>|<lichter>)[ hier] <aus>"
-          - "<schalten>[ hier] (<licht>|<lichter>) <aus>"
+          - "Mach das Licht aus"
 
       - sentences:
-          - "(<schalten>|<machen>) <name> <aus>"
-          - "<name> <aus>[<schalten>|<machen>]"
+          - "Mach <name> aus"
         requires_context:
           domain:
             - light
             - switch
 
       - sentences:
-          - "<schalten> (<licht>|<lichter>|<alle_lichter>) <area> <aus>"
-          - "<schalten> <area> (<licht>|<lichter>|<alle_lichter>) <aus>"
-
-      - sentences:
-          - "<schalten> (<licht>|<lichter>|<alle_lichter>) <floor> <aus>"
-          - "<schalten> <floor> (<licht>|<lichter>|<alle_lichter>) <aus>"
+          - "Mach das Licht <area> aus"
 
       # close
       - sentences:
-          - "<schliessen> <name>"
-          - "<name> <schliessen>"
+          - "Schließe <name>"
         requires_context:
           domain:
             - cover
             - valve
 
       - sentences:
-          - "close [all [of]] [the] {cover_classes} in [the] {area}"
-          - "close [all [of]] [the] {area} {cover_classes}"
-          - "close [all [of]] [the] {cover_classes} (on|in) [the] {floor} [floor]"
-          - "close [all [of]] [the] {floor} [floor] {cover_classes}"
+          - "Schließe <name> <area>"
 
       # unlock
       - sentences:
-          - "unlock [the] {name}"
+          - "Entsperre <name>"
         requires_context:
           domain: lock
 
@@ -289,118 +251,118 @@ intents:
   #         - "(set|start|create) [a] timer for {hours} hours and {minutes_large} minutes"
   #         - "(set|start|create) [a] timer for {hours} hours and {minutes_extra} minutes"
 
-  HassCancelTimer:
-    data:
-      - sentences:
-          - "<timer_cancel>[ (den|meinen)] Timer"
+  # HassCancelTimer:
+  #   data:
+  #     - sentences:
+  #         - "<timer_cancel>[ (den|meinen)] Timer"
 
-  HassCancelAllTimers:
-    data:
-      - sentences:
-          - "<timer_cancel> (alle[ meine]|sämtliche) Timer"
+  # HassCancelAllTimers:
+  #   data:
+  #     - sentences:
+  #         - "<timer_cancel> (alle[ meine]|sämtliche) Timer"
 
-  HassPauseTimer:
-    data:
-      - sentences:
-          - "pausiere[ (den|meinen)] Timer"
+  # HassPauseTimer:
+  #   data:
+  #     - sentences:
+  #         - "pausiere[ (den|meinen)] Timer"
 
-  HassUnpauseTimer:
-    data:
-      - sentences:
-          - "setze[ (den|meinen)] Timer fort"
+  # HassUnpauseTimer:
+  #   data:
+  #     - sentences:
+  #         - "setze[ (den|meinen)] Timer fort"
 
-  HassTimerStatus:
-    data:
-      - sentences:
-          - "Timer Status"
-          - "Status (des|meines) Timers"
-          - "wie lange läuft (der|mein) Timer noch"
+  # HassTimerStatus:
+  #   data:
+  #     - sentences:
+  #         - "Timer Status"
+  #         - "Status (des|meines) Timers"
+  #         - "wie lange läuft (der|mein) Timer noch"
 
-  # media players
-  HassMediaPause:
-    data:
-      - sentences:
-          - "(pausiere[n]|pause|anhalten|stopp|halt[e an])"
+  # # media players
+  # HassMediaPause:
+  #   data:
+  #     - sentences:
+  #         - "(pausiere[n]|pause|anhalten|stopp|halt[e an])"
 
-      - sentences:
-          - "(pausiere|pause) <name>"
-          - "halte <name> an"
-          - "<name> (pausieren|pause|anhalten|stopp|halt)"
-        requires_context:
-          domain: media_player
+  #     - sentences:
+  #         - "(pausiere|pause) <name>"
+  #         - "halte <name> an"
+  #         - "<name> (pausieren|pause|anhalten|stopp|halt)"
+  #       requires_context:
+  #         domain: media_player
 
-  HassMediaUnpause:
-    data:
-      - sentences:
-          - "fortsetzen|weiter[ (<machen>|laufen lassen)]"
+  # HassMediaUnpause:
+  #   data:
+  #     - sentences:
+  #         - "fortsetzen|weiter[ (<machen>|laufen lassen)]"
 
-      - sentences:
-          - "<name> weiter[ (<machen>|laufen lassen)]"
-          - "<name> fortsetzen"
-        requires_context:
-          domain: media_player
+  #     - sentences:
+  #         - "<name> weiter[ (<machen>|laufen lassen)]"
+  #         - "<name> fortsetzen"
+  #       requires_context:
+  #         domain: media_player
 
-  HassMediaNext:
-    data:
-      - sentences:
-          - "[<starte> ]<naechster>[ <song>]"
+  # HassMediaNext:
+  #   data:
+  #     - sentences:
+  #         - "[<starte> ]<naechster>[ <song>]"
 
-      - sentences:
-          - "[<starte> ]<naechster>[ <song>][ (<an>|am)] <name>"
-        requires_context:
-          domain: media_player
+  #     - sentences:
+  #         - "[<starte> ]<naechster>[ <song>][ (<an>|am)] <name>"
+  #       requires_context:
+  #         domain: media_player
 
-  # temperature
-  HassGetTemperature:
-    data:
-      - sentences:
-          - "Wie[ (hoch|niedrig)] ist die Temperatur[ <area>]"
-          - "Wie[ (hoch|niedrig)] ist <area> die Temperatur"
-          - "Wie[ (hoch|niedrig)] ist die Temperatur <von_dem> Thermostat <area>"
-          - "Wie[ (hoch|niedrig)] ist die Temperatur des Thermostat[s] <area>"
-          - "Wie (warm|kalt) ist es <area>"
-          - "<wieviel> Grad[ (hat|sind)] es <area>"
+  # # temperature
+  # HassGetTemperature:
+  #   data:
+  #     - sentences:
+  #         - "Wie[ (hoch|niedrig)] ist die Temperatur[ <area>]"
+  #         - "Wie[ (hoch|niedrig)] ist <area> die Temperatur"
+  #         - "Wie[ (hoch|niedrig)] ist die Temperatur <von_dem> Thermostat <area>"
+  #         - "Wie[ (hoch|niedrig)] ist die Temperatur des Thermostat[s] <area>"
+  #         - "Wie (warm|kalt) ist es <area>"
+  #         - "<wieviel> Grad[ (hat|sind)] es <area>"
 
-      - sentences:
-          - "Wie[ (hoch|niedrig)] ist die Temperatur[ <von_dem>] <name>"
-          - "Wie[ (hoch|niedrig)] ist die Temperatur des <name>[s]"
-        requires_context:
-          domain: climate
+  #     - sentences:
+  #         - "Wie[ (hoch|niedrig)] ist die Temperatur[ <von_dem>] <name>"
+  #         - "Wie[ (hoch|niedrig)] ist die Temperatur des <name>[s]"
+  #       requires_context:
+  #         domain: climate
 
-  # questions
-  HassGetState:
-    data:
-      # doors, etc.
-      - sentences:
-          - "ist <name> {cover_states:state}"
-        requires_context:
-          domain:
-            - cover
-            - valve
-        lists:
-          state:
-            values:
-              - "(offen|auf|oben|geöffnet)"
-              - "(geschlossen|zu|unten)"
+  # # questions
+  # HassGetState:
+  #   data:
+  #     # doors, etc.
+  #     - sentences:
+  #         - "ist <name> {cover_states:state}"
+  #       requires_context:
+  #         domain:
+  #           - cover
+  #           - valve
+  #       lists:
+  #         state:
+  #           values:
+  #             - "(offen|auf|oben|geöffnet)"
+  #             - "(geschlossen|zu|unten)"
 
-      # locks
-      - sentences:
-          - "ist <name> {state}"
-        requires_context:
-          domain: lock
-        lists:
-          state:
-            values:
-              - "(([ab|zu]ge|ver)(schlossen|sperrt)|verriegelt)"
-              - "(nicht (([ab|zu]ge|ver)(schlossen|sperrt)|verriegelt)|ent(riegelt|sperrt)|aufge(sperrt|schlossen))"
+  #     # locks
+  #     - sentences:
+  #         - "ist <name> {state}"
+  #       requires_context:
+  #         domain: lock
+  #       lists:
+  #         state:
+  #           values:
+  #             - "(([ab|zu]ge|ver)(schlossen|sperrt)|verriegelt)"
+  #             - "(nicht (([ab|zu]ge|ver)(schlossen|sperrt)|verriegelt)|ent(riegelt|sperrt)|aufge(sperrt|schlossen))"
 
-  # todo
-  HassListAddItem:
-    data:
-      - sentences:
-          - "füge {todo_item}[ zu] <meine_liste> hinzu"
-          - "füge[ zu] <meine_liste> {todo_item} hinzu"
-        expansion_rules:
-          meine_liste: "[meine[r]|die|der] ({name}[ Liste]|[Liste] {name})"
-        requires_context:
-          domain: todo
+  # # todo
+  # HassListAddItem:
+  #   data:
+  #     - sentences:
+  #         - "füge {todo_item}[ zu] <meine_liste> hinzu"
+  #         - "füge[ zu] <meine_liste> {todo_item} hinzu"
+  #       expansion_rules:
+  #         meine_liste: "[meine[r]|die|der] ({name}[ Liste]|[Liste] {name})"
+  #       requires_context:
+  #         domain: todo

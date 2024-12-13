@@ -1,4 +1,6 @@
 import base64
+import json
+import logging
 import math
 import re
 from collections import defaultdict
@@ -25,10 +27,13 @@ from .g2p import LexiconDatabase, split_words
 
 EPS = "<eps>"
 SPACE = "<space>"
-BEGIN_OUTPUT = "__begin_output"
+BEGIN_OUTPUT = "__begin_output:"
 END_OUTPUT = "__end_output"
+SENTENCE_OUTPUT = "__sentence_output:"
 OUTPUT_PREFIX = "__output:"
 WORD_PENALTY = 0.03
+
+_LOGGER = logging.getLogger(__name__)
 
 
 class SuppressOutput(Enum):
@@ -229,12 +234,16 @@ class Fst:
         if arc.out_label.startswith(BEGIN_OUTPUT):
             # Start suppressing output
             suppress_output = SuppressOutput.UNTIL_END
-        elif arc.out_label.startswith(OUTPUT_PREFIX):
-            # Output on next space
-            output_word = arc.out_label
         elif arc.out_label.startswith(END_OUTPUT):
             # Stop suppressing output
             suppress_output = SuppressOutput.UNTIL_SPACE
+        elif arc.out_label.startswith(SENTENCE_OUTPUT):
+            output_state = fst_without_spaces.next_edge(
+                output_state, EPS, arc.out_label
+            )
+        elif arc.out_label.startswith(OUTPUT_PREFIX):
+            # Output on next space
+            output_word = arc.out_label
 
         for next_arc_idx, next_arc in enumerate(self.arcs[arc.to_state]):
             self._remove_spaces(
@@ -356,13 +365,14 @@ class G2PInfo:
 
 
 @dataclass
-class ExpressionsWithOutput:
-    expressions: List[Expression]
+class ExpressionWithOutput:
+    expression: Expression
     output_text: str
+    list_name: Optional[str] = None
 
 
 def expression_to_fst(
-    expression: Union[Expression, ExpressionsWithOutput],
+    expression: Union[Expression, ExpressionWithOutput],
     state: int,
     fst: Fst,
     intent_data: IntentData,
@@ -372,26 +382,30 @@ def expression_to_fst(
     g2p_info: Optional[G2PInfo] = None,
     suppress_output: bool = False,
 ) -> Optional[int]:
-    if isinstance(expression, ExpressionsWithOutput):
-        exps_output: ExpressionsWithOutput = expression
-        output_word = encode_meta(exps_output.output_text)
+    if isinstance(expression, ExpressionWithOutput):
+        exp_output: ExpressionWithOutput = expression
+        output_data = {"text": exp_output.output_text}
+        if exp_output.list_name:
+            output_data["list"] = exp_output.list_name
+
+        output_word = encode_meta(json.dumps(output_data))
+
         state = fst.next_edge(state, EPS, BEGIN_OUTPUT)
         state = fst.next_edge(state, EPS, output_word)
-        for output_expression in exps_output.expressions:
-            state = expression_to_fst(
-                output_expression,
-                state,
-                fst,
-                intent_data,
-                intents,
-                slot_lists,
-                num_to_words,
-                g2p_info,
-                suppress_output=suppress_output,
-            )
-            if state is None:
-                # Dead branch
-                return None
+        state = expression_to_fst(
+            exp_output.expression,
+            state,
+            fst,
+            intent_data,
+            intents,
+            slot_lists,
+            num_to_words,
+            g2p_info,
+            suppress_output=suppress_output,
+        )
+        if state is None:
+            # Dead branch
+            return None
 
         return fst.next_edge(state, EPS, END_OUTPUT)
 
@@ -518,7 +532,7 @@ def expression_to_fst(
         if isinstance(slot_list, TextSlotList):
             text_list: TextSlotList = slot_list
 
-            values: List[ExpressionsWithOutput] = []
+            values: List[ExpressionWithOutput] = []
             for value in text_list.values:
                 if (intent_data.requires_context is not None) and (
                     not check_required_context(
@@ -546,8 +560,10 @@ def expression_to_fst(
 
                 if value_output_text:
                     values.append(
-                        ExpressionsWithOutput(
-                            [value.text_in], output_text=value_output_text
+                        ExpressionWithOutput(
+                            value.text_in,
+                            output_text=value_output_text,
+                            list_name=list_ref.slot_name,
                         )
                     )
                 else:
@@ -579,7 +595,7 @@ def expression_to_fst(
             number_sequence = num_to_words.cache.get(num_cache_key)
 
             if number_sequence is None:
-                values: List[ExpressionsWithOutput] = []
+                values: List[ExpressionWithOutput] = []
                 if num_to_words is not None:
                     for number in range(
                         range_list.start, range_list.stop + 1, range_list.step
@@ -590,11 +606,13 @@ def expression_to_fst(
                             w.replace("-", " ")
                             for w in number_result.text_by_ruleset.values()
                         }
-                        values.append(
-                            ExpressionsWithOutput(
-                                [TextChunk(w) for w in number_words],
+                        values.extend(
+                            ExpressionWithOutput(
+                                TextChunk(w),
                                 output_text=number_str,
+                                list_name=list_ref.slot_name,
                             )
+                            for w in number_words
                         )
 
                 number_sequence = Sequence(values, type=SequenceType.ALTERNATIVE)
@@ -724,8 +742,9 @@ def intents_to_fst(
         num_to_words = NumToWords(engine=RbnfEngine.for_language(number_language))
 
     filtered_intents = []
-    # sentence_counts: Dict[str, int] = {}
+    sentence_counts: Dict[str, int] = {}
     # sentence_counts: Dict[Sentence, int] = {}
+    total_sentences = 0
 
     for intent in intents.intents.values():
         if (exclude_intents is not None) and (intent.name in exclude_intents):
@@ -734,15 +753,22 @@ def intents_to_fst(
         if (include_intents is not None) and (intent.name not in include_intents):
             continue
 
-        # num_sentences = 0
-        # for i, data in enumerate(intent.data):
-        #     for j, sentence in enumerate(data.sentences):
+        num_sentences = 0
+        for i, data in enumerate(intent.data):
+            for j, sentence in enumerate(data.sentences):
+                num_sentences += get_count(sentence, intents, data)
         #         sentence_counts[(intent.name, i, j)] = get_count(
         #             sentence, intents, data
         #         )
 
+        sentence_counts[intent.name] = num_sentences
+        total_sentences += num_sentences
+
         filtered_intents.append(intent)
         # sentence_counts[intent.name] = num_sentences
+
+    _LOGGER.debug("Total sentences: %s", total_sentences)
+    _LOGGER.debug("Sentence count by intent: %s", sentence_counts)
 
     fst_with_spaces = Fst()
     final = fst_with_spaces.next_state()
@@ -774,8 +800,6 @@ def intents_to_fst(
             sentence_output: Optional[str] = None
             if data.metadata is not None:
                 sentence_output = data.metadata.get("output")
-                if sentence_output:
-                    sentence_output = encode_meta(sentence_output)
 
             for j, sentence in enumerate(data.sentences):
                 # weight = sentence_weights[(intent.name, i, j)]
@@ -789,12 +813,10 @@ def intents_to_fst(
 
                 if sentence_output:
                     # Sentence has different output than input
-                    # TODO: Replace list references
                     sentence_state = fst_with_spaces.next_edge(
-                        sentence_state, EPS, BEGIN_OUTPUT
-                    )
-                    sentence_state = fst_with_spaces.next_edge(
-                        sentence_state, EPS, sentence_output
+                        sentence_state,
+                        EPS,
+                        encode_meta(sentence_output, SENTENCE_OUTPUT),
                     )
 
                 state = expression_to_fst(
@@ -816,23 +838,36 @@ def intents_to_fst(
 
                 fst_with_spaces.add_edge(state, final, SPACE, SPACE)
 
-                if sentence_output:
-                    state = fst_with_spaces.next_edge(state, EPS, END_OUTPUT)
-
     fst_with_spaces.accept(final)
 
     return fst_with_spaces
 
 
 def decode_meta(text: str) -> str:
-    return re.sub(
-        re.escape(OUTPUT_PREFIX) + "([0-9A-Z=]+)",
-        lambda m: base64.b32decode(m.group(1).encode("utf-8")).decode("utf-8"),
-        text,
-    )
+    slots: Dict[str, str] = {}
+
+    def handle_match(m: re.Match) -> str:
+        data = json.loads(decode_meta_single(m.group(1)))
+        slot_name = data.get("list")
+        slot_value = data["text"]
+        if slot_name:
+            slots[slot_name] = slot_value
+
+        return slot_value
+
+    text = re.sub(re.escape(OUTPUT_PREFIX) + "([0-9A-Z=]+)", handle_match, text)
+    match = re.search(re.escape(SENTENCE_OUTPUT) + "([0-9A-Z=]+)", text)
+
+    if match is None:
+        return text
+
+    sentence_output = decode_meta_single(match.group(1))
+    return sentence_output.format(**slots)
 
 
-def encode_meta(text: str) -> str:
-    return OUTPUT_PREFIX + (
-        base64.b32encode(text.encode("utf-8")).strip().decode("utf-8")
-    )
+def decode_meta_single(text: str) -> str:
+    return base64.b32decode(text.encode("utf-8")).strip().decode("utf-8")
+
+
+def encode_meta(text: str, prefix: str = OUTPUT_PREFIX) -> str:
+    return prefix + (base64.b32encode(text.encode("utf-8")).strip().decode("utf-8"))

@@ -45,7 +45,7 @@
   <li class="p-1">
 {% for word in processed_words: %}
   {% if isstring(word): %}
-  {{ word }}&nbsp;
+  {{ word }}
   {% else: %}
   <select>
     {% for sub_word in word: %}

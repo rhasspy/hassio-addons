@@ -55,11 +55,9 @@ lists:
   cover_classes:
     values:
       - blinds
-      - curtain
-      - curtains
+      - curtain[s]
       - garage door
-      - window
-      - windows
+      - window[s]
 
 intents:
   # nevermind
@@ -109,6 +107,8 @@ intents:
           domain:
             - light
             - switch
+            - media_player
+            - input_boolean
 
       - sentences:
           - "turn on [all [of]] [the] {area} lights"
@@ -162,6 +162,8 @@ intents:
           domain:
             - light
             - switch
+            - media_player
+            - input_boolean
 
       - sentences:
           - "turn off [all [of]] [the] {area} lights"
@@ -369,6 +371,15 @@ intents:
             values:
               - locked
               - unlocked
+
+      # sensors, etc.
+      - sentences:
+          - "what is [the] {name}"
+        requires_context:
+          domain:
+            - sensor
+            - binary_sensor
+
 
   # todo
   HassListAddItem:

@@ -52,6 +52,7 @@ def sample_expression(
     expression: Expression,
     intent_data: IntentData,
     intents: Intents,
+    in_list_value: bool = False,
 ) -> Iterable[str]:
     """Sample possible text strings from an expression."""
     if isinstance(expression, TextChunk):
@@ -59,7 +60,7 @@ def sample_expression(
         yield chunk.original_text
     elif isinstance(expression, Sequence):
         seq: Sequence = expression
-        if seq.is_optional:
+        if seq.is_optional and (not in_list_value):
             yield ""
         elif seq.type == SequenceType.ALTERNATIVE:
             # Try to compact to/show/alternatives
@@ -86,17 +87,25 @@ def sample_expression(
                 is_all_text = False
                 break
 
-            if is_all_text:
+            if is_all_text and all(text.strip() for text in text_alternatives):
+                # Add slashes if all of the items are non-empty text strings
                 if any(" " in text for text in text_alternatives):
-                    yield "(" + "/".join(text_alternatives) + ")"
+                    yield "(" + "/".join(sorted(text_alternatives)) + ")"
                 else:
-                    yield "/".join(text_alternatives)
+                    yield "/".join(sorted(text_alternatives))
             else:
                 for item in seq.items:
-                    yield from sample_expression(item, intent_data, intents)
+                    yield from sample_expression(
+                        item, intent_data, intents, in_list_value=in_list_value
+                    )
         elif seq.type == SequenceType.GROUP:
             seq_sentences = map(
-                partial(sample_expression, intent_data=intent_data, intents=intents),
+                partial(
+                    sample_expression,
+                    intent_data=intent_data,
+                    intents=intents,
+                    in_list_value=in_list_value,
+                ),
                 seq.items,
             )
             sentence_texts = itertools.product(*seq_sentences)
@@ -153,7 +162,7 @@ def sample_expression(
             value_texts = []
             for value in possible_values:
                 for value_text in sample_expression(
-                    value.text_in, intent_data, intents
+                    value.text_in, intent_data, intents, in_list_value=True
                 ):
                     value_texts.append(value_text)
 
@@ -180,7 +189,9 @@ def sample_expression(
             rule_body = intents.expansion_rules.get(rule_ref.rule_name)
 
         if rule_body is not None:
-            yield from sample_expression(rule_body, intent_data, intents)
+            yield from sample_expression(
+                rule_body, intent_data, intents, in_list_value=in_list_value
+            )
         else:
             yield f"<{rule_ref.rule_name}>"
     else:
