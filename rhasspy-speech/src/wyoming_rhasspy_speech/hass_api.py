@@ -122,6 +122,10 @@ async def get_exposed_dict(token: str, uri: str) -> Dict[str, Any]:
                 # area = None
 
                 if entity_info:
+                    if entity_info.get("disabled_by") is not None:
+                        # Skip disabled entities
+                        continue
+
                     name = entity_info.get("name") or entity_info["original_name"]
                     names.extend(entity_info.get("aliases", []))
 

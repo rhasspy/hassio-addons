@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.3
+
+- Fix list `value[s]`
+- Add list references in output text
+- Merge user intents last for override
+- Reduce number of French sentences
+- Skip disabled entities
+
 ## 2.0.2
 
 - Fix numbers in languages with multiple genders
