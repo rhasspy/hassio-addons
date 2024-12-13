@@ -184,58 +184,58 @@ intents:
     data:
       # brightness
       - sentences:
-          - "ajusta el brillo de <name> al {brightness} por ciento"
+          - "ajusta [el] brillo de <name> al {brightness} por ciento"
         requires_context:
           domain: light
 
       - sentences:
-          - "ajusta el brillo de las luces <area> al {brightness} por ciento"
+          - "ajusta [el] brillo de las luces <area> al {brightness} por ciento"
 
       # color
       - sentences:
-          - "ajusta el color de <name> a {color}"
+          - "ajusta [el] color de <name> a {color}"
         requires_context:
           domain: light
 
       - sentences:
-          - "ajusta el color de las luces <area> de <name> a {color}"
+          - "ajusta [el] color de las luces <area> de <name> a {color}"
 
   # timers
   HassStartTimer:
     data:
       # seconds
       - sentences:
-          - "configura un temporizador para {seconds} segundos"
+          - "inicia temporizador de {seconds} segundos"
 
       # minutes
       - sentences:
-          - "configura un temporizador para 1 minuto"
-          - "configura un temporizador para {minutes_small} minutos"
-          - "configura un temporizador para {minutes_large} minutos"
-          - "configura un temporizador para {minutes_extra} minutos"
+          - "inicia temporizador de 1 minuto"
+          - "inicia temporizador de {minutes_small} minutos"
+          - "inicia temporizador de {minutes_large} minutos"
+          - "inicia temporizador de {minutes_extra} minutos"
 
       # minutes half
       - sentences:
-          - "configura un temporizador para 1 minuto {minutes_half:seconds}"
-          - "configura un temporizador para {minutes_small} minutos {minutes_half:seconds}"
-          - "configura un temporizador para {minutes_large} minutos {minutes_half:seconds}"
-          - "configura un temporizador para {minutes_extra} minutos {minutes_half:seconds}"
+          - "inicia temporizador de 1 minuto {minutes_half:seconds}"
+          - "inicia temporizador de {minutes_small} minutos {minutes_half:seconds}"
+          - "inicia temporizador de {minutes_large} minutos {minutes_half:seconds}"
+          - "inicia temporizador de {minutes_extra} minutos {minutes_half:seconds}"
 
       # hours
       - sentences:
-          - "configura un temporizador para 1 hora"
-          - "configura un temporizador para {hours} horas"
+          - "inicia temporizador de 1 hora"
+          - "inicia temporizador de {hours} horas"
 
       # hours half
       - sentences:
-          - "configura un temporizador para 1 hora {hours_half:minutes}"
+          - "inicia temporizador de 1 hora {hours_half:minutes}"
 
       # hours + minutes
       - sentences:
-          - "configura un temporizador para 1 hora y 1 minuto"
-          - "configura un temporizador para {hours} horas y {minutes_small} minutos"
-          - "configura un temporizador para {hours} horas y {minutes_large} minutos"
-          - "configura un temporizador para {hours} horas y {minutes_extra} minutos"
+          - "inicia temporizador de 1 hora y 1 minuto"
+          - "inicia temporizador de {hours} horas y {minutes_small} minutos"
+          - "inicia temporizador de {hours} horas y {minutes_large} minutos"
+          - "inicia temporizador de {hours} horas y {minutes_extra} minutos"
 
   HassCancelTimer:
     data:
@@ -260,9 +260,9 @@ intents:
   HassTimerStatus:
     data:
       - sentences:
-          - "timer status"
-          - "status of [the|my] timer[s]"
-          - "[how much] time [is] left on [the|my] timer[s]"
+          - "estado de temporizador"
+          - "estado de[l] [mi[s]] temporizador[es]"
+          - "cuánto falta para [el|los|mi[s]] temporizador[es]"
 
   # media players
   HassMediaPause:
@@ -302,7 +302,7 @@ intents:
           - "cuál es la temperatura"
 
       - sentences:
-          - "cuál es la temperatura del <name>"
+          - "cuál es la temperatura de[l] <name>"
         requires_context:
           domain: climate
 
