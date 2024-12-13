@@ -83,7 +83,7 @@ intents:
   HassGetCurrentDate:
     data:
       - sentences:
-          - "cuál es la fecha"
+          - "qué día es"
 
   HassGetWeather:
     data:
@@ -101,10 +101,10 @@ intents:
     data:
       # turn on
       - sentences:
-          - "enciende las luces"
+          - "(enciende|prend(e|é)) las luces"
 
       - sentences:
-          - "enciende <name>"
+          - "(enciende|prend(e|é)) <name>"
         requires_context:
           domain:
             - light
@@ -113,7 +113,7 @@ intents:
             - input_boolean
 
       - sentences:
-          - "enciende las luces <area>"
+          - "(enciende|prend(e|é)) las luces <area>"
 
       # open
       - sentences:
@@ -124,23 +124,23 @@ intents:
             - valve
 
       - sentences:
-          - "abre [el|la|los|las] {cover_classes:device_class} <area>"
+          - "abr(e|í) [el|la|los|las] {cover_classes:device_class} <area>"
 
       # lock
       - sentences:
-          - "cierra con llave <name>"
+          - "(cierra|cerrá) con llave <name>"
         requires_context:
           domain: lock
 
       # script
       - sentences:
-          - "ejecuta <name>"
+          - "ejecut(a|á) <name>"
         requires_context:
           domain: script
 
       # scene
       - sentences:
-          - "activa <name>"
+          - "activ(a|á) <name>"
         requires_context:
           domain: scene
 
@@ -148,10 +148,10 @@ intents:
     data:
       # turn off
       - sentences:
-          - "apaga las luces"
+          - "apag(a|á) las luces"
 
       - sentences:
-          - "apaga <name>"
+          - "apag(a|á) <name>"
         requires_context:
           domain:
             - light
@@ -160,22 +160,22 @@ intents:
             - input_boolean
 
       - sentences:
-          - "apaga las luces <area>"
+          - "apag(a|á) las luces <area>"
 
       # close
       - sentences:
-          - "cierra <name>"
+          - "(cierra|cerrá) <name>"
         requires_context:
           domain:
             - cover
             - valve
 
       - sentences:
-          - "cierra [el|la|los|las] {cover_classes:device_class} <area>"
+          - "(cierra|cerrá) [el|la|los|las] {cover_classes:device_class} <area>"
 
       # unlock
       - sentences:
-          - "abre <name>"
+          - "abr(e|í) <name>"
         requires_context:
           domain: lock
 
@@ -184,104 +184,104 @@ intents:
     data:
       # brightness
       - sentences:
-          - "ajusta el brillo de <name> al {brightness} por ciento"
+          - "ajust(a|á) [el] brillo de <name> al {brightness} por ciento"
         requires_context:
           domain: light
 
       - sentences:
-          - "ajusta el brillo de las luces <area> al {brightness} por ciento"
+          - "ajust(a|á) [el] brillo de las luces <area> al {brightness} por ciento"
 
       # color
       - sentences:
-          - "ajusta el color de <name> a {color}"
+          - "ajust(a|á) [el] color de <name> a {color}"
         requires_context:
           domain: light
 
       - sentences:
-          - "ajusta el color de las luces <area> de <name> a {color}"
+          - "ajust(a|á) [el] color de las luces <area> de <name> a {color}"
 
   # timers
   HassStartTimer:
     data:
       # seconds
       - sentences:
-          - "configura un temporizador para {seconds} segundos"
+          - "inici(a|á) temporizador de {seconds} segundos"
 
       # minutes
       - sentences:
-          - "configura un temporizador para 1 minuto"
-          - "configura un temporizador para {minutes_small} minutos"
-          - "configura un temporizador para {minutes_large} minutos"
-          - "configura un temporizador para {minutes_extra} minutos"
+          - "inici(a|á) temporizador de 1 minuto"
+          - "inici(a|á) temporizador de {minutes_small} minutos"
+          - "inici(a|á) temporizador de {minutes_large} minutos"
+          - "inici(a|á) temporizador de {minutes_extra} minutos"
 
       # minutes half
       - sentences:
-          - "configura un temporizador para 1 minuto {minutes_half:seconds}"
-          - "configura un temporizador para {minutes_small} minutos {minutes_half:seconds}"
-          - "configura un temporizador para {minutes_large} minutos {minutes_half:seconds}"
-          - "configura un temporizador para {minutes_extra} minutos {minutes_half:seconds}"
+          - "inici(a|á) temporizador de 1 minuto {minutes_half:seconds}"
+          - "inici(a|á) temporizador de {minutes_small} minutos {minutes_half:seconds}"
+          - "inici(a|á) temporizador de {minutes_large} minutos {minutes_half:seconds}"
+          - "inici(a|á) temporizador de {minutes_extra} minutos {minutes_half:seconds}"
 
       # hours
       - sentences:
-          - "configura un temporizador para 1 hora"
-          - "configura un temporizador para {hours} horas"
+          - "inici(a|á) temporizador de 1 hora"
+          - "inici(a|á) temporizador de {hours} horas"
 
       # hours half
       - sentences:
-          - "configura un temporizador para 1 hora {hours_half:minutes}"
+          - "inici(a|á) temporizador de 1 hora {hours_half:minutes}"
 
       # hours + minutes
       - sentences:
-          - "configura un temporizador para 1 hora y 1 minuto"
-          - "configura un temporizador para {hours} horas y {minutes_small} minutos"
-          - "configura un temporizador para {hours} horas y {minutes_large} minutos"
-          - "configura un temporizador para {hours} horas y {minutes_extra} minutos"
+          - "inici(a|á) temporizador de 1 hora y 1 minuto"
+          - "inici(a|á) temporizador de {hours} horas y {minutes_small} minutos"
+          - "inici(a|á) temporizador de {hours} horas y {minutes_large} minutos"
+          - "inici(a|á) temporizador de {hours} horas y {minutes_extra} minutos"
 
   HassCancelTimer:
     data:
       - sentences:
-          - "cancela el temporizador"
+          - "cancel(a|á) [el] temporizador"
 
   HassCancelAllTimers:
     data:
       - sentences:
-          - "cancela todos los temporizadores"
+          - "cancel(a|á) [todos los] temporizadores"
 
   HassPauseTimer:
     data:
       - sentences:
-          - "pausa el temporizador"
+          - "paus(a|á) el temporizador"
 
   HassUnpauseTimer:
     data:
       - sentences:
-          - "reanuda el temporizador"
+          - "reanud(a|á) el temporizador"
 
   HassTimerStatus:
     data:
       - sentences:
-          - "timer status"
-          - "status of [the|my] timer[s]"
-          - "[how much] time [is] left on [the|my] timer[s]"
+          - "estado de temporizador"
+          - "estado de[l] [mi[s]] temporizador[es]"
+          - "cuánto falta para [el|los|mi[s]] temporizador[es]"
 
   # media players
   HassMediaPause:
     data:
       - sentences:
-          - "pausa [la música]"
+          - "paus(a|á) [la música]"
 
       - sentences:
-          - "pausa <name>"
+          - "paus(a|á) <name>"
         requires_context:
           domain: media_player
 
   HassMediaUnpause:
     data:
       - sentences:
-          - "reanuda [la música]"
+          - "reanud(a|á) [la música]"
 
       - sentences:
-          - "reanuda <name>"
+          - "reanud(a|á) <name>"
         requires_context:
           domain: media_player
 
@@ -302,7 +302,7 @@ intents:
           - "cuál es la temperatura"
 
       - sentences:
-          - "cuál es la temperatura del <name>"
+          - "cuál es la temperatura de[l] <name>"
         requires_context:
           domain: climate
 
@@ -349,6 +349,6 @@ intents:
   HassListAddItem:
     data:
       - sentences:
-          - "agrega {todo_item} a [mi] [lista de] {name}"
+          - "(añad(e|í)|agreg(a|á)) {todo_item} a [mi] [lista [de]] {name}"
         requires_context:
           domain: todo
