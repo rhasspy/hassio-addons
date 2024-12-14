@@ -92,7 +92,9 @@ sentences:
     requires_context:
       domain: cover
       
-  - "set [a] timer for {minutes} minute[s]"
+  # Output text may contain list references
+  - in: "the world ends in {minutes} minute[s]"
+    out: "set a timer for {minutes} minutes"
   
 lists:
   name:
@@ -105,7 +107,7 @@ lists:
           domain: cover
   minutes:
     range:
-      from: 1
+      from: 5
       to: 100
       step: 5
 ```

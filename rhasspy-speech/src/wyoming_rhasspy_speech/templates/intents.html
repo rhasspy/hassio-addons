@@ -45,7 +45,13 @@
   <li class="p-1">
 {% for word in processed_words: %}
   {% if isstring(word): %}
-  {{ word }}
+    {% if "{" in word: %}
+    <span class="bg-danger text-white p-1">{{ word }}</span>
+    {% elif "/" in word: %}
+    <span class="text-muted">{{ word }}</span>
+    {% else: %}
+      {{ word }}
+    {% endif %}
   {% else: %}
   <select>
     {% for sub_word in word: %}
