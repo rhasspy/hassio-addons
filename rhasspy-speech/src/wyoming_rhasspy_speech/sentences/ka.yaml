@@ -1,0 +1,39 @@
+language: ka
+
+intents:
+  # nevermind
+  HassNevermind:
+    data:
+      - sentences:
+          - "არ დაიდარდო"
+
+  # date, time
+  HassGetCurrentTime:
+    data:
+      - sentences:
+          - "რომელი საათია"
+
+  HassGetCurrentDate:
+    data:
+      - sentences:
+          - "რა თარიღია"
+
+  # turn on
+  HassTurnOn:
+    data:
+      - sentences:
+          - "დაქართულე {name}"
+        requires_context:
+          domain:
+            - light
+            - switch
+
+  # turn off
+  HassTurnOff:
+    data:
+      - sentences:
+          - "გამორთე {name}"
+        requires_context:
+          domain:
+            - light
+            - switch

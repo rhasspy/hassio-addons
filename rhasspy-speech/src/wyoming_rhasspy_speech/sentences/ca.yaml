@@ -1,0 +1,43 @@
+language: ca
+
+expansion_rules:
+  pronom_singular: "((el|la|es|sa) |l'|s')"
+  name: "[<pronom_singular>]{name}"
+
+intents:
+  # nevermind
+  HassNevermind:
+    data:
+      - sentences:
+          - "cancel·lar [la comanda|l'ordre]"
+
+  # date, time
+  HassGetCurrentTime:
+    data:
+      - sentences:
+          - "quina hora és"
+
+  HassGetCurrentDate:
+    data:
+      - sentences:
+          - "quin dia és [avui]"
+
+  # turn on
+  HassTurnOn:
+    data:
+      - sentences:
+          - "encén <name>"
+        requires_context:
+          domain:
+            - light
+            - switch
+
+  # turn off
+  HassTurnOff:
+    data:
+      - sentences:
+          - "apaga <name>"
+        requires_context:
+          domain:
+            - light
+            - switch

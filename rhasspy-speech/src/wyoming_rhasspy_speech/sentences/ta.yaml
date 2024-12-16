@@ -1,0 +1,40 @@
+language: ta
+
+intents:
+  # nevermind
+  HassNevermind:
+    data:
+      - sentences:
+          - "பிரச்சினை இல்லை"
+          - "கவலைப்படாதே"
+
+  # date, time
+  HassGetCurrentTime:
+    data:
+      - sentences:
+          - "எப்போதும் நேரம்"
+
+  HassGetCurrentDate:
+    data:
+      - sentences:
+          - "இன்று எந்த தேதி"
+
+  # turn on
+  HassTurnOn:
+    data:
+      - sentences:
+          - "{name} அணைக்கவும்"
+        requires_context:
+          domain:
+            - light
+            - switch
+
+  # turn off
+  HassTurnOff:
+    data:
+      - sentences:
+          - "{name} அணைக்காமல் விட்டு வைக்கவும்"
+        requires_context:
+          domain:
+            - light
+            - switch

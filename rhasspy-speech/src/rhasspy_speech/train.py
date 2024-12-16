@@ -10,6 +10,7 @@ from typing import Any, Dict, List, Optional, Union
 from hassil.intents import Intents
 
 from .const import LangSuffix, WordCasing
+from .coqui_stt import CoquiSttTrainer
 from .g2p import LexiconDatabase, get_sounds_like
 from .intent_fst import intents_to_fst
 from .kaldi import KaldiTrainer
@@ -34,21 +35,25 @@ async def train_model(
             model_config = json.load(model_config_file)
 
     word_casing = WordCasing(model_config.get("lexicon", {}).get("casing", "lower"))
+    model_type = model_config.get("type", "kaldi")
 
-    lexicon = LexiconDatabase(os.path.join(model_dir, "lexicon.db"))
+    if model_type == "kaldi":
+        lexicon = LexiconDatabase(os.path.join(model_dir, "lexicon.db"))
 
-    # User lexicon
-    if words:
-        for word, word_prons in words.items():
-            if isinstance(word_prons, str):
-                word_prons = [word_prons]
+        # User lexicon
+        if words:
+            for word, word_prons in words.items():
+                if isinstance(word_prons, str):
+                    word_prons = [word_prons]
 
-            for word_pron in word_prons:
-                lexicon.add(word, get_sounds_like(word_pron.split(), lexicon))
+                for word_pron in word_prons:
+                    lexicon.add(word, get_sounds_like(word_pron.split(), lexicon))
+    else:
+        # coqui
+        lexicon = LexiconDatabase()
 
     with io.StringIO() as fst_file:
         fst_context = intents_to_fst(
-            train_dir=train_dir,
             intents=intents,
             fst_file=fst_file,
             lexicon=lexicon,
@@ -56,23 +61,28 @@ async def train_model(
             word_casing=word_casing,
         )
 
-        trainer_args: Dict[str, Any] = {}
-        if "sil_phone" in model_config:
-            trainer_args["sil_phone"] = model_config["sil_phone"]
+        if model_type == "kaldi":
+            trainer_args: Dict[str, Any] = {}
+            if "sil_phone" in model_config:
+                trainer_args["sil_phone"] = model_config["sil_phone"]
 
-        if "spn_phone" in model_config:
-            trainer_args["spn_phone"] = model_config["spn_phone"]
+            if "spn_phone" in model_config:
+                trainer_args["spn_phone"] = model_config["spn_phone"]
 
-        trainer = KaldiTrainer(
-            train_dir=train_dir,
-            model_dir=os.path.join(model_dir, "model"),
-            tools=tools,
-            fst_context=fst_context,
-            **trainer_args,
-        )
+            trainer = KaldiTrainer(
+                train_dir=train_dir,
+                model_dir=os.path.join(model_dir, "model"),
+                tools=tools,
+                fst_context=fst_context,
+                **trainer_args,
+            )
 
-        train_args: Dict[str, Any] = {}
-        if rescore_order is not None:
-            train_args["rescore_order"] = rescore_order
+            train_args: Dict[str, Any] = {}
+            if rescore_order is not None:
+                train_args["rescore_order"] = rescore_order
 
-        await trainer.train(lang_suffixes=lang_suffixes, **train_args)
+            await trainer.train(lang_suffixes=lang_suffixes, **train_args)
+        else:
+            # coqui
+            trainer = CoquiSttTrainer(model_dir, tools)
+            await trainer.train(fst_context, train_dir)

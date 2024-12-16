@@ -1,0 +1,39 @@
+language: pl
+
+intents:
+  # nevermind
+  HassNevermind:
+    data:
+      - sentences:
+          - "nieważne"
+
+  # date, time
+  HassGetCurrentTime:
+    data:
+      - sentences:
+          - "jaką mamy [teraz |obecnie ]godzinę"
+
+  HassGetCurrentDate:
+    data:
+      - sentences:
+          - "jaka jest dzisiejsza data"
+
+  # turn on
+  HassTurnOn:
+    data:
+      - sentences:
+          - "włącz {name}"
+        requires_context:
+          domain:
+            - light
+            - switch
+
+  # turn off
+  HassTurnOff:
+    data:
+      - sentences:
+          - "wyłącz {name}"
+        requires_context:
+          domain:
+            - light
+            - switch

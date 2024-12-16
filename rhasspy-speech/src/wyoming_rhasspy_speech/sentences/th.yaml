@@ -1,0 +1,39 @@
+language: th
+
+intents:
+  # nevermind
+  HassNevermind:
+    data:
+      - sentences:
+          - "ไม่เป็นไร"
+
+  # date, time
+  HassGetCurrentTime:
+    data:
+      - sentences:
+          - "กี่โมงแล้ว"
+
+  HassGetCurrentDate:
+    data:
+      - sentences:
+          - "วันนี้วันที่เท่าไหร่"
+
+  # turn on
+  HassTurnOn:
+    data:
+      - sentences:
+          - "เปิด{name}"
+        requires_context:
+          domain:
+            - light
+            - switch
+
+  # turn off
+  HassTurnOff:
+    data:
+      - sentences:
+          - "ปิด{name}"
+        requires_context:
+          domain:
+            - light
+            - switch

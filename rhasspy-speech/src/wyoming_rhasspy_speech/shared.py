@@ -1,6 +1,7 @@
+import json
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 from rhasspy_speech.const import LangSuffix
 
@@ -47,6 +48,9 @@ class AppSettings:
     # Web server
     auto_train_model_id: Optional[str] = None
 
+    # Misc
+    model_id_for_language: Dict[str, str] = field(default_factory=dict)
+
     def model_data_dir(self, model_id: str) -> Path:
         return self.models_dir / model_id
 
@@ -86,6 +90,15 @@ class AppSettings:
             filename = "lists.yaml"
 
         return self.train_dir / model_id / filename
+
+    def model_config(self, model_id: str) -> Dict[str, Any]:
+        model_dir = self.model_data_dir(model_id)
+        model_config_path = model_dir / "config.json"
+        if not model_config_path.exists():
+            return {}
+
+        with open(model_config_path, "r", encoding="utf-8") as model_config_file:
+            return json.load(model_config_file)
 
 
 @dataclass

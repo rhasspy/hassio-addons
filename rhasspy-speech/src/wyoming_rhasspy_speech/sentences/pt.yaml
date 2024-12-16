@@ -1,0 +1,42 @@
+language: pt
+
+expansion_rules:
+  name: "[(o|os|a|as)] {name}"
+
+intents:
+  # nevermind
+  HassNevermind:
+    data:
+      - sentences:
+          - "esquece"
+
+  # date, time
+  HassGetCurrentTime:
+    data:
+      - sentences:
+          - "que horas são"
+
+  HassGetCurrentDate:
+    data:
+      - sentences:
+          - "que dia é hoje"
+
+  # turn on
+  HassTurnOn:
+    data:
+      - sentences:
+          - "(liga[r]|ligue) <name>"
+        requires_context:
+          domain:
+            - light
+            - switch
+
+  # turn off
+  HassTurnOff:
+    data:
+      - sentences:
+          - "(desliga|desligue) <name>"
+        requires_context:
+          domain:
+            - light
+            - switch

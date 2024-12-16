@@ -739,7 +739,10 @@ def intents_to_fst(
 ) -> Fst:
     num_to_words: Optional[NumToWords] = None
     if number_language:
-        num_to_words = NumToWords(engine=RbnfEngine.for_language(number_language))
+        try:
+            num_to_words = NumToWords(engine=RbnfEngine.for_language(number_language))
+        except ValueError:
+            _LOGGER.exception("Unable to convert numbers to words")
 
     filtered_intents = []
     sentence_counts: Dict[str, int] = {}

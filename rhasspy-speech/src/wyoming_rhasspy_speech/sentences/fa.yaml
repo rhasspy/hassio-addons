@@ -1,0 +1,39 @@
+language: fa
+
+intents:
+  # nevermind
+  HassNevermind:
+    data:
+      - sentences:
+          - "مهم نیست"
+
+  # date, time
+  HassGetCurrentTime:
+    data:
+      - sentences:
+          - "ساعت چنده"
+
+  HassGetCurrentDate:
+    data:
+      - sentences:
+          - "تاریخ چه روزی است"
+
+  # turn on
+  HassTurnOn:
+    data:
+      - sentences:
+          - "{name} (را | رو) روشن کن"
+        requires_context:
+          domain:
+            - light
+            - switch
+
+  # turn off
+  HassTurnOff:
+    data:
+      - sentences:
+          - "{name} (را | رو) خاموش کن"
+        requires_context:
+          domain:
+            - light
+            - switch

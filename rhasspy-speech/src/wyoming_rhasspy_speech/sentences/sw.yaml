@@ -1,0 +1,40 @@
+language: sw
+
+intents:
+  # nevermind
+  HassNevermind:
+    data:
+      - sentences:
+          - "usijali"
+          - "sahau"
+
+  # date, time
+  HassGetCurrentTime:
+    data:
+      - sentences:
+          - "ni saa ngapi"
+
+  HassGetCurrentDate:
+    data:
+      - sentences:
+          - "ni tarehe gani"
+
+  # turn on
+  HassTurnOn:
+    data:
+      - sentences:
+          - "washa {name}"
+        requires_context:
+          domain:
+            - light
+            - switch
+
+  # turn off
+  HassTurnOff:
+    data:
+      - sentences:
+          - "zima {name}"
+        requires_context:
+          domain:
+            - light
+            - switch

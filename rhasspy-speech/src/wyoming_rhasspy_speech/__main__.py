@@ -19,6 +19,7 @@ from pyring_buffer import RingBuffer
 from pysilero_vad import SileroVoiceActivityDetector
 from pyspeex_noise import AudioProcessor as SpeexAudioProcessor
 from rhasspy_speech.const import LangSuffix
+from rhasspy_speech.coqui_stt import CoquiSttTranscriber
 from rhasspy_speech.tools import KaldiTools
 from rhasspy_speech.transcribe_stream import KaldiNnet3StreamTranscriber
 from rhasspy_speech.transcribe_wav import KaldiNnet3WavTranscriber
@@ -136,6 +137,15 @@ async def main() -> None:
         "--auto-train", help="Model id to automatically download and train"
     )
     #
+    parser.add_argument(
+        "--model-for-language",
+        nargs=2,
+        metavar=("language", "model"),
+        action="append",
+        default=[],
+        help="Set model id for language (e.g., en_US en_US-zamia)",
+    )
+    #
     parser.add_argument("--debug", action="store_true", help="Log DEBUG messages")
     args = parser.parse_args()
 
@@ -175,8 +185,18 @@ async def main() -> None:
             hass_ingress=args.hass_ingress,
             hass_auto_train=args.hass_auto_train,
             hass_builtin_intents=(not args.no_hass_builtin_intents),
+            # Misc
+            model_id_for_language=dict(args.model_for_language),
         )
     )
+
+    # Add default models for languages
+    for model in MODELS.values():
+        if model.language_code not in state.settings.model_id_for_language:
+            state.settings.model_id_for_language[model.language_code] = model.id
+
+        if model.language_family not in state.settings.model_id_for_language:
+            state.settings.model_id_for_language[model.language_family] = model.id
 
     if args.auto_train:
         model: Optional[Model] = None
@@ -310,6 +330,7 @@ class RhasspySpeechEventHandler(AsyncEventHandler):
         self.state = state
         self.transcriber: Optional[KaldiNnet3WavTranscriber] = None
         self.transcribe_task: Optional[asyncio.Task] = None
+        self.coqui_transcriber: Optional[CoquiSttTranscriber] = None
 
         settings = self.state.settings
 
@@ -373,7 +394,9 @@ class RhasspySpeechEventHandler(AsyncEventHandler):
             # Empty queue
             self.audio_queue = asyncio.Queue()
 
-            if self.is_streaming:
+            if self.coqui_transcriber is not None:
+                await self.coqui_transcriber.start_stream()
+            elif self.is_streaming:
                 # Streaming audio
                 transcriber = KaldiNnet3StreamTranscriber(
                     model_dir=self.model_data_dir,
@@ -465,7 +488,9 @@ class RhasspySpeechEventHandler(AsyncEventHandler):
                         audio_to_transcribe = chunk.audio
 
                 if audio_to_transcribe:
-                    if self.is_streaming:
+                    if self.coqui_transcriber is not None:
+                        await self.coqui_transcriber.process_chunk(audio_to_transcribe)
+                    elif self.is_streaming:
                         self.audio_queue.put_nowait(audio_to_transcribe)
                     else:
                         self.audio_buffer += audio_to_transcribe
@@ -501,7 +526,14 @@ class RhasspySpeechEventHandler(AsyncEventHandler):
             texts: List[str] = []
 
             try:
-                if self.is_streaming:
+                if self.coqui_transcriber is not None:
+                    probs = await self.coqui_transcriber.finish_stream()
+                    texts = [
+                        await self.coqui_transcriber.decode_probs(
+                            probs, self.model_train_dir
+                        )
+                    ]
+                elif self.is_streaming:
                     assert self.transcribe_task is not None
 
                     # End stream and get transcript(s)
@@ -573,6 +605,10 @@ class RhasspySpeechEventHandler(AsyncEventHandler):
             _LOGGER.debug("Final text: %s", text)
             await self.write_event(Transcript(text=text).event())
 
+            if self.coqui_transcriber is not None:
+                await self.coqui_transcriber.stop()
+                self.coqui_transcriber = None
+
             return True
         elif Transcribe.is_type(event.type):
             self.model_id, self.model_suffix = None, None
@@ -589,14 +625,34 @@ class RhasspySpeechEventHandler(AsyncEventHandler):
                 else:
                     self.model_id, self.model_suffix = transcribe.name, None
             elif transcribe.language:
-                for model in sorted(
-                    self.get_info().asr[0].models,
-                    key=lambda m: len(m.name),
-                    reverse=True,
-                ):
-                    if model.name.startswith(transcribe.language):
-                        self.model_id = model.name
-                        break
+                self.model_id = self.state.settings.model_id_for_language.get(
+                    transcribe.language
+                )
+                if not self.model_id:
+                    # Find the first one that matches the prefix
+                    for model in sorted(
+                        self.get_info().asr[0].models,
+                        key=lambda m: len(m.name),
+                        reverse=True,
+                    ):
+                        if model.name.startswith(transcribe.language):
+                            self.model_id = model.name
+                            break
+
+                _LOGGER.debug(
+                    "Selected model %s for language %s",
+                    self.model_id,
+                    transcribe.language,
+                )
+
+            assert self.model_id is not None
+            model_config = self.state.settings.model_config(self.model_id)
+            if model_config.get("type") == "coqui":
+                self.coqui_transcriber = CoquiSttTranscriber(
+                    model_dir=self.state.settings.model_data_dir(self.model_id),
+                    exe_path=self.state.settings.tools_dir / "stt_onlyprobs",
+                    tools=KaldiTools.from_tools_dir(self.state.settings.tools_dir),
+                )
         else:
             _LOGGER.debug("Unexpected event: type=%s, data=%s", event.type, event.data)
 
@@ -644,13 +700,15 @@ class RhasspySpeechEventHandler(AsyncEventHandler):
         )
         for model_id, suffix in trained_models:
             # en_US-rhasspy -> rhasspy
-            language, program = model_id.split("-", maxsplit=1)
+            language = model_id.split("-", maxsplit=1)[0]
             if suffix:
-                program = f"{program}-{suffix}"
+                program = f"rhasspy-{suffix}"
+            else:
+                program = "rhasspy"
 
             language_support[program][language] = (model_id, suffix)
 
-        return Info(
+        info = Info(
             asr=[
                 AsrProgram(
                     name=program,
@@ -678,6 +736,9 @@ class RhasspySpeechEventHandler(AsyncEventHandler):
                 for program, languages in language_support.items()
             ],
         )
+        _LOGGER.debug(info)
+
+        return info
 
 
 def multiply_volume(chunk: bytes, volume_multiplier: float) -> bytes:

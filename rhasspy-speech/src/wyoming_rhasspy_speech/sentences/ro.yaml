@@ -1,0 +1,39 @@
+language: ro
+
+intents:
+  # nevermind
+  HassNevermind:
+    data:
+      - sentences:
+          - "las(ă|a)"
+
+  # date, time
+  HassGetCurrentTime:
+    data:
+      - sentences:
+          - "ce oră este"
+
+  HassGetCurrentDate:
+    data:
+      - sentences:
+          - "care este data"
+
+  # turn on
+  HassTurnOn:
+    data:
+      - sentences:
+          - "aprinde {name}"
+        requires_context:
+          domain:
+            - light
+            - switch
+
+  # turn off
+  HassTurnOff:
+    data:
+      - sentences:
+          - "oprește {name}"
+        requires_context:
+          domain:
+            - light
+            - switch

@@ -7,14 +7,30 @@ It's targeted at lower-end hardware, such as the Raspberry Pi 4.
 
 ## Supported languages
 
+* Catalan (`ca`)
 * Czech (`cz`)
-* Dutch (`nl`)
-* English (`en`)
-* French (`fr`)
 * German (`de`)
-* Italian (`it`)
-* Russian (`ru`)
+* Greek (`el`)
+* English (`en`)
 * Spanish (`es`)
+* Basque (`eu`)
+* Persian (`fa`)
+* Finnish (`fi`)
+* French (`fr`)
+* Hindi (`hi`)
+* Italian (`it`)
+* Georgian (`ka`)
+* Mongolian (`mn`)
+* Dutch (`nl`)
+* Polish (`pl`)
+* Portuguese (`pt`)
+* Romanian (`ro`)
+* Russian (`ru`)
+* Slovenian (`sl`)
+* Swahili (`sw`)
+* Tamil (`ta`)
+* Thai (`th`)
+* Turkish (`tr`)
 
 A collection of [builtin sentences](https://github.com/rhasspy/wyoming-rhasspy-speech/tree/master/wyoming_rhasspy_speech/sentences) are available, which target the [builtin intents](https://developers.home-assistant.io/docs/intent_builtin) in Home Assistant.
 

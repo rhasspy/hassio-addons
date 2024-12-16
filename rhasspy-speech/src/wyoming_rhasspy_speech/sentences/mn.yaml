@@ -1,0 +1,40 @@
+language: mn
+
+intents:
+  # nevermind
+  HassNevermind:
+    data:
+      - sentences:
+          - "зүгээр"
+          - "хамаагүй"
+
+  # date, time
+  HassGetCurrentTime:
+    data:
+      - sentences:
+          - "хэдэн цаг болж байна вэ"
+
+  HassGetCurrentDate:
+    data:
+      - sentences:
+          - "өнөөдөр ямар өдөр вэ"
+
+  # turn on
+  HassTurnOn:
+    data:
+      - sentences:
+          - "{name} асаа"
+        requires_context:
+          domain:
+            - light
+            - switch
+
+  # turn off
+  HassTurnOff:
+    data:
+      - sentences:
+          - "{name} унтраа"
+        requires_context:
+          domain:
+            - light
+            - switch

@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.4
+
+- Support more languages with Coqui STT (see docs)
+
 ## 2.0.3
 
 - Fix list `value[s]`

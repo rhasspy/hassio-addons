@@ -1,0 +1,39 @@
+language: fi
+
+intents:
+  # nevermind
+  HassNevermind:
+    data:
+      - sentences:
+          - "ei [sittenkään] mitään"
+
+  # date, time
+  HassGetCurrentTime:
+    data:
+      - sentences:
+          - "paljonko kello on"
+
+  HassGetCurrentDate:
+    data:
+      - sentences:
+          - "mikä on päivämäärä"
+
+  # turn on
+  HassTurnOn:
+    data:
+      - sentences:
+          - "laita {name} päälle"
+        requires_context:
+          domain:
+            - light
+            - switch
+
+  # turn off
+  HassTurnOff:
+    data:
+      - sentences:
+          - "laita {name} päältä"
+        requires_context:
+          domain:
+            - light
+            - switch

@@ -1,0 +1,45 @@
+language: lb
+
+expansion_rules:
+  name: "([den |de | d']){name}"
+
+intents:
+  # nevermind
+  HassNevermind:
+    data:
+      - sentences:
+          - "macht näischt"
+          - "gleeft et"
+
+  # date, time
+  HassGetCurrentTime:
+    data:
+      - sentences:
+          - "Wéi vill Auer ass et [elo]"
+          - "Wéi spéit ass et [elo]"
+
+  HassGetCurrentDate:
+    data:
+      - sentences:
+          - "Wéien Dag ass haut"
+          - "De wéivillte[n] si mer [haut]"
+
+  # turn on
+  HassTurnOn:
+    data:
+      - sentences:
+          - "schalt <name> un"
+        requires_context:
+          domain:
+            - light
+            - switch
+
+  # turn off
+  HassTurnOff:
+    data:
+      - sentences:
+          - "schalt <name> aus"
+        requires_context:
+          domain:
+            - light
+            - switch

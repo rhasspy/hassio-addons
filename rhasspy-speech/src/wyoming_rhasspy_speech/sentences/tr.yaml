@@ -1,0 +1,40 @@
+language: tr
+
+intents:
+  # nevermind
+  HassNevermind:
+    data:
+      - sentences:
+          - "önemli değil"
+          - "boşver"
+
+  # date, time
+  HassGetCurrentTime:
+    data:
+      - sentences:
+          - "saat kaç"
+
+  HassGetCurrentDate:
+    data:
+      - sentences:
+          - "bugün hangi tarih"
+
+  # turn on
+  HassTurnOn:
+    data:
+      - sentences:
+          - "{name}'i aç"
+        requires_context:
+          domain:
+            - light
+            - switch
+
+  # turn off
+  HassTurnOff:
+    data:
+      - sentences:
+          - "{name}'i kapat"
+        requires_context:
+          domain:
+            - light
+            - switch

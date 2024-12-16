@@ -1,0 +1,42 @@
+language: el
+
+expansion_rules:
+  name: "[(ο|οι|τον|η|την|το|τα|τις|τους|στον|στη|στην|στο|στους|στις|στα)] {name}"
+
+intents:
+  # nevermind
+  HassNevermind:
+    data:
+      - sentences:
+          - "άστο"
+
+  # date, time
+  HassGetCurrentTime:
+    data:
+      - sentences:
+          - "τι ώρα είναι"
+
+  HassGetCurrentDate:
+    data:
+      - sentences:
+          - "ποια είναι η ημερομηνία"
+
+  # turn on
+  HassTurnOn:
+    data:
+      - sentences:
+          - "άναψε <name>"
+        requires_context:
+          domain:
+            - light
+            - switch
+
+  # turn off
+  HassTurnOff:
+    data:
+      - sentences:
+          - "σβήσε <name>"
+        requires_context:
+          domain:
+            - light
+            - switch

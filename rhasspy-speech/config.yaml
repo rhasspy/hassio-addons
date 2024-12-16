@@ -1,5 +1,5 @@
 ---
-version: 2.0.3
+version: 2.0.4
 slug: rhasspy-speech
 name: rhasspy-speech
 description: Speech-to-text system from Rhasspy
@@ -24,7 +24,7 @@ options:
   debug_logging: false
 schema:
   language: |
-    list(cs|de|en|es|fr|it|nl|ru)
+    list(ca|cs|de|el|en|es|eu|fa|fi|fr|hi|it|ka|mn|nl|pl|pt|ro|ru|sl|sw|ta|th|tr)
   streaming: bool
   decode_mode: |
     list(auto|strict|flexible|flexible_2pass)
