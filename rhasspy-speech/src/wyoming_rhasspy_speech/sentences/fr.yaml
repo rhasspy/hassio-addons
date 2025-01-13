@@ -452,7 +452,7 @@ intents:
   HassGetState:
     data:
       - sentences:
-          - "<quel> est [(l'état|le statut|la valeur) de] [<le>]{name} [<dans> [<le>]{area}]"
+          - "quel est [(l'état|le statut|la valeur) de] [<le>]{name} [<dans> [<le>]{area}]"
         requires_context:
           domain:
             - sensor
