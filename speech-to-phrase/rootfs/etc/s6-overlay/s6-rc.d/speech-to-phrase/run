@@ -1,0 +1,31 @@
+#!/command/with-contenv bashio
+# shellcheck shell=bash
+# ==============================================================================
+# Start speech-to-phrase service
+# ==============================================================================
+cd /usr/src
+
+flags=()
+
+if bashio::config.true 'debug_logging'; then
+    flags+=('--debug')
+fi
+
+models_dir='/data/models'
+mkdir -p "${models_dir}"
+
+en_model_dir="${models_dir}/en_US-rhasspy"
+if [ ! -d "${en_model_dir}" ]; then
+    echo 'Downloading English model'
+    curl --location --output - \
+        "https://huggingface.co/datasets/rhasspy/rhasspy-speech/resolve/main/models/en_US-rhasspy.tar.gz?download=true" | \
+        tar -C "${models_dir}" -xzf -
+fi
+
+exec .venv/bin/python3 -m speech_to_phrase \
+    --uri 'tcp://0.0.0.0:10300' \
+    --tools-dir /usr/src/tools \
+    --train-dir /share/speech-to-phrase/train \
+    --models-dir "${models_dir}" \
+    --hass-token "${SUPERVISOR_TOKEN}" \
+    --hass-websocket-uri 'ws://supervisor/core/websocket' ${flags[@]}
