@@ -13,7 +13,9 @@ See below for a list of supported sentences.
 
 ## Installation
 
-Follow these steps to get the add-on installed on your system:
+[![Show add-on](https://my.home-assistant.io/badges/supervisor_addon.svg)](https://my.home-assistant.io/redirect/supervisor_addon/?addon=47701997_speech-to-phrase&repository_url=https%3A%2F%2Fgithub.com%2Frhasspy%2Fhassio-addons)
+
+Use the "my link" above or manually follow these steps to get the add-on installed on your system:
 
 1. Navigate in your Home Assistant frontend to **Settings** -> **Add-ons** -> **Add-on store**.
 2. Add the store https://github.com/rhasspy/hassio-addons
