@@ -4,7 +4,7 @@
 
 **NOTE:** This add-on is in beta! Expect things to change and break.
 
-Home Assistant add-on that uses [speech-to-phrase](https://github.com/OHF-voice/speech-to-phrase) for speech-to-text.
+Home Assistant add-on that uses [speech-to-phrase](https://github.com/OHF-voice/speech-to-phrase) for speech-to-text, a fast but limited speech-to-text system. Only trained phrases are able to be transcribed, but this includes your exposed entities, areas, and floors.
 
 [![Show add-on](https://my.home-assistant.io/badges/supervisor_addon.svg)](https://my.home-assistant.io/redirect/supervisor_addon/?addon=47701997_speech-to-phrase&repository_url=https%3A%2F%2Fgithub.com%2Frhasspy%2Fhassio-addons)
 
