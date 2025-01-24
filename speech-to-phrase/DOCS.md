@@ -1,6 +1,6 @@
 # Home Assistant Add-on: speech-to-phrase
 
-![logo](logo.png)
+**NOTE:** This add-on is in beta! Expect things to change and break.
 
 [speech-to-phrase](https://github.com/OHF-voice/speech-to-phrase) is a speech-to-text system that recognizes what you say from a set of pre-defined sentences.
 It's targeted at lower-end hardware, such as the Raspberry Pi 4.
