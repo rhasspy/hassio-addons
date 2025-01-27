@@ -1,5 +1,5 @@
 ---
-version: 0.0.1
+version: 0.0.2
 slug: speech-to-phrase
 name: speech-to-phrase
 description: Fast but limited speech-to-text
@@ -14,7 +14,6 @@ map:
   - share:rw
 backup_exclude:
   - "*/models/*"
-ingress: true
 homeassistant_api: true
 options:
   debug_logging: false
