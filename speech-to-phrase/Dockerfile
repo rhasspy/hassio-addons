@@ -6,10 +6,10 @@ ARG BUILD_ARCH
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # Install speech-to-phrase
+ARG SPEECH_TO_PHRASE_VERSION
 WORKDIR /usr/src
 
 RUN mkdir -p ./tools
-COPY src/ ./
 
 RUN \
     apt-get update \
@@ -29,7 +29,8 @@ RUN \
         "https://huggingface.co/datasets/rhasspy/rhasspy-speech/resolve/main/tools/rhasspy-speech_${ARCH}.tar.gz?download=true" | \
         tar -C ./tools -xzf - \
     && python3 -m venv .venv \
-    && .venv/bin/pip3 install --no-cache-dir . \
+    && .venv/bin/pip3 install --no-cache-dir \
+        "speech-to-phrase @ https://github.com/OHF-Voice/speech-to-phrase/archive/refs/tags/v${SPEECH_TO_PHRASE_VERSION}.tar.gz" \
     && apt-get remove --yes build-essential \
     && apt-get autoclean \
     && apt-get purge \

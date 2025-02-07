@@ -4,11 +4,12 @@
 
 **NOTE:** This add-on is in beta! Expect things to change and break.
 
-Home Assistant add-on that uses [speech-to-phrase](https://github.com/OHF-voice/speech-to-phrase), a fast but limited speech-to-text system. Only trained phrases are able to be transcribed, but this includes your exposed entities, areas, floors, and sentence triggers.
+A fast, local speech-to-text system that is personalized with your [Home Assistant](https://www.home-assistant.io/) device names.
+It's targeted at lower-end hardware, such as the Raspberry Pi 4 and Home Assistant Green.
 
 [![Show add-on](https://my.home-assistant.io/badges/supervisor_addon.svg)](https://my.home-assistant.io/redirect/supervisor_addon/?addon=47701997_speech-to-phrase&repository_url=https%3A%2F%2Fgithub.com%2Frhasspy%2Fhassio-addons)
 
-See the [documentation](DOCS.md) for available voice commands.
+See the [documentation](http://github.com/OHF-voice/speech-to-phrase) for available voice commands.
 
 Built on top of the [Year of Voice](https://www.home-assistant.io/blog/2022/12/20/year-of-voice/).
 

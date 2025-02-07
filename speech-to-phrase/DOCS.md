@@ -2,14 +2,23 @@
 
 **NOTE:** This add-on is in beta! Expect things to change and break.
 
-[speech-to-phrase](https://github.com/OHF-voice/speech-to-phrase) is a speech-to-text system that recognizes what you say from a set of pre-defined sentences.
-It's targeted at lower-end hardware, such as the Raspberry Pi 4.
+A fast, local speech-to-text system that is personalized with your [Home Assistant](https://www.home-assistant.io/) device names.
+It's targeted at lower-end hardware, such as the Raspberry Pi 4 and Home Assistant Green.
+
+Speech-to-phrase is not a general purpose speech recognition system. Instead of answering the question "what did the user say?", it answers "which of the phrases I know did the user say?".
+This is accomplished by combining [pre-defined sentence templates](https://github.com/OHF-Voice/speech-to-phrase/tree/main/speech_to_phrase/sentences) with the names of your Home Assistant entities, areas, and floors that have been [exposed to Assist](https://www.home-assistant.io/voice_control/voice_remote_expose_devices/). [Sentence triggers][sentence trigger] are also included automatically.
+
 
 ## Supported languages
 
-* English
+Available voice commands:
 
-See below for a list of supported sentences.
+- [English](https://github.com/OHF-Voice/speech-to-phrase/blob/main/docs/english.md)
+- [Français (French)](https://github.com/OHF-Voice/speech-to-phrase/blob/main/docs/french.md)
+- [Deutsch (German)](https://github.com/OHF-Voice/speech-to-phrase/blob/main/docs/german.md)
+- [Nederlands (Dutch)](https://github.com/OHF-Voice/speech-to-phrase/blob/main/docs/dutch.md)
+- [Spanish (Español)](https://github.com/OHF-Voice/speech-to-phrase/blob/main/docs/spanish.md)
+- [Italian (Italiano)](https://github.com/OHF-Voice/speech-to-phrase/blob/main/docs/italian.md)
 
 ## Installation
 
@@ -24,11 +33,11 @@ Use the "my link" above or manually follow these steps to get the add-on install
 
 ## How to use
 
-After this add-on is installed and running, it should automatically train itself based on your exposed entities, areas, floors, and sentence triggers. Check the logs for the add-on to report "Ready".
+After this add-on is installed and running, it should automatically train itself based on your exposed entities, areas, floors, and [sentence triggers][sentence trigger].
+The add-on will automatically re-train if necessary.
 
-Once you have a model trained, it will be automatically discovered by the
-Wyoming integration in Home Assistant. To finish the setup, click the following
-my button:
+
+The add-on will be automatically discovered by the Wyoming integration in Home Assistant. To finish the setup, click the following my button:
 
 [![Open your Home Assistant instance and start setting up a new integration.](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=wyoming)
 
@@ -36,92 +45,7 @@ Alternatively, you can install the Wyoming integration manually, see the
 [Wyoming integration documentation](https://www.home-assistant.io/integrations/wyoming/)
 for more information.
 
-## English
-
-### Date and Time
-
-- "what time is it?"
-- "what's the date?"
-
-### Weather and Temperature
-
-- "what's the weather?"
-    - Requires a [weather](https://www.home-assistant.io/integrations/weather/) entity to be configured
-- "what's the weather like in New York?"
-    - Requires a [weather](https://www.home-assistant.io/integrations/weather/) entity named "New York"
-- "what's the temperature?"
-    - Requires a [climate](https://www.home-assistant.io/integrations/climate/) entity to be configured
-- "what's the temperature of the EcoBee?"
-    - Requires a [climate](https://www.home-assistant.io/integrations/climate/) entity named "EcoBee"
-    
-### Lights
-
-- "turn on/off the lights"
-    - Requires voice satellite to be in an [area](https://www.home-assistant.io/docs/organizing/#area)
-- "turn on/off standing light"
-    - Requires a [light](https://www.home-assistant.io/integrations/light/) entity named "standing light"
-- "turn on/off lights in the kitchen"
-    - Requires an [area](https://www.home-assistant.io/docs/organizing/#area) named "kitchen"
-- "turn on/off lights on the first floor"
-    - Requires a [floor](https://www.home-assistant.io/docs/organizing/#floor) named "first floor"
-- "set kitchen lights to green"
-    - Requires an [area](https://www.home-assistant.io/docs/organizing/#area) named "kitchen" with at least one [light](https://www.home-assistant.io/integrations/light/) entity in it that supports setting color
-- "set bed light brightness to 100 percent"
-    - Requires a [light](https://www.home-assistant.io/integrations/light/) entity named "bed light" that supports setting brightness
-    - Brightness from 10-100 by 10s
-
-### Sensors
-
-- "what is the outdoor humidity?"
-    - Requires a [sensor](https://www.home-assistant.io/integrations/sensor/) entity named "outdoor humidity"
-
-### Doors and Windows
-
-- "open/close the garage door"
-    - Requires a [cover](https://www.home-assistant.io/integrations/cover/) entity named "garage door"
-- "is the garage door open/closed?"
-    - Requires a [cover](https://www.home-assistant.io/integrations/cover/) entity named "garage door"
-    
-### Locks
-
-- "lock/unlock the front door"
-    - Requires a [lock](https://www.home-assistant.io/integrations/lock/) entity named "front door"
-- "is the front door locked/unlocked?"
-    - Requires a [lock](https://www.home-assistant.io/integrations/lock/) entity named "front door"
-
-### Media
-
-- "pause"
-    - Requires a [media player](https://www.home-assistant.io/integrations/media_player/) entity that is playing
-- "resume"
-    - Requires a [media player](https://www.home-assistant.io/integrations/media_player/) entity that is paused
-- "next"
-    - Requires a [media player](https://www.home-assistant.io/integrations/media_player/) entity to that is playing and supports next track
-
-### Timers
-
-- "set a timer for five minutes"
-    - minutes from 1-10, 15, 20, 30, 40, 45, 50-100 by 10s
-- "set a timer for thirty seconds"
-    - seconds from 10-100 by 10s
-- "set a timer for three hours and ten minutes"
-    - hours from 1-100
-- "pause/resume timer"
-- "cancel timer"
-- "cancel all timers"
-- "timer status"
-
-### Scenes and Scripts
-
-- "run party time"
-    - Requires a [script](https://www.home-assistant.io/integrations/script/) named "party time"
-- "activate mood lighting"
-    - Requires a [scene](https://www.home-assistant.io/integrations/scene/) named "mood lighting"
-
-### Miscellaneous
-
-- "nevermind"
-
+See [the documentation](https://github.com/OHF-voice/speech-to-phrase) for available voice commands.
 
 ## Support
 
@@ -140,3 +64,4 @@ In case you've found an bug, please [open an issue on our GitHub][issue].
 [issue]: https://github.com/home-assistant/addons/issues
 [reddit]: https://reddit.com/r/homeassistant
 [repository]: https://github.com/rhasspy/hassio-addons
+[sentence trigger]: https://www.home-assistant.io/docs/automation/trigger/#sentence-trigger

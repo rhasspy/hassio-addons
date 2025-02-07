@@ -1,8 +1,8 @@
 ---
-version: 0.0.2
+version: 1.0.0-1
 slug: speech-to-phrase
 name: speech-to-phrase
-description: Fast but limited speech-to-text
+description: Fast and personalized local speech-to-text
 url: http://github.com/OHF-voice/speech-to-phrase
 arch:
   - amd64
@@ -18,6 +18,8 @@ homeassistant_api: true
 options:
   debug_logging: false
 schema:
+  hass_websocket_uri: str?
+  hass_token: str?
   debug_logging: bool
 ports:
   "10300/tcp": null
