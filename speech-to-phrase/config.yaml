@@ -1,5 +1,5 @@
 ---
-version: 1.0.0-1
+version: 1.0.0
 slug: speech-to-phrase
 name: speech-to-phrase
 description: Fast and personalized local speech-to-text
