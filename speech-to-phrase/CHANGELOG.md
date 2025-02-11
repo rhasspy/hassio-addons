@@ -1,5 +1,9 @@
 # Changelog
 
-## 0.0.1
+## 1.1.0
 
-- Beta release
+- Add custom sentences
+
+## 1.0.0
+
+- Initial release

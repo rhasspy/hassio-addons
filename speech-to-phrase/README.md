@@ -1,13 +1,9 @@
-# Home Assistant Add-on: speech-to-phrase
+# Home Assistant Add-on: Speech to phrase
 
 ![Supports aarch64 Architecture][aarch64-shield] ![Supports amd64 Architecture][amd64-shield]
 
-**NOTE:** This add-on is in beta! Expect things to change and break.
-
-A fast, local speech-to-text system that is personalized with your [Home Assistant](https://www.home-assistant.io/) device names.
-It's targeted at lower-end hardware, such as the Raspberry Pi 4 and Home Assistant Green.
-
-[![Show add-on](https://my.home-assistant.io/badges/supervisor_addon.svg)](https://my.home-assistant.io/redirect/supervisor_addon/?addon=47701997_speech-to-phrase&repository_url=https%3A%2F%2Fgithub.com%2Frhasspy%2Fhassio-addons)
+A fast and local speech-to-text system that is personalized with the names of things in your home.
+[Speech-to-phrase](https://github.com/OHF-voice/speech-to-phrase) is targeted at lower-end hardware, such as the Raspberry Pi 4 and Home Assistant Green.
 
 See the [documentation](http://github.com/OHF-voice/speech-to-phrase) for available voice commands.
 

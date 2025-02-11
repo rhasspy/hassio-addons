@@ -1,13 +1,5 @@
 ---
 configuration:
-  hass_websocket_uri:
-    name: Home Assistant websocket URI
-    description: >-
-      URI of Home Assistant websocket API if using external server
-  hass_token:
-    name: Home Assistant token
-    description: >-
-      Long-lived access token for external server
   debug_logging:
     name: Debug logging
     description: >-
