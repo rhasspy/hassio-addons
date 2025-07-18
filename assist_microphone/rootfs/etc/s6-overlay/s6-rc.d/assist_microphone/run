@@ -18,6 +18,16 @@ if [ "$(bashio::core.ssl)" == 'true' ]; then
     extra_args+=('--protocol' 'https')
 fi
 
+if [ "$(bashio::config 'pulseserver')" != "" ]; then
+    extra_args+=('--pulseaudio' $(bashio::config 'pulseserver'))
+    if [ "$(bashio::config 'pulseecho')" != 'true' ]; then
+        extra_args+=('--echo-cancel')
+    fi
+    if [ "$(bashio::config 'pulseducking')" != "" ]; then
+        extra_args+=('--ducking' $(bashio::config 'pulseducking'))
+    fi
+fi
+
 exec python3 -m homeassistant_satellite \
     --host "$(bashio::config 'host')" \
     --port "$(bashio::core.port)" \
