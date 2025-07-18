@@ -45,3 +45,9 @@ Wake word detection using [microWakeWord](https://github.com/kahrendt/microWakeW
 Speech-to-text using [rhasspy-speech](https://github.com/rhasspy/rhasspy-speech) for pre-defined voice commands.
 
 [![Show add-on](https://my.home-assistant.io/badges/supervisor_addon.svg)](https://my.home-assistant.io/redirect/supervisor_addon/?addon=47701997_rhasspy-speech&repository_url=https%3A%2F%2Fgithub.com%2Frhasspy%2Fhassio-addons)
+
+## stt-fallback
+
+Speech-to-text fall back using [stt entities](https://www.home-assistant.io/integrations/stt).
+
+[![Show add-on](https://my.home-assistant.io/badges/supervisor_addon.svg)](https://my.home-assistant.io/redirect/supervisor_addon/?addon=47701997_stt-fallback&repository_url=https%3A%2F%2Fgithub.com%2Frhasspy%2Fhassio-addons)
