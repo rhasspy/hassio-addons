@@ -1,0 +1,12 @@
+---
+configuration:
+  entity_ids:
+    name: Entity ids
+    description: >-
+      Speech-to-text entity ids (separated by space) in fallback order.
+  debug_logging:
+    name: Debug logging
+    description: >-
+      Enable debug logging.
+network:
+  10300/tcp: stt-fallback Wyoming Protocol

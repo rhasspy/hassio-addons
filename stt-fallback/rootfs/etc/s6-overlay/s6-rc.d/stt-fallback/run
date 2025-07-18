@@ -1,0 +1,18 @@
+#!/command/with-contenv bashio
+# shellcheck shell=bash
+# ==============================================================================
+# Start stt-fallback service
+# ==============================================================================
+cd /usr/src
+
+flags=()
+
+if bashio::config.true 'debug_logging'; then
+    flags+=('--debug')
+fi
+
+exec python3 stt_fallback.py \
+    --uri 'tcp://0.0.0.0:10300' \
+    --hass-token "${SUPERVISOR_TOKEN}" \
+    --hass-http-uri 'http://supervisor/core/api' \
+    ${flags[@]} $(bashio::config 'entity_ids')

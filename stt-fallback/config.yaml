@@ -1,0 +1,22 @@
+---
+version: 1.0.0
+slug: stt-fallback
+name: stt-fallback
+description: Speech-to-text fallback
+url: https://github.com/rhasspy/hassio-addons/tree/master/stt-fallback
+arch:
+  - amd64
+  - aarch64
+init: false
+discovery:
+  - wyoming
+homeassistant_api: true
+options:
+  entity_ids: "stt.home_assistant_cloud"
+  debug_logging: false
+schema:
+  entity_ids: str
+  debug_logging: bool
+ports:
+  "10300/tcp": null
+homeassistant: 2023.11.0

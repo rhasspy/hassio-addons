@@ -1,0 +1,2 @@
+wyoming==1.5.4
+aiohttp>=3,<4
