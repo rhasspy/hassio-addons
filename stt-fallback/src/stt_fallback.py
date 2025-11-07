@@ -149,15 +149,18 @@ async def main() -> None:
 
     _LOGGER.debug("Entities: %s", entities)
 
-    server = AsyncServer.from_uri(args.uri)
-    _LOGGER.info("Ready")
+    if entities:
+        server = AsyncServer.from_uri(args.uri)
+        _LOGGER.info("Ready")
 
-    try:
-        await server.run(
-            partial(FallbackEventHandler, entities, args.hass_token, args.hass_http_uri)
-        )
-    except KeyboardInterrupt:
-        pass
+        try:
+            await server.run(
+                partial(FallbackEventHandler, entities, args.hass_token, args.hass_http_uri)
+            )
+        except KeyboardInterrupt:
+            pass
+    else:
+        _LOGGER.critical("No valid STT entities found")
 
 
 # -----------------------------------------------------------------------------
