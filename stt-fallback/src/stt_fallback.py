@@ -80,6 +80,46 @@ class STTEntity:
         return None
 
 
+async def get_entity_info_with_retries(
+    session: aiohttp.ClientSession,
+    url: str,
+    headers: Dict[str, str],
+    max_attempts: int = 8,
+    delay_seconds: int = 5,
+) -> Optional[Dict]:
+    """
+    Gets entities and retries on 404
+    """
+    for attempt in range(1, max_attempts + 1):
+        try:
+            async with session.get(url, headers=headers) as resp:
+                if resp.status == 200:
+                    return await resp.json()
+
+                if resp.status == 404:
+                    _LOGGER.warning(
+                        "Entity not found (404) at %s — attempt %d/%d",
+                        url,
+                        attempt,
+                        max_attempts,
+                    )
+                    if attempt < max_attempts:
+                        await asyncio.sleep(delay_seconds)
+                        continue
+                    _LOGGER.warning(
+                        "Giving up after %d attempts for %s (404)", max_attempts, url
+                    )
+                    return None
+
+                _LOGGER.warning("Failed to get entity info: %s, status=%s", url, resp.status)
+                return None
+        except Exception:
+            _LOGGER.exception("Error fetching entity info from %s", url)
+            return None
+
+    return None
+
+
 async def main() -> None:
     """Runs fallback ASR server."""
     parser = argparse.ArgumentParser()
@@ -112,40 +152,32 @@ async def main() -> None:
         for entity_id in args.stt_entity_id:
             _LOGGER.debug("Getting info for STT entity: %s", entity_id)
 
-            async with session.get(
-                f"{args.hass_http_uri}/stt/{entity_id}", headers=headers
-            ) as resp:
-                if resp.status != 200:
-                    _LOGGER.warning(
-                        "Failed to get entity info: %s, status=%s",
-                        entity_id,
-                        resp.status,
-                    )
-                    continue
+            info = await get_entity_info_with_retries(session, f"{args.hass_http_uri}/stt/{entity_id}", headers)
 
-                info = await resp.json()
+            if info is None:
+                continue
 
-                # Check required audio format
-                if (
-                    (16000 not in info["sample_rates"])
-                    or (16 not in info["bit_rates"])
-                    or (1 not in info["channels"])
-                    or ("wav" not in info["formats"])
-                    or ("pcm" not in info["codecs"])
-                ):
-                    _LOGGER.warning(
-                        "Skipping '%s': 16Khz 16-bit mono PCM is not supported",
-                        entity_id,
-                    )
-                    _LOGGER.warning("%s: %s", entity_id, info)
-                    continue
-
-                entities.append(
-                    STTEntity(
-                        entity_id=entity_id,
-                        supported_languages=set(info["languages"]),
-                    )
+            # Check required audio format
+            if (
+                (16000 not in info["sample_rates"])
+                or (16 not in info["bit_rates"])
+                or (1 not in info["channels"])
+                or ("wav" not in info["formats"])
+                or ("pcm" not in info["codecs"])
+            ):
+                _LOGGER.warning(
+                    "Skipping '%s': 16Khz 16-bit mono PCM is not supported",
+                    entity_id,
                 )
+                _LOGGER.warning("%s: %s", entity_id, info)
+                continue
+
+            entities.append(
+                STTEntity(
+                    entity_id=entity_id,
+                    supported_languages=set(info["languages"]),
+                )
+            )
 
     _LOGGER.debug("Entities: %s", entities)
 
