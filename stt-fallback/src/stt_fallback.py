@@ -98,6 +98,21 @@ async def main() -> None:
         help="Ids of speech-to-text entities in fallback order",
     )
     parser.add_argument(
+        "--entity-retry-interval",
+        type=float,
+        default=5.0,
+        help="Seconds between attempts to get STT entity info (default: 5)",
+    )
+    parser.add_argument(
+        "--entity-timeout",
+        type=float,
+        default=300.0,
+        help=(
+            "Seconds to wait for all STT entities before starting with only the "
+            "available ones (default: 300). At least one entity is always required."
+        ),
+    )
+    parser.add_argument(
         "--debug", action="store_true", help="Print DEBUG messages to console"
     )
     args = parser.parse_args()
@@ -105,25 +120,73 @@ async def main() -> None:
     logging.basicConfig(level=logging.DEBUG if args.debug else logging.INFO)
     _LOGGER.debug(args)
 
-    # Get STT entity info
-    entities: List[STTEntity] = []
-    headers = {"Authorization": f"Bearer {args.hass_token}"}
-    async with aiohttp.ClientSession() as session:
-        for entity_id in args.stt_entity_id:
-            _LOGGER.debug("Getting info for STT entity: %s", entity_id)
+    # Get STT entity info.
+    # The Wyoming server is not started until entities are available, so Home
+    # Assistant will not see a "ready" service with no languages.
+    entities = await get_entities(
+        args.stt_entity_id,
+        args.hass_token,
+        args.hass_http_uri,
+        retry_interval=args.entity_retry_interval,
+        timeout=args.entity_timeout,
+    )
 
-            async with session.get(
-                f"{args.hass_http_uri}/stt/{entity_id}", headers=headers
-            ) as resp:
-                if resp.status != 200:
-                    _LOGGER.warning(
-                        "Failed to get entity info: %s, status=%s",
-                        entity_id,
-                        resp.status,
-                    )
+    _LOGGER.debug("Entities: %s", entities)
+
+    server = AsyncServer.from_uri(args.uri)
+    _LOGGER.info("Ready")
+
+    try:
+        await server.run(
+            partial(FallbackEventHandler, entities, args.hass_token, args.hass_http_uri)
+        )
+    except KeyboardInterrupt:
+        pass
+
+
+async def get_entities(
+    entity_ids: List[str],
+    hass_token: str,
+    hass_http_uri: str,
+    retry_interval: float,
+    timeout: float,
+) -> List[STTEntity]:
+    """Get info for STT entities, retrying until they are available.
+
+    Waits until all entities are available or until the timeout expires. After
+    the timeout, the available entities are used if there is at least one.
+    Otherwise, keep waiting.
+    """
+    found: Dict[str, STTEntity] = {}
+    unsupported: Set[str] = set()
+    headers = {"Authorization": f"Bearer {hass_token}"}
+    start_time = time.monotonic()
+
+    async with aiohttp.ClientSession() as session:
+        while True:
+            for entity_id in entity_ids:
+                if (entity_id in found) or (entity_id in unsupported):
                     continue
 
-                info = await resp.json()
+                _LOGGER.debug("Getting info for STT entity: %s", entity_id)
+                try:
+                    async with session.get(
+                        f"{hass_http_uri}/stt/{entity_id}", headers=headers
+                    ) as resp:
+                        if resp.status != 200:
+                            _LOGGER.warning(
+                                "Failed to get entity info: %s, status=%s",
+                                entity_id,
+                                resp.status,
+                            )
+                            continue
+
+                        info = await resp.json()
+                except (aiohttp.ClientError, asyncio.TimeoutError) as err:
+                    _LOGGER.warning(
+                        "Failed to get entity info: %s, error=%s", entity_id, err
+                    )
+                    continue
 
                 # Check required audio format
                 if (
@@ -138,26 +201,41 @@ async def main() -> None:
                         entity_id,
                     )
                     _LOGGER.warning("%s: %s", entity_id, info)
+                    unsupported.add(entity_id)
                     continue
 
-                entities.append(
-                    STTEntity(
-                        entity_id=entity_id,
-                        supported_languages=set(info["languages"]),
-                    )
+                found[entity_id] = STTEntity(
+                    entity_id=entity_id,
+                    supported_languages=set(info["languages"]),
                 )
 
-    _LOGGER.debug("Entities: %s", entities)
+            missing = [
+                entity_id
+                for entity_id in entity_ids
+                if (entity_id not in found) and (entity_id not in unsupported)
+            ]
+            if not missing:
+                break
 
-    server = AsyncServer.from_uri(args.uri)
-    _LOGGER.info("Ready")
+            if found and ((time.monotonic() - start_time) >= timeout):
+                _LOGGER.warning(
+                    "Timed out waiting for STT entities, continuing without: %s",
+                    missing,
+                )
+                break
 
-    try:
-        await server.run(
-            partial(FallbackEventHandler, entities, args.hass_token, args.hass_http_uri)
-        )
-    except KeyboardInterrupt:
-        pass
+            _LOGGER.info(
+                "Waiting for STT entities: %s (retry in %s second(s))",
+                missing,
+                retry_interval,
+            )
+            await asyncio.sleep(retry_interval)
+
+    if not found:
+        raise RuntimeError(f"No usable STT entities: {entity_ids}")
+
+    # Keep fallback order
+    return [found[entity_id] for entity_id in entity_ids if entity_id in found]
 
 
 # -----------------------------------------------------------------------------
@@ -325,7 +403,7 @@ class FallbackEventHandler(AsyncEventHandler):
                     ),
                     description="Automatic fallback for Home Assistant speech-to-text",
                     installed=True,
-                    version="1.0.0",
+                    version="1.0.1",
                     models=[
                         AsrModel(
                             name="fallback",
